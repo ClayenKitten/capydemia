@@ -1,0 +1,3 @@
+# capydemia
+
+Interactive educational platform.
