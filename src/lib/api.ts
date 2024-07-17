@@ -1,11 +1,12 @@
-import type { App } from "./backend";
 import { browser } from "$app/environment";
-import { treaty } from "@elysiajs/eden";
+import type { AppRouter } from "$lib/server";
+import { createTRPCClient, type TRPCClientInit } from "trpc-sveltekit";
 
-const api = (
-	browser
-		? treaty<App>("localhost:3000")
-		: treaty<App>((await import("./backend")).app)
-).api;
+let browserClient: ReturnType<typeof createTRPCClient<AppRouter>>;
 
-export default api;
+export default function api(init?: TRPCClientInit) {
+	if (browser && browserClient) return browserClient;
+	const client = createTRPCClient<AppRouter>({ init });
+	if (browser) browserClient = client;
+	return client;
+}

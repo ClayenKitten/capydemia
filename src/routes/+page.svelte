@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import { onMount } from "svelte";
 
 	let time = "";
 	onMount(async () => {
-		time = (await api.time.get()).data!;
+		time = await api($page).getTime.query();
 	});
 </script>
 

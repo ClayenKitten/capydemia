@@ -3,9 +3,9 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "bunx --bun vite --port 3000",
-		"build": "bunx --bun vite build",
-		"preview": "bunx --bun vite preview --port 3000",
+		"dev": "vite --port 3000",
+		"build": "vite build",
+		"preview": "vite preview --port 3000",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest",
@@ -32,8 +32,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@elysiajs/eden": "^1.0.14",
-		"elysia": "^1.0.27",
-		"svelte-adapter-bun": "^0.5.2"
+		"@sinclair/typebox": "^0.32.34",
+		"@sveltejs/adapter-node": "^5.2.0",
+		"@trpc/client": "^10.0.0",
+		"@trpc/server": "^10.0.0",
+		"@typeschema/typebox": "^0.13.4",
+		"trpc-sveltekit": "^3.6.2"
 	}
 }
