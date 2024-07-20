@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: inherit;
+  }
+
+  :root {
+    --main-bg: #a2b2da;
+    --primary-bg: #e0eaff;
+    --primary-bg-hover: #a8c4ffb2;
+    --header: #2d2f5f;
+    --text: #1b2740;
+    --text-header: #e0eaff;
+    --separator: #9291c9;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+
+  body {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
