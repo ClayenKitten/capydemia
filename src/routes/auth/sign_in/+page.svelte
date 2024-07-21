@@ -6,37 +6,34 @@
 	let name = "";
 	let password = "";
 
-	async function submit(){
-		await api($page).auth.login.mutate({ name, password});
+	async function submit() {
+		await api($page).auth.login.mutate({ name, password });
 	}
-
 </script>
 
 <main>
 	<h1>Welcome to Capidemia</h1>
 
-	<div id="form">
-		<div id="labels">
+	<div class="form">
+		<div class="labels">
 			<span>Username:</span>
 			<span>Password: </span>
 		</div>
-		<div id="input">
+		<div class="input">
 			<input bind:value={name} />
-			<input bind:value={password} />
+			<input type="password" bind:value={password} />
 		</div>
 	</div>
 
 	<a href="/auth/recovery/contacts">Forgot your password?</a>
 
-	<div id="submit">
+	<div>
 		<button on:click={submit}>Submit</button>
 	</div>
-	
+
 	<div id="sign_up_offer">
-		<label>
-			<span>New to Capydemia?</span>
-			<button on:click={() => goto("/auth/sign_up/new_user")}> Sign up </button>
-		</label>
+		<span>New to Capydemia?</span>
+		<a href="/auth/sign_up/new_user" class="button"> Sign up </a>
 	</div>
 </main>
 
@@ -44,50 +41,50 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		flex:1;
-		gap:5px;
+		flex: 1;
+		gap: 5px;
 		text-align: center;
-		background-color: black;
-		color:aliceblue;
+		background-color: var(--main-bg);
+		color: var(--text);
 	}
-	#labels{
+	.labels {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
-		gap:5px;
+		gap: 5px;
 	}
-	span{
-		height:22px;
+	span {
+		height: 22px;
 	}
-	#input{
+	.input {
 		display: flex;
 		flex-direction: column;
-		gap:5px;
+		gap: 5px;
 	}
-	input{
-		height:22px;
+	input {
+		height: 22px;
 	}
-	#form{
+	.form {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 	}
-	h1{
-		color:aquamarine;
+	h1 {
+		color: var(--text-header);
 		font-size: 50px;
-		margin:10px;
+		margin: 10px;
 	}
 
-	#sign_up_offer{
-		color: white;
-		margin:5px;
+	#sign_up_offer {
+		margin: 5px;
 	}
-	button{
-		color:black;
-		background-color: aquamarine;
+	.button,
+	button {
+		color: var(--button-text);
+		background-color: var(--fill);
 		width: fit-content;
 		padding: 2px 7px;
-		border: 3px solid white;
-  		border-radius: 15px;
+		border: 3px solid var(--border);
+		border-radius: 15px;
 	}
 </style>

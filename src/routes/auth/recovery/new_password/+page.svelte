@@ -1,76 +1,82 @@
 <script lang="ts">
-	function submit(){
-        finish = "Successfully changed password! Now go to the main page to start working.";
-	};
+	function submit() {
+		finish = true;
+	}
 	let password = "";
-    let password_prove = "";
-    let finish = "";
+	let repeat_password = "";
+	let finish = false;
 </script>
 
 <main>
 	<h1>Create new password</h1>
-	<div id="form">
-		<div id="labels">
+	<div class="form">
+		<div class="labels">
 			<span>New password:</span>
 			<span>Repeat password:</span>
 		</div>
-		<div id="input">
-			<input bind:value={password} />
-			<input bind:value={password_prove} />
+		<div class="input">
+			<input type="password" bind:value={password} />
+			<input type="password" bind:value={repeat_password} />
 		</div>
 	</div>
 	<div>
-		<button on:click={submit}>Change password.</button>
+		<button
+			on:click={submit}
+			disabled={password !== repeat_password || password == ""}
+			>Change password.</button
+		>
 	</div>
-	
-    <div>
-		{@html finish}
-	</div>
+
+	{#if finish}
+		<p>
+			Successfully changed password! Now go to the main page to start working.
+		</p>
+	{/if}
 </main>
 
 <style>
 	main {
 		display: flex;
 		flex-direction: column;
-		flex:1;
-		gap:5px;
+		flex: 1;
+		gap: 5px;
 		text-align: center;
-		background-color: black;
-		color:aliceblue;
+		background-color: var(--main-bg);
+		color: var(--text);
 	}
-	#labels{
+	.labels {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
-		gap:5px;
+		gap: 5px;
 	}
-	span{
-		height:22px;
+	span {
+		height: 22px;
 	}
-	#input{
+	.input {
 		display: flex;
 		flex-direction: column;
-		gap:5px;
+		gap: 5px;
 	}
-	input{
-		height:22px;
+	input {
+		height: 22px;
 	}
-	#form{
+	.form {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 	}
-	h1{
-		color:aquamarine;
+	h1 {
+		color: var(--text-header);
 		font-size: 50px;
-		margin:10px;
+		margin: 10px;
 	}
-	button{
-		color:black;
-		background-color: aquamarine;
+	button {
+		color: var(--button-text);
+		background-color: var(--fill);
 		width: fit-content;
 		padding: 2px 7px;
-		border: 3px solid white;
-  		border-radius: 15px;
+		border: 3px solid var(--border);
+		border-radius: 15px;
 	}
 </style>

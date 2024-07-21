@@ -1,33 +1,38 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 
-	function create(){
+	function create() {
 		goto("/main_page");
-	};
+	}
 	let username = "";
 	let contact = "";
 	let password = "";
 	let repeat_password = "";
+	let disabled = 1;
 </script>
 
 <main>
 	<h1>Fill in your profile.</h1>
-	<div id="form">
-		<div id="labels">
+	<div class="form">
+		<div class="labels">
 			<span> Username: </span>
 			<span>Contact:</span>
 			<span>Password:</span>
 			<span>Repeat password:</span>
 		</div>
-		<div id="input">
+		<div class="input">
 			<input bind:value={username} />
 			<input bind:value={contact} />
-			<input bind:value={password} />
-			<input bind:value={repeat_password} />
+			<input type="password" bind:value={password} />
+			<input type="password" bind:value={repeat_password} />
 		</div>
 	</div>
 	<div>
-		<button on:click={create}>Create account</button>
+		<button
+			on:click={create}
+			disabled={password !== repeat_password || password == ""}
+			>Create account</button
+		>
 	</div>
 </main>
 
@@ -35,46 +40,46 @@
 	main {
 		display: flex;
 		flex-direction: column;
-		flex:1;
-		gap:5px;
+		flex: 1;
+		gap: 5px;
 		text-align: center;
-		background-color: black;
-		color:aliceblue;
+		background-color: var(--main-bg);
+		color: var(--text);
 	}
-	#labels{
+	.labels {
 		display: flex;
 		flex-direction: column;
 		text-align: right;
-		gap:5px;
+		gap: 5px;
 	}
-	span{
-		height:22px;
+	span {
+		height: 22px;
 	}
-	#input{
+	.input {
 		display: flex;
 		flex-direction: column;
-		gap:5px;
+		gap: 5px;
 	}
-	input{
-		height:22px;
+	input {
+		height: 22px;
 	}
-	#form{
+	.form {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 	}
-	h1{
-		color:aquamarine;
+	h1 {
+		color: var(--text-header);
 		font-size: 50px;
-		margin:10px;
+		margin: 10px;
 	}
-	button{
-		color:black;
-		background-color: aquamarine;
+	button {
+		color: var(--button-text);
+		background-color: var(--fill);
 		width: fit-content;
 		padding: 2px 7px;
-		border: 3px solid white;
-  		border-radius: 15px;
-		margin:5px;
+		border: 3px solid var(--border);
+		border-radius: 15px;
+		margin: 5px;
 	}
 </style>

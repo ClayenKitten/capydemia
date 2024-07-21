@@ -1,3 +1,3 @@
 <main>
-    <hi>This is the main page!</hi>
+	<hi>This is the main page!</hi>
 </main>
