@@ -1,0 +1,29 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: inherit;
+	font-weight: inherit;
+	font-style: inherit;
+	font-size: inherit;
+}
+
+:root {
+	--main-bg: black;
+	--text: white;
+	--text-header: aquamarine;
+	--border: white;
+	--fill: aquamarine;
+	--button-text: black;
+}
+
+button {
+	cursor: pointer;
+}
+
+body {
+	width: 100dvw;
+	height: 100dvh;
+	display: flex;
+	flex-direction: column;
+}
