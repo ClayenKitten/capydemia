@@ -31,7 +31,7 @@
 		<button on:click={submit}>Submit</button>
 	</div>
 
-	<div id="sign_up_offer">
+	<div class="sign_up_offer">
 		<span>New to Capydemia?</span>
 		<a href="/auth/sign_up/new_user" class="button"> Sign up </a>
 	</div>
@@ -75,7 +75,7 @@
 		margin: 10px;
 	}
 
-	#sign_up_offer {
+	.sign_up_offer {
 		margin: 5px;
 	}
 	.button,
