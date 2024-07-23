@@ -1,0 +1,16 @@
+{
+	"dockerComposeFile": ["./compose.yaml"],
+	"workspaceFolder": "/app",
+	"service": "dev",
+	"runServices": ["db"],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"matthewpi.caddyfile-support",
+				"svelte.svelte-vscode",
+				"esbenp.prettier-vscode",
+				"vitest.explorer"
+			]
+		}
+	}
+}
