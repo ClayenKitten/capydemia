@@ -27,7 +27,30 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
+  dbgate:
+    image: dbgate/dbgate:5.3.1-alpine
+    expose: [3000]
+    restart: unless-stopped
+    env_file: [.env]
+    environment:
+      CONNECTIONS: Capydemia
+      SIGNLE_CONNECTION: Capydemia
+      SINGLE_DATABASE: ${POSTGRES_DB}
+
+      LABEL_Capydemia: Capydemia
+      SERVER_Capydemia: ${POSTGRES_HOST}
+      DATABASE_Capydemia: ${POSTGRES_DB}
+      USER_Capydemia: ${POSTGRES_USER}
+      PASSWORD_Capydemia: ${POSTGRES_PASSWORD}
+      PORT_Capydemia: 5432
+      ENGINE_Capydemia: postgres@dbgate-plugin-postgres
+
+      WEB_ROOT: "/db"
+    volumes:
+      - dbgate:/root/.dbgate
+
 volumes:
   caddy_data:
   caddy_config:
   db:
+  dbgate:

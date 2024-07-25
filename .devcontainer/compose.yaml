@@ -1,5 +1,14 @@
 services:
-  dev:
+  gateway:
+    extends:
+      service: gateway
+      file: ../compose.yaml
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+    environment:
+      DOMAIN: "localhost"
+
+  web:
     build:
       context: ..
       dockerfile: ./.devcontainer/Dockerfile
@@ -14,5 +23,13 @@ services:
       service: db
       file: ../compose.yaml
 
+  dbgate:
+    extends:
+      service: dbgate
+      file: ../compose.yaml
+
 volumes:
+  caddy_data:
+  caddy_config:
   db:
+  dbgate:

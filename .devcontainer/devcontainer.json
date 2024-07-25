@@ -1,8 +1,8 @@
 {
 	"dockerComposeFile": ["./compose.yaml"],
 	"workspaceFolder": "/app",
-	"service": "dev",
-	"runServices": ["db"],
+	"service": "web",
+	"runServices": ["gateway", "db", "dbgate"],
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -10,7 +10,11 @@
 				"svelte.svelte-vscode",
 				"esbenp.prettier-vscode",
 				"vitest.explorer"
-			]
+			],
+			"settings": {
+				"remote.autoForwardPorts": false
+			}
 		}
-	}
+	},
+	"forwardPorts": ["gateway:3000"]
 }

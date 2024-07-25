@@ -1,3 +1,14 @@
 {$DOMAIN} {
 	reverse_proxy web:3000
 }
+
+admin.{$DOMAIN} {
+	basic_auth {
+		admin $2a$14$LD4vBEjHG67HhvTQz9VTWelM2OJB6rvkX6gtI5.UoCdWBqQ95IWz.
+	}
+
+	rewrite /db /db/
+	handle /db/* {
+		reverse_proxy dbgate:3000
+	}
+}
