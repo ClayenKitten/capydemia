@@ -22,4 +22,7 @@ jobs:
           host: ${{ secrets.DOMAIN }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
-          script: cd ~/capydemia && git reset --hard @{u} && git pull && docker compose pull && docker compose up -d
+          script: |
+            cd ~/capydemia
+            git reset --hard @{u} && git pull
+            docker compose pull && docker compose up -d --force-recreate
