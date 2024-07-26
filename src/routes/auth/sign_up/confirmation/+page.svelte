@@ -20,13 +20,6 @@
 	</div>
 </main>
 
-<footer>
-	<span>Help center</span>
-	<span>Terms of Service</span>
-	<span>Privacy Policy</span>
-	<span>@capydemia</span>
-</footer>
-
 <style lang="scss">
 	main {
 		display: flex;
@@ -60,14 +53,6 @@
 		font-size: 32px;
 		margin: 10px;
 	}
-	footer {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		font-size: 14px;
-		gap: 40px;
-		margin-top: 40px;
-	}
 	.button {
 		height: 64px;
 		color: var(--button-text);
@@ -81,8 +66,8 @@
 		text-decoration: none;
 
 		&:hover {
-			border: 2px solid var(--fill-hoover);
-			background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hover);
+			background-color: var(--fill-hover);
 		}
 
 		&:disabled {

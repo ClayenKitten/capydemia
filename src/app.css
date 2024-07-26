@@ -12,15 +12,15 @@
 	--main-bg: white;
 	--text: black;
 	--text-header: black;
-	--text-note: grey;
-	--fill: #111111;
-	--fill-sec: white;
-	--fill-hoover: rgb(57, 57, 57);
+	--text-note: rgb(102, 102, 102);
+	--fill: rgb(17, 17, 17);
+	--fill-secondary: white;
+	--fill-hover: rgb(57, 57, 57);
 	--button-text: white;
-	--button-text-sec: black;
-	--border: lightgrey;
-	--border-sec: grey;
-	--border-sec-hoover: rgb(28, 28, 28);
+	--button-text-secondary: black;
+	--border: rgb(210, 210, 210);
+	--border-secondary: rgb(102, 102, 102);
+	--border-secondary-hover: rgb(28, 28, 28);
 }
 
 button {

@@ -15,15 +15,15 @@
 				<h1>Восстановление пароля</h1>
 
 				<div class="input">
-					<div class="type">
+					<label class="type">
 						<span>Новый пароль</span>
 						<input bind:value={password} />
-					</div>
+					</label>
 
-					<div class="type">
+					<label class="type">
 						<span>Повторите пароль</span>
 						<input type="password" bind:value={repeat_password} />
-					</div>
+					</label>
 
 					<button
 						on:click={submit}
@@ -37,13 +37,6 @@
 		{/if}
 	</div>
 </main>
-
-<footer>
-	<span>Help center</span>
-	<span>Terms of Service</span>
-	<span>Privacy Policy</span>
-	<span>@capydemia</span>
-</footer>
 
 <style lang="scss">
 	main {
@@ -99,22 +92,6 @@
 		font-size: 20px;
 		padding: 0 10px 0 10px;
 	}
-	.sign_up_offer {
-		margin: 5px;
-		font-size: 20px;
-	}
-	footer {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		font-size: 14px;
-		gap: 40px;
-		margin-top: 40px;
-	}
-	a {
-		color: var(--text);
-	}
-	.button,
 	button {
 		height: 64px;
 		color: var(--button-text);
@@ -128,29 +105,13 @@
 		text-decoration: none;
 
 		&:hover {
-			border: 2px solid var(--fill-hoover);
-			background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hover);
+			background-color: var(--fill-hover);
 		}
 
 		&:disabled {
 			background-color: var(--border);
 			border-color: var(--border);
-		}
-	}
-	.button {
-		color: var(--button-text--sec);
-		background-color: var(--fill-sec);
-		border: 2px solid var(--border-sec);
-
-		&:hover {
-			border: 2px solid var(--border-sec-hoover);
-			background-color: var(--fill-sec);
-			color: var(--button-text-hoover);
-		}
-
-		&:disabled {
-			background-color: var(--text-note);
-			border-color: var(--text-note);
 		}
 	}
 </style>

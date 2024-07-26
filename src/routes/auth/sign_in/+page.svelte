@@ -18,15 +18,15 @@
 			<h1>Вход в аккаунт</h1>
 
 			<div class="input">
-				<div class="type">
+				<label class="type">
 					<span>Email</span>
 					<input bind:value={name} />
-				</div>
+				</label>
 
-				<div class="type">
+				<label class="type">
 					<span>Пароль</span>
 					<input type="password" bind:value={password} />
-				</div>
+				</label>
 
 				<button on:click={submit} disabled={password == "" || name == ""}
 					>Войти</button
@@ -43,13 +43,6 @@
 		<a href="/auth/sign_up" class="button">Создать аккаунт</a>
 	</div>
 </main>
-
-<footer>
-	<span>Help center</span>
-	<span>Terms of Service</span>
-	<span>Privacy Policy</span>
-	<span>@capydemia</span>
-</footer>
 
 <style lang="scss">
 	main {
@@ -109,14 +102,6 @@
 		margin: 5px;
 		font-size: 20px;
 	}
-	footer {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		font-size: 14px;
-		gap: 40px;
-		margin-top: 40px;
-	}
 	a {
 		color: var(--text);
 	}
@@ -134,8 +119,8 @@
 		text-decoration: none;
 
 		&:hover {
-			border: 2px solid var(--fill-hoover);
-			background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hover);
+			background-color: var(--fill-hover);
 		}
 
 		&:disabled {
@@ -144,14 +129,14 @@
 		}
 	}
 	.button {
-		color: var(--button-text--sec);
-		background-color: var(--fill-sec);
-		border: 2px solid var(--border-sec);
+		color: var(--button-text--secondary);
+		background-color: var(--fill-secondary);
+		border: 2px solid var(--border-secondary);
 
 		&:hover {
-			border: 2px solid var(--border-sec-hoover);
-			background-color: var(--fill-sec);
-			color: var(--button-text-hoover);
+			border: 2px solid var(--border-secondary-hover);
+			background-color: var(--fill-secondary);
+			color: var(--button-text-hover);
 		}
 
 		&:disabled {
