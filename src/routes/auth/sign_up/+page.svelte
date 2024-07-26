@@ -1,26 +1,25 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import api from "$lib/api";
 
-	let name = "";
-	let password = "";
-
-	async function submit() {
-		await api($page).auth.login.mutate({ name, password });
+	function create() {
+		goto("/main_page");
 	}
+	let contact = "";
+	let password = "";
+	let repeat_password = "";
+	let disabled = 1;
 </script>
 
 <main>
 	<div class="content">
 		<div class="logo">Logo</div>
 		<div class="form">
-			<h1>Вход в аккаунт</h1>
+			<h1>Регистрация</h1>
 
 			<div class="input">
 				<label class="type">
 					<span>Email</span>
-					<input bind:value={name} />
+					<input bind:value={contact} />
 				</label>
 
 				<label class="type">
@@ -28,19 +27,25 @@
 					<input type="password" bind:value={password} />
 				</label>
 
-				<button on:click={submit} disabled={password == "" || name == ""}
-					>Войти</button
+				<label class="type">
+					<span>Повторите пароль</span>
+					<input type="password" bind:value={repeat_password} />
+				</label>
+
+				<button
+					on:click={create}
+					disabled={password !== repeat_password ||
+						password == "" ||
+						contact == ""}>Зарегистрироваться</button
 				>
 			</div>
-
-			<a href="/auth/recovery">Забыли пароль?</a>
 		</div>
 
 		<div class="sign_up_offer">
-			<span>Ещё нет аккаунта?</span>
+			<span>Уже есть аккаунт?</span>
 		</div>
 
-		<a href="/auth/sign_up" class="button">Создать аккаунт</a>
+		<a href="/auth/sign_in" class="button">Войти</a>
 	</div>
 </main>
 
@@ -102,9 +107,6 @@
 		margin: 5px;
 		font-size: 20px;
 	}
-	a {
-		color: var(--text);
-	}
 	.button,
 	button {
 		height: 64px;
@@ -119,8 +121,8 @@
 		text-decoration: none;
 
 		&:hover {
-			border: 2px solid var(--fill-hover);
-			background-color: var(--fill-hover);
+			border: 2px solid var(--fill-hoover);
+			background-color: var(--fill-hoover);
 		}
 
 		&:disabled {

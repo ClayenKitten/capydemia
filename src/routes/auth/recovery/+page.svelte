@@ -1,46 +1,40 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import api from "$lib/api";
 
-	let name = "";
-	let password = "";
-
-	async function submit() {
-		await api($page).auth.login.mutate({ name, password });
+	function submit() {
+		//goto('/auth/recovery/new_password');
+		confirmed = true;
 	}
+
+	let contact = "";
+	let confirmed = false;
 </script>
 
 <main>
 	<div class="content">
-		<div class="logo">Logo</div>
-		<div class="form">
-			<h1>Вход в аккаунт</h1>
+		{#if !confirmed}
+			<div class="logo">Logo</div>
 
-			<div class="input">
-				<label class="type">
-					<span>Email</span>
-					<input bind:value={name} />
-				</label>
+			<div class="form">
+				<h1>Забыли пароль?</h1>
 
-				<label class="type">
-					<span>Пароль</span>
-					<input type="password" bind:value={password} />
-				</label>
+				<span>Укажите вашу почту для восстановления доступа к аккаунту.</span>
 
-				<button on:click={submit} disabled={password == "" || name == ""}
-					>Войти</button
-				>
+				<div class="input">
+					<label class="type">
+						<span>Email</span>
+						<input bind:value={contact} />
+					</label>
+
+					<button on:click={submit} disabled={contact == ""}>Войти</button>
+				</div>
 			</div>
-
-			<a href="/auth/recovery">Забыли пароль?</a>
-		</div>
-
-		<div class="sign_up_offer">
-			<span>Ещё нет аккаунта?</span>
-		</div>
-
-		<a href="/auth/sign_up" class="button">Создать аккаунт</a>
+		{:else}
+			<p>
+				На указанную почту будет отправлено письмо с сылкой для восстановления
+				пароля. Проверьте свой почтовый ящик!
+			</p>
+		{/if}
 	</div>
 </main>
 
@@ -98,14 +92,6 @@
 		font-size: 20px;
 		padding: 0 10px 0 10px;
 	}
-	.sign_up_offer {
-		margin: 5px;
-		font-size: 20px;
-	}
-	a {
-		color: var(--text);
-	}
-	.button,
 	button {
 		height: 64px;
 		color: var(--button-text);
@@ -126,22 +112,6 @@
 		&:disabled {
 			background-color: var(--border);
 			border-color: var(--border);
-		}
-	}
-	.button {
-		color: var(--button-text--secondary);
-		background-color: var(--fill-secondary);
-		border: 2px solid var(--border-secondary);
-
-		&:hover {
-			border: 2px solid var(--border-secondary-hover);
-			background-color: var(--fill-secondary);
-			color: var(--button-text-hover);
-		}
-
-		&:disabled {
-			background-color: var(--text-note);
-			border-color: var(--text-note);
 		}
 	}
 </style>
