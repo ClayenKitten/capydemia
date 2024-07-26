@@ -10,9 +10,7 @@
 <main>
 	<div class="content">
 		{#if !finish}
-			<div class="logo">
-				Logo
-			</div>
+			<div class="logo">Logo</div>
 			<div class="form">
 				<h1>Восстановление пароля</h1>
 
@@ -27,13 +25,15 @@
 						<input type="password" bind:value={repeat_password} />
 					</div>
 
-					<button on:click={submit} disabled={password !== repeat_password || password == ""}>Сменить пароль</button>
+					<button
+						on:click={submit}
+						disabled={password !== repeat_password || password == ""}
+						>Сменить пароль</button
+					>
 				</div>
 			</div>
 		{:else}
-			<p>
-				Пароль успешно изменён!
-			</p>
+			<p>Пароль успешно изменён!</p>
 		{/if}
 	</div>
 </main>
@@ -44,7 +44,6 @@
 	<span>Privacy Policy</span>
 	<span>@capydemia</span>
 </footer>
-
 
 <style lang="scss">
 	main {
@@ -58,7 +57,7 @@
 		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content{
+	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -80,12 +79,12 @@
 		color: var(--text-note);
 		gap: 24px;
 	}
-	.type{
+	.type {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		text-align: left;
-		gap:4px;
+		gap: 4px;
 	}
 	h1 {
 		color: var(--text-header);
@@ -104,16 +103,16 @@
 		margin: 5px;
 		font-size: 20px;
 	}
-	footer{
-		display:flex;
+	footer {
+		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		font-size: 14px;
-		gap:40px;
+		gap: 40px;
 		margin-top: 40px;
 	}
-	a{
-		color:var(--text);
+	a {
+		color: var(--text);
 	}
 	.button,
 	button {
@@ -129,29 +128,29 @@
 		text-decoration: none;
 
 		&:hover {
-		border: 2px solid var(--fill-hoover);
-		background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hoover);
+			background-color: var(--fill-hoover);
 		}
 
 		&:disabled {
-		background-color: var(--border);
-		border-color: var(--border);
+			background-color: var(--border);
+			border-color: var(--border);
 		}
 	}
-	.button{
+	.button {
 		color: var(--button-text--sec);
 		background-color: var(--fill-sec);
 		border: 2px solid var(--border-sec);
 
 		&:hover {
-		border: 2px solid var(--border-sec-hoover);
-		background-color: var(--fill-sec);
-		color: var(--button-text-hoover);
+			border: 2px solid var(--border-sec-hoover);
+			background-color: var(--fill-sec);
+			color: var(--button-text-hoover);
 		}
 
 		&:disabled {
-		background-color: var(--text-note);
-		border-color: var(--text-note);
+			background-color: var(--text-note);
+			border-color: var(--text-note);
 		}
 	}
 </style>

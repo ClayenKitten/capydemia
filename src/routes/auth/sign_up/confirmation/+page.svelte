@@ -8,12 +8,13 @@
 
 <main>
 	<div class="content">
-		<div class="logo">
-			Logo
-		</div>
+		<div class="logo">Logo</div>
 		<div class="form">
 			<h1>Подтверждение почты</h1>
-			<span>Ваша почта успешно подтверждена! Для начала работы перейдите на главную страницу.</span>
+			<span
+				>Ваша почта успешно подтверждена! Для начала работы перейдите на главную
+				страницу.</span
+			>
 			<a href="/main_page" class="button">На главную</a>
 		</div>
 	</div>
@@ -38,7 +39,7 @@
 		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content{
+	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -59,15 +60,15 @@
 		font-size: 32px;
 		margin: 10px;
 	}
-	footer{
-		display:flex;
+	footer {
+		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		font-size: 14px;
-		gap:40px;
+		gap: 40px;
 		margin-top: 40px;
 	}
-	.button{
+	.button {
 		height: 64px;
 		color: var(--button-text);
 		background-color: var(--fill);
@@ -80,13 +81,13 @@
 		text-decoration: none;
 
 		&:hover {
-		border: 2px solid var(--fill-hoover);
-		background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hoover);
+			background-color: var(--fill-hoover);
 		}
 
 		&:disabled {
-		background-color: var(--border);
-		border-color: var(--border);
+			background-color: var(--border);
+			border-color: var(--border);
 		}
 	}
 </style>

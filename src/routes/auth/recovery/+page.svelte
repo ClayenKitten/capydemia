@@ -13,15 +13,13 @@
 <main>
 	<div class="content">
 		{#if !confirmed}
-			<div class="logo">
-				Logo
-			</div>
+			<div class="logo">Logo</div>
 
 			<div class="form">
 				<h1>Забыли пароль?</h1>
 
 				<span>Укажите вашу почту для восстановления доступа к аккаунту.</span>
-				
+
 				<div class="input">
 					<div class="type">
 						<span>Email</span>
@@ -33,7 +31,8 @@
 			</div>
 		{:else}
 			<p>
-				На указанную почту будет отправлено письмо с сылкой для восстановления пароля. Проверьте свой почтовый ящик!
+				На указанную почту будет отправлено письмо с сылкой для восстановления
+				пароля. Проверьте свой почтовый ящик!
 			</p>
 		{/if}
 	</div>
@@ -58,7 +57,7 @@
 		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content{
+	.content {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -80,12 +79,12 @@
 		color: var(--text-note);
 		gap: 24px;
 	}
-	.type{
+	.type {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		text-align: left;
-		gap:4px;
+		gap: 4px;
 	}
 	h1 {
 		color: var(--text-header);
@@ -100,12 +99,12 @@
 		font-size: 20px;
 		padding: 0 10px 0 10px;
 	}
-	footer{
-		display:flex;
+	footer {
+		display: flex;
 		flex-direction: row;
 		justify-content: center;
 		font-size: 14px;
-		gap:40px;
+		gap: 40px;
 		margin-top: 40px;
 	}
 	button {
@@ -121,13 +120,13 @@
 		text-decoration: none;
 
 		&:hover {
-		border: 2px solid var(--fill-hoover);
-		background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hoover);
+			background-color: var(--fill-hoover);
 		}
 
 		&:disabled {
-		background-color: var(--border);
-		border-color: var(--border);
+			background-color: var(--border);
+			border-color: var(--border);
 		}
 	}
 </style>
