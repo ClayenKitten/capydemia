@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 
-	function submit() {
-		//goto('/auth/recovery/new_password');
+	async function submit() {
+		await api($page).user.password.recovery.begin.mutate({ email });
 		confirmed = true;
 	}
 
-	let contact = "";
+	let email = "";
 	let confirmed = false;
 </script>
 
@@ -14,24 +15,22 @@
 	<div class="content">
 		{#if !confirmed}
 			<div class="logo">Logo</div>
-
 			<div class="form">
 				<h1>Забыли пароль?</h1>
-
 				<span>Укажите вашу почту для восстановления доступа к аккаунту.</span>
-
 				<div class="input">
 					<label class="type">
 						<span>Email</span>
-						<input bind:value={contact} />
+						<input bind:value={email} />
 					</label>
-
-					<button on:click={submit} disabled={contact == ""}>Войти</button>
+					<button on:click={submit} disabled={email == ""}>
+						Запросить восстановление
+					</button>
 				</div>
 			</div>
 		{:else}
 			<p>
-				На указанную почту будет отправлено письмо с сылкой для восстановления
+				На указанную почту будет отправлено письмо со ссылкой для восстановления
 				пароля. Проверьте свой почтовый ящик!
 			</p>
 		{/if}

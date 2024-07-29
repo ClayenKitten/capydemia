@@ -3,11 +3,20 @@
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 
-	let name = "";
+	let email = "";
 	let password = "";
+	let error = "";
 
 	async function submit() {
-		await api($page).auth.login.mutate({ name, password });
+		let result = await api($page).user.session.login.mutate({
+			email,
+			password
+		});
+		if (result.ok) {
+			goto("/");
+		} else {
+			error = "Неверный логин или пароль";
+		}
 	}
 </script>
 
@@ -16,30 +25,27 @@
 		<div class="logo">Logo</div>
 		<div class="form">
 			<h1>Вход в аккаунт</h1>
-
 			<div class="input">
 				<label class="type">
 					<span>Email</span>
-					<input bind:value={name} />
+					<input bind:value={email} />
 				</label>
-
 				<label class="type">
 					<span>Пароль</span>
 					<input type="password" bind:value={password} />
 				</label>
-
-				<button on:click={submit} disabled={password == "" || name == ""}
-					>Войти</button
-				>
+				<button on:click={submit} disabled={password == "" || email == ""}>
+					Войти
+				</button>
+				{#if error}
+					<span class="error">{error}</span>
+				{/if}
 			</div>
-
 			<a href="/auth/recovery">Забыли пароль?</a>
 		</div>
-
 		<div class="sign_up_offer">
 			<span>Ещё нет аккаунта?</span>
 		</div>
-
 		<a href="/auth/sign_up" class="button">Создать аккаунт</a>
 	</div>
 </main>
@@ -143,5 +149,8 @@
 			background-color: var(--text-note);
 			border-color: var(--text-note);
 		}
+	}
+	.error {
+		color: var(--error);
 	}
 </style>

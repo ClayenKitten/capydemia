@@ -1,7 +1,28 @@
 <script lang="ts">
-	function submit() {
-		finish = true;
+	import { page } from "$app/stores";
+	import api from "$lib/api";
+
+	async function submit() {
+		let code = $page.url.searchParams.get("code");
+		if (code === null) {
+			error = "Некорректная ссылка.";
+			return;
+		}
+		let result = await api($page).user.password.recovery.complete.mutate({
+			code,
+			newPassword: password
+		});
+		if (result.ok) {
+			finish = true;
+		} else {
+			if (result.error === "EXPIRED") {
+				error = "Срок действия ссылки истёк.";
+			} else if (result.error === "NOT_FOUND") {
+				error = "Некорректная ссылка.";
+			}
+		}
 	}
+	let error: string | null = null;
 	let password = "";
 	let repeat_password = "";
 	let finish = false;
@@ -13,27 +34,30 @@
 			<div class="logo">Logo</div>
 			<div class="form">
 				<h1>Восстановление пароля</h1>
-
-				<div class="input">
-					<label class="type">
-						<span>Новый пароль</span>
-						<input bind:value={password} />
-					</label>
-
-					<label class="type">
-						<span>Повторите пароль</span>
-						<input type="password" bind:value={repeat_password} />
-					</label>
-
-					<button
-						on:click={submit}
-						disabled={password !== repeat_password || password == ""}
-						>Сменить пароль</button
-					>
-				</div>
+				{#if !error}
+					<div class="input">
+						<label class="type">
+							<span>Новый пароль</span>
+							<input bind:value={password} />
+						</label>
+						<label class="type">
+							<span>Повторите пароль</span>
+							<input type="password" bind:value={repeat_password} />
+						</label>
+						<button
+							on:click={submit}
+							disabled={password !== repeat_password || password == ""}
+						>
+							Сменить пароль
+						</button>
+					</div>
+				{:else}
+					<span class="error">{error}</span>
+				{/if}
 			</div>
 		{:else}
 			<p>Пароль успешно изменён!</p>
+			<a href="/auth/sign_in">Войти</a>
 		{/if}
 	</div>
 </main>
@@ -113,5 +137,8 @@
 			background-color: var(--border);
 			border-color: var(--border);
 		}
+	}
+	.error {
+		color: var(--error);
 	}
 </style>

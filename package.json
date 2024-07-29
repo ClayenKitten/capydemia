@@ -10,7 +10,9 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest",
 		"lint": "prettier --check . && eslint .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"db": "kysely",
+		"db:infer": "kysely-codegen --url postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB --dialect postgres"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "^2.0.0",
@@ -20,6 +22,7 @@
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
 		"globals": "^15.0.0",
+		"kysely-ctl": "^0.9.0",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"sass": "^1.77.8",
@@ -33,11 +36,18 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sinclair/typebox": "^0.32.34",
 		"@sveltejs/adapter-node": "^5.2.0",
 		"@trpc/client": "^10.0.0",
 		"@trpc/server": "^10.0.0",
-		"@typeschema/typebox": "^0.13.4",
-		"trpc-sveltekit": "^3.6.2"
+		"@types/node": "^22.0.0",
+		"@types/pg": "^8.11.6",
+		"argon2": "^0.40.3",
+		"handlebars": "^4.7.8",
+		"kysely": "^0.27.4",
+		"kysely-codegen": "^0.15.0",
+		"pg": "^8.12.0",
+		"resend": "^3.4.0",
+		"trpc-sveltekit": "^3.6.2",
+		"zod": "^3.23.8"
 	}
 }

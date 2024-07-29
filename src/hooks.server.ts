@@ -1,9 +1,27 @@
-import { appRouter } from "$lib/server";
+import appRouter from "$lib/server/router";
 import createContext from "$lib/server/context";
-import type { Handle } from "@sveltejs/kit";
+import { redirect, type Handle } from "@sveltejs/kit";
 import { createTRPCHandle } from "trpc-sveltekit";
+import { sequence } from "@sveltejs/kit/hooks";
+import { tokenCookieName } from "$lib/api";
 
-export const handle: Handle = createTRPCHandle({
-	router: appRouter,
-	createContext
-});
+const authorizationHandle: Handle = async ({ event, resolve }) => {
+	let pathname = event.url.pathname;
+	let token = event.cookies.get(tokenCookieName);
+	if (pathname.startsWith("/auth") && token) {
+		redirect(307, "/");
+	} else if (!pathname.startsWith("/auth") && !token) {
+		redirect(307, "/auth/sign_in");
+	}
+
+	const response = await resolve(event);
+	return response;
+};
+
+export const handle: Handle = sequence(
+	createTRPCHandle({
+		router: appRouter,
+		createContext
+	}),
+	authorizationHandle
+);

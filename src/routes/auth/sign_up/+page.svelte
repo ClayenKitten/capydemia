@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 
-	function create() {
-		goto("/main_page");
+	async function create() {
+		await api($page).user.registration.begin.mutate({ email, password });
+		await goto("/auth/sign_in");
 	}
-	let contact = "";
+	let email = "";
 	let password = "";
 	let repeat_password = "";
-	let disabled = 1;
 </script>
 
 <main>
@@ -15,29 +17,27 @@
 		<div class="logo">Logo</div>
 		<div class="form">
 			<h1>Регистрация</h1>
-
 			<div class="input">
 				<label class="type">
 					<span>Email</span>
-					<input bind:value={contact} />
+					<input bind:value={email} />
 				</label>
-
 				<label class="type">
 					<span>Пароль</span>
 					<input type="password" bind:value={password} />
 				</label>
-
 				<label class="type">
 					<span>Повторите пароль</span>
 					<input type="password" bind:value={repeat_password} />
 				</label>
-
 				<button
 					on:click={create}
 					disabled={password !== repeat_password ||
 						password == "" ||
-						contact == ""}>Зарегистрироваться</button
+						email == ""}
 				>
+					Зарегистрироваться
+				</button>
 			</div>
 		</div>
 
@@ -121,8 +121,8 @@
 		text-decoration: none;
 
 		&:hover {
-			border: 2px solid var(--fill-hoover);
-			background-color: var(--fill-hoover);
+			border: 2px solid var(--fill-hover);
+			background-color: var(--fill-hover);
 		}
 
 		&:disabled {

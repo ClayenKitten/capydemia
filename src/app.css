@@ -21,6 +21,7 @@
 	--border: rgb(210, 210, 210);
 	--border-secondary: rgb(102, 102, 102);
 	--border-secondary-hover: rgb(28, 28, 28);
+	--error: rgb(194, 9, 9);
 }
 
 button {

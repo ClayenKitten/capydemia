@@ -8,6 +8,19 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+
+	namespace NodeJS {
+		interface ProcessEnv {
+			[key: string]: string | undefined;
+			EMAIL_SENDER: string;
+			DOMAIN: string;
+			POSTGRES_HOST: string;
+			POSTGRES_DB: string;
+			POSTGRES_USER: string;
+			POSTGRES_PASSWORD: string;
+			RESEND_KEY: string;
+		}
+	}
 }
 
 export {};

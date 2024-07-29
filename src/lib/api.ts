@@ -10,3 +10,5 @@ export default function api(init?: TRPCClientInit) {
 	if (browser) browserClient = client;
 	return client;
 }
+
+export const tokenCookieName = "capydemiaToken";

@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
+	import type { PageData } from "./$types";
 
-	function confirm() {
-		//goto("/main_page");
-	}
+	export let data: PageData;
 </script>
 
 <main>
@@ -11,11 +9,8 @@
 		<div class="logo">Logo</div>
 		<div class="form">
 			<h1>Подтверждение почты</h1>
-			<span
-				>Ваша почта успешно подтверждена! Для начала работы перейдите на главную
-				страницу.</span
-			>
-			<a href="/main_page" class="button">На главную</a>
+			<span>{data.message}</span>
+			<a href="/" class="button">На главную</a>
 		</div>
 	</div>
 </main>
