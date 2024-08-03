@@ -26,6 +26,11 @@
 	let password = "";
 	let repeat_password = "";
 	let finish = false;
+
+	$: valid_password = password.length >= 8 && password.length <= 128;
+	$: valid_repeat_password =
+		repeat_password.length >= 8 && repeat_password.length <= 128;
+	$: valid = valid_password && valid_repeat_password;
 </script>
 
 <main>
@@ -38,15 +43,25 @@
 					<div class="input">
 						<label class="type">
 							<span>Новый пароль</span>
-							<input bind:value={password} />
+							<input
+								type="password"
+								bind:value={password}
+								class:invalid={!valid_password}
+							/>
 						</label>
 						<label class="type">
 							<span>Повторите пароль</span>
-							<input type="password" bind:value={repeat_password} />
+							<input
+								type="password"
+								bind:value={repeat_password}
+								class:invalid={!valid_repeat_password}
+							/>
 						</label>
 						<button
 							on:click={submit}
-							disabled={password !== repeat_password || password == ""}
+							disabled={password !== repeat_password ||
+								password == "" ||
+								!valid}
 						>
 							Сменить пароль
 						</button>
@@ -95,6 +110,9 @@
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 24px;
+	}
+	.invalid {
+		border-color: var(--error);
 	}
 	.type {
 		display: flex;

@@ -2,50 +2,80 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
+	import { z } from "zod";
 
 	async function create() {
 		await api($page).user.registration.begin.mutate({ email, password });
-		await goto("/auth/sign_in");
+		//await goto("/auth/sign_in");
+		confirmed = true;
 	}
+
 	let email = "";
 	let password = "";
 	let repeat_password = "";
+	let confirmed = false;
+
+	$: valid_email = z.string().email().max(128).safeParse(email).success;
+	$: valid_password = password.length >= 8 && password.length <= 128;
+	$: valid_repeat_password =
+		repeat_password.length >= 8 && repeat_password.length <= 128;
+	$: valid = valid_email && valid_password && valid_repeat_password;
 </script>
 
 <main>
 	<div class="content">
-		<div class="logo">Logo</div>
-		<div class="form">
-			<h1>Регистрация</h1>
-			<div class="input">
-				<label class="type">
-					<span>Email</span>
-					<input bind:value={email} />
-				</label>
-				<label class="type">
-					<span>Пароль</span>
-					<input type="password" bind:value={password} />
-				</label>
-				<label class="type">
-					<span>Повторите пароль</span>
-					<input type="password" bind:value={repeat_password} />
-				</label>
-				<button
-					on:click={create}
-					disabled={password !== repeat_password ||
-						password == "" ||
-						email == ""}
-				>
-					Зарегистрироваться
-				</button>
+		{#if !confirmed}
+			<div class="logo">Logo</div>
+			<div class="form">
+				<h1>Регистрация</h1>
+				<div class="input">
+					<label class="type">
+						<span>Email</span>
+						<input
+							type="email"
+							bind:value={email}
+							class:invalid={!valid_email}
+						/>
+					</label>
+					<label class="type">
+						<span>Пароль</span>
+						<input
+							type="password"
+							bind:value={password}
+							class:invalid={!valid_password}
+						/>
+					</label>
+					<label class="type">
+						<span>Повторите пароль</span>
+						<input
+							type="password"
+							bind:value={repeat_password}
+							class:invalid={!valid_repeat_password}
+						/>
+					</label>
+					<button
+						on:click={create}
+						disabled={password !== repeat_password ||
+							password == "" ||
+							email == "" ||
+							!valid}
+					>
+						Зарегистрироваться
+					</button>
+				</div>
 			</div>
-		</div>
 
-		<div class="sign_up_offer">
-			<span>Уже есть аккаунт?</span>
-		</div>
+			<div class="sign_up_offer">
+				<span>Уже есть аккаунт?</span>
+			</div>
 
-		<a href="/auth/sign_in" class="button">Войти</a>
+			<a href="/auth/sign_in" class="button">Войти</a>
+		{:else}
+			<p>
+				На указанную почту будет отправлено письмо со ссылкой для подтверждения
+				контактов. Проверьте свой почтовый ящик!
+			</p>
+		{/if}
 	</div>
 </main>
 
@@ -102,6 +132,9 @@
 		border-radius: 12px;
 		font-size: 20px;
 		padding: 0 10px 0 10px;
+	}
+	.invalid {
+		border-color: var(--error);
 	}
 	.sign_up_offer {
 		margin: 5px;

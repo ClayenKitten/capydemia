@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import api from "$lib/api";
+	import { z } from "zod";
 
 	async function submit() {
 		await api($page).user.password.recovery.begin.mutate({ email });
@@ -9,6 +10,9 @@
 
 	let email = "";
 	let confirmed = false;
+
+	$: valid_email = z.string().email().max(128).safeParse(email).success;
+	$: valid = valid_email;
 </script>
 
 <main>
@@ -21,9 +25,13 @@
 				<div class="input">
 					<label class="type">
 						<span>Email</span>
-						<input bind:value={email} />
+						<input
+							type="email"
+							bind:value={email}
+							class:invalid={!valid_email}
+						/>
 					</label>
-					<button on:click={submit} disabled={email == ""}>
+					<button on:click={submit} disabled={email == "" || !valid}>
 						Запросить восстановление
 					</button>
 				</div>
@@ -70,6 +78,9 @@
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 24px;
+	}
+	.invalid {
+		border-color: var(--error);
 	}
 	.type {
 		display: flex;
