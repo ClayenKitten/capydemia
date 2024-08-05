@@ -1,3 +1,18 @@
+@font-face {
+	font-family: "Montserrat";
+	font-weight: 700;
+	src:
+		local("Montserrat"),
+		url("/fonts/Montserrat-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "NunitoSans";
+	src:
+		local("Nunito Sans"),
+		url("/fonts/NunitoSans.ttf") format("truetype");
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -33,4 +48,14 @@ body {
 	height: 100dvh;
 	display: flex;
 	flex-direction: column;
+	font-family: "NunitoSans";
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Montserrat";
 }
