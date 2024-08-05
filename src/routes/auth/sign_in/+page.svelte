@@ -38,10 +38,7 @@
 					<span>Пароль</span>
 					<input type="password" bind:value={password} />
 				</label>
-				<button
-					on:click={submit}
-					disabled={password == "" || email == "" || !valid}
-				>
+				<button on:click={submit} disabled={password == "" || !valid}>
 					Войти
 				</button>
 				{#if error}

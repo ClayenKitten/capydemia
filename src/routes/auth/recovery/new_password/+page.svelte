@@ -28,8 +28,7 @@
 	let finish = false;
 
 	$: valid_password = password.length >= 8 && password.length <= 128;
-	$: valid_repeat_password =
-		repeat_password.length >= 8 && repeat_password.length <= 128;
+	$: valid_repeat_password = password === repeat_password;
 	$: valid = valid_password && valid_repeat_password;
 </script>
 
@@ -57,12 +56,7 @@
 								class:invalid={!valid_repeat_password}
 							/>
 						</label>
-						<button
-							on:click={submit}
-							disabled={password !== repeat_password ||
-								password == "" ||
-								!valid}
-						>
+						<button on:click={submit} disabled={!valid}>
 							Сменить пароль
 						</button>
 					</div>

@@ -6,7 +6,6 @@
 
 	async function create() {
 		await api($page).user.registration.begin.mutate({ email, password });
-		//await goto("/auth/sign_in");
 		confirmed = true;
 	}
 
@@ -17,8 +16,7 @@
 
 	$: valid_email = z.string().email().max(128).safeParse(email).success;
 	$: valid_password = password.length >= 8 && password.length <= 128;
-	$: valid_repeat_password =
-		repeat_password.length >= 8 && repeat_password.length <= 128;
+	$: valid_repeat_password = password === repeat_password;
 	$: valid = valid_email && valid_password && valid_repeat_password;
 </script>
 
@@ -53,13 +51,7 @@
 							class:invalid={!valid_repeat_password}
 						/>
 					</label>
-					<button
-						on:click={create}
-						disabled={password !== repeat_password ||
-							password == "" ||
-							email == "" ||
-							!valid}
-					>
+					<button on:click={create} disabled={!valid}>
 						Зарегистрироваться
 					</button>
 				</div>

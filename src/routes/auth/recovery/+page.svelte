@@ -31,7 +31,7 @@
 							class:invalid={!valid_email}
 						/>
 					</label>
-					<button on:click={submit} disabled={email == "" || !valid}>
+					<button on:click={submit} disabled={!valid}>
 						Запросить восстановление
 					</button>
 				</div>
