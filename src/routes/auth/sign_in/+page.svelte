@@ -2,10 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
-
-	let email = "";
-	let password = "";
-	let error = "";
+	import { z } from "zod";
 
 	async function submit() {
 		let result = await api($page).user.session.login.mutate({
@@ -18,6 +15,13 @@
 			error = "Неверный логин или пароль";
 		}
 	}
+
+	let email = "";
+	let password = "";
+	let error = "";
+
+	$: valid_email = z.string().email().max(128).safeParse(email).success;
+	$: valid = valid_email;
 </script>
 
 <main>
@@ -28,13 +32,13 @@
 			<div class="input">
 				<label class="type">
 					<span>Email</span>
-					<input bind:value={email} />
+					<input type="email" bind:value={email} class:invalid={!valid_email} />
 				</label>
 				<label class="type">
 					<span>Пароль</span>
 					<input type="password" bind:value={password} />
 				</label>
-				<button on:click={submit} disabled={password == "" || email == ""}>
+				<button on:click={submit} disabled={password == "" || !valid}>
 					Войти
 				</button>
 				{#if error}
@@ -84,6 +88,9 @@
 		color: var(--text-note);
 		gap: 24px;
 	}
+	.invalid {
+		border-color: var(--error);
+	}
 	.type {
 		display: flex;
 		flex-direction: column;
@@ -103,6 +110,9 @@
 		border-radius: 12px;
 		font-size: 20px;
 		padding: 0 10px 0 10px;
+	}
+	.invalid {
+		border-color: var(--error);
 	}
 	.sign_up_offer {
 		margin: 5px;
