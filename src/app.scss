@@ -24,14 +24,15 @@
 }
 
 :root {
-	--primary: #07689F;
-	--secondary: #A2D5F2;
-	--secondary-bleek: #E9F7FE;
+	--primary: #07689f;
+	--secondary: #a2d5f2;
+	--secondary-bleek: #e9f7fe;
 	--main-bg: white;
+	--base-bg: #fafafa;
 
 	--text: #172126;
-	--text-note: #B9B8B8;
-	--text-disabled: #8C8C8C;
+	--text-note: #b9b8b8;
+	--text-disabled: #8c8c8c;
 	--H1: 700 48px "Montserrat";
 	--H2: 700 40px "Montserrat";
 	--H3: 700 34px "Montserrat";
@@ -47,8 +48,8 @@
 	--P3-extrabold: 800 12px "NunitoSans";
 	--P3-light: 300 12px "NunitoSans";
 
-	--error: #F8565C;
-	--success: #91F8CC;
+	--error: #f8565c;
+	--success: #91f8cc;
 }
 
 button {
