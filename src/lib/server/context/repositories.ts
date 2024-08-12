@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import type { DB } from "kysely-codegen";
+import type { DB } from "$lib/server/db/types";
 import { UserRepository } from "../user";
 import { SessionRepository } from "../user/session";
 import { PendingRegistrationRepository } from "../user/pendingRegistration";

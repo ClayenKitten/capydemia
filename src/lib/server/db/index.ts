@@ -1,6 +1,6 @@
 import pg from "pg";
 import { Kysely, PostgresDialect } from "kysely";
-import type { DB } from "kysely-codegen";
+import type { DB } from "$lib/server/db/types";
 import migrateToLatest from "./migrate";
 
 const dialect = new PostgresDialect({

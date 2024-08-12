@@ -1,5 +1,5 @@
 import { Migrator, Kysely } from "kysely";
-import type { DB } from "kysely-codegen";
+import type { DB } from "$lib/server/db/types";
 import MyMigrationProvider from "./migration-provider";
 
 const migrations = ["0001_initial"] as const;
