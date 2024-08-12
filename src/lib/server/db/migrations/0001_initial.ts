@@ -31,7 +31,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-	const tables = ["pendingRegistration", "session", "user", "passwordRecovery"];
+	const tables = ["pendingRegistration", "session", "passwordRecovery", "user"];
 	await Promise.all(
 		tables.map(t => db.schema.dropTable(t).ifExists().execute())
 	);
