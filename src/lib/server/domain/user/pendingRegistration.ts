@@ -1,6 +1,6 @@
-import Repository from "../db/repository";
+import Repository from "../../db/repository";
 import crypto from "crypto";
-import { expiresAfter } from "../util/date";
+import { expiresAfter } from "../../util/date";
 
 export class PendingRegistrationRepository extends Repository {
 	/**

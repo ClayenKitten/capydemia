@@ -1,9 +1,9 @@
 import type { Kysely } from "kysely";
 import type { DB } from "$lib/server/db/types";
-import { UserRepository } from "../user";
-import { SessionRepository } from "../user/session";
-import { PendingRegistrationRepository } from "../user/pendingRegistration";
-import { PasswordRecoveryRepository } from "../user/passwordRecovery";
+import { UserRepository } from "../domain/user";
+import { SessionRepository } from "../domain/user/session";
+import { PendingRegistrationRepository } from "../domain/user/pendingRegistration";
+import { PasswordRecoveryRepository } from "../domain/user/passwordRecovery";
 
 export default function createRepositories(db: Kysely<DB>) {
 	return {

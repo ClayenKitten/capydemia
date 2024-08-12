@@ -2,11 +2,11 @@ import { addProp } from "./util";
 import type { Repositories } from "./repositories";
 import type EmailService from "../email";
 import { ResendEmailService } from "../email/resend";
-import type PasswordService from "../user/password";
-import Argon2PasswordService from "../user/password/argon2";
-import { UserService } from "../user";
-import { PasswordRecoveryService } from "../user/passwordRecovery";
-import { SessionService } from "../user/session";
+import type PasswordService from "../domain/user/password";
+import Argon2PasswordService from "../domain/user/password/argon2";
+import { UserService } from "../domain/user";
+import { PasswordRecoveryService } from "../domain/user/passwordRecovery";
+import { SessionService } from "../domain/user/session";
 
 export default function createServices(repos: Repositories) {
 	let s = {};

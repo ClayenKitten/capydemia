@@ -1,15 +1,15 @@
-import Repository from "../db/repository";
-import type EmailService from "../email";
+import Repository from "../../db/repository";
+import type EmailService from "../../email";
 import {
 	alreadyRegisteredTemplate,
 	registerTemplate
-} from "../email/templates";
+} from "../../email/templates";
 import type PasswordService from "./password";
 import {
 	PendingRegistration,
 	type PendingRegistrationRepository
 } from "./pendingRegistration";
-import type Result from "../util/result";
+import type Result from "../../util/result";
 
 export class User {
 	constructor(

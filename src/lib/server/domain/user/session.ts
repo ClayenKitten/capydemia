@@ -1,9 +1,9 @@
 import { User, UserRepository } from ".";
-import Repository from "../db/repository";
-import { expiresAfter } from "../util/date";
+import Repository from "../../db/repository";
+import { expiresAfter } from "../../util/date";
 import crypto from "crypto";
 import type PasswordService from "./password";
-import type Result from "../util/result";
+import type Result from "../../util/result";
 
 export class SessionService {
 	constructor(
