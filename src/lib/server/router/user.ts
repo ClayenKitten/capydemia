@@ -53,7 +53,7 @@ const login = publicProcedure
 	.input(
 		z.object({
 			email: z.string().email().max(128),
-			password: z.string().min(8).max(128)
+			password: z.string().max(128)
 		})
 	)
 	.mutation(async opts => {
