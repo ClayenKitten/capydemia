@@ -73,9 +73,12 @@ const login = publicProcedure
 			return { ok: false };
 		}
 	});
-const logout = protectedProcedure.input(z.void()).mutation(async opts => {
-	opts.ctx.request.cookies.delete(tokenCookieName, { path: "/" });
-	return await opts.ctx.services.session.logout(opts.ctx.session);
+const logout = publicProcedure.input(z.void()).mutation(async ({ ctx }) => {
+	ctx.request.cookies.delete(tokenCookieName, { path: "/" });
+	if (ctx.session === undefined) {
+		return;
+	}
+	return await ctx.services.session.logout(ctx.session);
 });
 const logoutAll = protectedProcedure.input(z.void()).mutation(async opts => {
 	opts.ctx.request.cookies.delete(tokenCookieName, { path: "/" });
