@@ -1,16 +1,8 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
-	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
-
-	async function logout() {
-		await api($page).user.session.logout.mutate();
-		await goto("/auth/sign_in");
-	}
 </script>
 
 <main>
@@ -28,14 +20,21 @@
 		</div>
 
 		<div class="modules">
-			<span>Модуль1</span>
+			{#each data.course.modules as module}
+				<span>{module.title}</span>
+				{#each module.lessons as lesson}
+					<a href={`/course/${data.course.id}/lesson/${lesson.id}`}>
+						{lesson.title}
+					</a>
+				{/each}
+			{/each}
 		</div>
 
 		<div class="lesson">
 			<span> </span>
 			<div class="editorjs"></div>
 			<h5>Конспект урока</h5>
-			<span> Когда-нибудь здесь будет текстовое описание урока </span>
+			<span>{data.lessonContent}</span>
 		</div>
 	</div>
 </main>
