@@ -1,8 +1,10 @@
 import { router } from "./trpc";
+import getCourseRouter from "./course";
 import getUserRouter from "./user";
 
 const appRouter = router({
-	user: getUserRouter()
+	user: getUserRouter(),
+	course: getCourseRouter()
 });
 
 type AppRouter = typeof appRouter;

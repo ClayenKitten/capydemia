@@ -4,7 +4,45 @@ export type Generated<T> = T extends ColumnType<infer S, infer I, infer U>
   ? ColumnType<S, I | undefined, U>
   : ColumnType<T, T | undefined, T>;
 
+export type Json = JsonValue;
+
+export type JsonArray = JsonValue[];
+
+export type JsonObject = {
+  [K in string]?: JsonValue;
+};
+
+export type JsonPrimitive = boolean | number | string | null;
+
+export type JsonValue = JsonArray | JsonObject | JsonPrimitive;
+
 export type Timestamp = ColumnType<Date, Date | string, Date | string>;
+
+export interface Course {
+  description: string | null;
+  id: Generated<number>;
+  title: string;
+}
+
+export interface CourseEnrollment {
+  courseId: number;
+  userId: number;
+}
+
+export interface Lesson {
+  content: Json;
+  id: Generated<number>;
+  moduleId: number;
+  order: number;
+  title: string;
+}
+
+export interface Module {
+  courseId: number;
+  id: Generated<number>;
+  order: number;
+  title: string;
+}
 
 export interface PasswordRecovery {
   code: string;
@@ -32,6 +70,10 @@ export interface User {
 }
 
 export interface DB {
+  course: Course;
+  courseEnrollment: CourseEnrollment;
+  lesson: Lesson;
+  module: Module;
   passwordRecovery: PasswordRecovery;
   pendingRegistration: PendingRegistration;
   session: Session;

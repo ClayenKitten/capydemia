@@ -7,6 +7,7 @@ import Argon2PasswordService from "../domain/user/password/argon2";
 import { UserService } from "../domain/user";
 import { PasswordRecoveryService } from "../domain/user/passwordRecovery";
 import { SessionService } from "../domain/user/session";
+import CourseService from "../domain/course";
 
 export default function createServices(repos: Repositories) {
 	let s = {};
@@ -19,6 +20,7 @@ export default function createServices(repos: Repositories) {
 	addProp(s, "passwordRecovery", new PasswordRecoveryService(s, repos));
 	addProp(s, "session", new SessionService(s, repos));
 	addProp(s, "user", new UserService(s, repos));
+	addProp(s, "course", new CourseService(repos));
 	return s;
 }
 export type Services = ReturnType<typeof createServices>;
