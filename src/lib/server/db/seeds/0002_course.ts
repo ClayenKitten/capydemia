@@ -1,14 +1,13 @@
 import { sql, type Kysely } from "kysely";
 import type { DB } from "../types";
+import { resetSequence } from "../utils";
 
 export async function seed(db: Kysely<DB>): Promise<void> {
 	const tables = ["lesson", "module", "course"] as const;
 	await Promise.all(
 		tables.map(async t => {
 			await db.deleteFrom(t).execute();
-			sql<void>`ALTER SEQUENCE ${sql.id(`${t}_id_seq`)} RESTART WITH 1`.execute(
-				db
-			);
+			await resetSequence(db, t);
 		})
 	);
 
