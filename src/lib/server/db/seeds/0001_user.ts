@@ -16,12 +16,12 @@ export async function seed(db: Kysely<DB>): Promise<void> {
 		.insertInto("user")
 		.values([
 			{
-				email: "student@example.com",
-				passwordHash: await argon2.hash("qwerty")
+				email: "student@capydemia.ru",
+				passwordHash: await argon2.hash("password")
 			},
 			{
-				email: "teacher@example.com",
-				passwordHash: await argon2.hash("qwerty")
+				email: "teacher@capydemia.ru",
+				passwordHash: await argon2.hash("password")
 			}
 		])
 		.execute();
