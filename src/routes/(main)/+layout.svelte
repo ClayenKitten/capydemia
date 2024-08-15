@@ -19,7 +19,7 @@
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		border-bottom: 0.5px solid var(--secondary);
+		border-bottom: 1px solid var(--secondary);
 		background-color: var(--base-bg);
 	}
 	.header_logo {

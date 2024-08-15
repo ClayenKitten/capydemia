@@ -26,9 +26,9 @@
 						<span>Модуль {i + 1}. {module.title}</span>
 					</button>
 					<div class="lessons">
-						{#each module.lessons as lesson}
+						{#each module.lessons as lesson, j}
 							<a href={`/course/${data.course.id}/lesson/${lesson.id}`}>
-								{lesson.title}
+								Урок {j + 1}. {lesson.title}
 							</a>
 						{/each}
 					</div>
@@ -69,7 +69,7 @@
 	.progress {
 		grid-area: progress;
 		background-color: var(--main-bg);
-		border: 0.5px solid var(--secondary);
+		border: 1px solid var(--secondary);
 		border-radius: 8px;
 
 		display: flex;
@@ -82,7 +82,7 @@
 	.achievements {
 		grid-area: achievements;
 		background-color: var(--main-bg);
-		border: 0.5px solid var(--secondary);
+		border: 1px solid var(--secondary);
 		border-radius: 8px;
 
 		display: flex;
@@ -114,11 +114,20 @@
 					border-radius: 0 0 8px 8px;
 					padding: 12px 0 12px 0;
 					a {
+						display: flex;
+						align-items: center;
 						min-height: 60px;
 						padding: 10px 32px 10px 32px;
 						font: var(--P1);
+						color: var(--text);
 						line-height: 24px;
 						text-decoration: none;
+						&:focus-within {
+							background-color: var(--secondary);
+						}
+					}
+					&:not(:focus-within) > a:hover {
+						color: var(--secondary);
 					}
 				}
 				button {
@@ -129,8 +138,14 @@
 				}
 			}
 
-			& button {
+			button {
 				height: 72px;
+				padding: 12px 32px 12px 32px;
+				text-align: left;
+				width: 100%;
+				background-color: var(--main-bg);
+				border: 1px solid var(--secondary);
+				border-radius: 8px;
 
 				> span {
 					display: -webkit-box;
@@ -140,13 +155,10 @@
 					overflow: hidden;
 					-webkit-box-orient: vertical;
 				}
+			}
 
-				padding: 12px 32px 12px 32px;
-				text-align: left;
-				width: 100%;
-				background-color: var(--main-bg);
-				border: 0.5px solid var(--secondary);
-				border-radius: 8px;
+			&:not(:focus-within) > button:hover {
+				color: var(--secondary);
 			}
 
 			.lessons {
@@ -157,7 +169,7 @@
 	.lesson {
 		grid-area: lesson;
 		background-color: var(--main-bg);
-		border: 0.5px solid var(--secondary);
+		border: 1px solid var(--secondary);
 		border-radius: 8px;
 	}
 </style>

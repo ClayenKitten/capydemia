@@ -52,7 +52,7 @@
 		&.secondary {
 			color: var(--primary);
 			background-color: var(--main-bg);
-			border: 0.5px solid var(--primary);
+			border: 1px solid var(--primary);
 
 			&:hover {
 				color: var(--secondary);
