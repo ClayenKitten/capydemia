@@ -20,9 +20,11 @@
 		</div>
 
 		<div class="modules">
-			{#each data.course.modules as module}
+			{#each data.course.modules as module, i}
 				<div class="module">
-					<button>{module.title}</button>
+					<button>
+						<span>Модуль {i + 1}. {module.title}</span>
+					</button>
 					<div class="lessons">
 						{#each module.lessons as lesson}
 							<a href={`/course/${data.course.id}/lesson/${lesson.id}`}>
@@ -129,8 +131,16 @@
 
 			& button {
 				height: 72px;
-				overflow: hidden;
-				text-overflow: ellipsis;
+
+				> span {
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					line-clamp: 2;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					-webkit-box-orient: vertical;
+				}
+
 				padding: 12px 32px 12px 32px;
 				text-align: left;
 				width: 100%;
