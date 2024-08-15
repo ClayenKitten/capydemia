@@ -21,12 +21,16 @@
 
 		<div class="modules">
 			{#each data.course.modules as module}
-				<span>{module.title}</span>
-				{#each module.lessons as lesson}
-					<a href={`/course/${data.course.id}/lesson/${lesson.id}`}>
-						{lesson.title}
-					</a>
-				{/each}
+				<div class="module">
+					<button>{module.title}</button>
+					<div class="lessons">
+						{#each module.lessons as lesson}
+							<a href={`/course/${data.course.id}/lesson/${lesson.id}`}>
+								{lesson.title}
+							</a>
+						{/each}
+					</div>
+				</div>
 			{/each}
 		</div>
 
@@ -87,9 +91,58 @@
 	}
 	.modules {
 		grid-area: modules;
-		background-color: var(--main-bg);
-		border: 0.5px solid var(--secondary);
-		border-radius: 8px;
+
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		font: var(--B);
+
+		.module {
+			height: 72px;
+
+			&:focus-within {
+				max-height: 340px;
+				height: min-content;
+				.lessons {
+					display: flex;
+					flex-direction: column;
+					background-color: var(--main-bg);
+					border: 1px solid var(--secondary);
+					border-top: none;
+					border-radius: 0 0 8px 8px;
+					padding: 12px 0 12px 0;
+					a {
+						min-height: 60px;
+						padding: 10px 32px 10px 32px;
+						font: var(--P1);
+						line-height: 24px;
+						text-decoration: none;
+					}
+				}
+				button {
+					background-color: var(--primary);
+					color: var(--main-bg);
+					border-radius: 8px 8px 0 0;
+					border: none;
+				}
+			}
+
+			& button {
+				height: 72px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				padding: 12px 32px 12px 32px;
+				text-align: left;
+				width: 100%;
+				background-color: var(--main-bg);
+				border: 0.5px solid var(--secondary);
+				border-radius: 8px;
+			}
+
+			.lessons {
+				display: none;
+			}
+		}
 	}
 	.lesson {
 		grid-area: lesson;

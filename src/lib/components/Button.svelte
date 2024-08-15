@@ -21,109 +21,98 @@
 </button>
 
 <style lang="scss">
-	.primary {
+	button {
 		height: 52px;
-		color: var(--main-bg);
-		background-color: var(--primary);
 		padding: 14px 32px 14px 32px;
 		border-radius: 8px;
-		border: none;
-		font: var(--B);
-		align-self: stretch;
 		align-content: center;
-		text-decoration: none;
+		font: var(--B);
 
-		&:hover {
-			color: var(--text);
-			background-color: var(--secondary);
-		}
-
-		&:active {
+		&.primary {
 			color: var(--main-bg);
 			background-color: var(--primary);
-		}
+			border: none;
 
-		&:disabled {
-			color: var(--text-disabled);
-			background-color: var(--text-note);
-			cursor: not-allowed;
-		}
-	}
-	.secondary {
-		height: 52px;
-		color: var(--primary);
-		background-color: var(--main-bg);
-		padding: 14px 32px 14px 32px;
-		border: 0.5px solid var(--primary);
-		border-radius: 8px;
-		font: var(--B);
-		align-self: stretch;
-		align-content: center;
-		text-decoration: none;
+			&:hover {
+				color: var(--text);
+				background-color: var(--secondary);
+			}
 
-		&:hover {
-			color: var(--secondary);
-			border-color: var(--secondary);
-		}
+			&:active {
+				color: var(--main-bg);
+				background-color: var(--primary);
+			}
 
-		&:active {
+			&:disabled {
+				color: var(--text-disabled);
+				background-color: var(--text-note);
+				cursor: not-allowed;
+			}
+		}
+		&.secondary {
 			color: var(--primary);
-			border-color: var(--primary);
-		}
+			background-color: var(--main-bg);
+			border: 0.5px solid var(--primary);
 
-		&:disabled {
-			color: var(--text-note);
-			border-color: var(--text-note);
-			cursor: not-allowed;
-		}
-	}
-	.text {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		gap: 10px;
-		height: 24px;
-		padding: 4px 0 4px 0;
-		color: var(--text);
-		background-color: var(--main-bg);
-		border: none;
-		font: var(--B);
-		align-self: stretch;
-		align-content: center;
-		text-decoration: none;
+			&:hover {
+				color: var(--secondary);
+				border-color: var(--secondary);
+			}
 
-		& img {
-			filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
-				brightness(97%) contrast(101%);
-		}
+			&:active {
+				color: var(--primary);
+				border-color: var(--primary);
+			}
 
-		&:hover {
-			color: var(--primary);
-			fill: var(--primary);
+			&:disabled {
+				color: var(--text-note);
+				border-color: var(--text-note);
+				cursor: not-allowed;
+			}
 		}
-
-		&:hover img {
-			filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
-				brightness(99%) contrast(94%);
-		}
-
-		&:active {
+		&.text {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			height: 24px;
+			padding: 4px 0 4px 0;
 			color: var(--text);
-		}
+			background-color: var(--main-bg);
+			border: none;
 
-		&:active img {
-			filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
-				brightness(97%) contrast(101%);
-		}
+			& img {
+				filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
+					brightness(97%) contrast(101%);
+			}
 
-		&:disabled {
-			color: var(--text-note);
-			cursor: not-allowed;
-		}
+			&:hover {
+				color: var(--primary);
+				fill: var(--primary);
+			}
 
-		&:disabled img {
-			filter: invert(82%) sepia(8%) saturate(41%) hue-rotate(316deg)
-				brightness(87%) contrast(98%);
+			&:hover img {
+				filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
+					brightness(99%) contrast(94%);
+			}
+
+			&:active {
+				color: var(--text);
+			}
+
+			&:active img {
+				filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
+					brightness(97%) contrast(101%);
+			}
+
+			&:disabled {
+				color: var(--text-note);
+				cursor: not-allowed;
+			}
+
+			&:disabled img {
+				filter: invert(82%) sepia(8%) saturate(41%) hue-rotate(316deg)
+					brightness(87%) contrast(98%);
+			}
 		}
 	}
 </style>
