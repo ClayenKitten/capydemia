@@ -10,10 +10,11 @@ export default class CourseService {
 	public async getCourse(
 		user: User,
 		courseId: number
-	): Promise<Result<Course, "UNAUTHORIZED">> {
+	): Promise<Result<Course, "NOT_FOUND">> {
 		let course = await this.repos.course.getCourse(courseId);
+		if (course === null) return { ok: false, error: "NOT_FOUND" };
 		if (!this.repos.course.isEnrolled(user, course))
-			return { ok: false, error: "UNAUTHORIZED" };
+			return { ok: false, error: "NOT_FOUND" };
 		return { ok: true, value: course };
 	}
 
@@ -24,23 +25,27 @@ export default class CourseService {
 	public async getLessonContent(
 		user: User,
 		lessonId: number
-	): Promise<Result<string, "UNAUTHORIZED">> {
+	): Promise<Result<string, "NOT_FOUND">> {
 		let course = await this.repos.course.getCourseByLesson(lessonId);
+		if (course === null) return { ok: false, error: "NOT_FOUND" };
 		if (!this.repos.course.isEnrolled(user, course))
-			return { ok: false, error: "UNAUTHORIZED" };
+			return { ok: false, error: "NOT_FOUND" };
 
 		let lesson = await this.repos.course.getLessonContent(lessonId);
+		if (lesson === null) return { ok: false, error: "NOT_FOUND" };
+
 		return { ok: true, value: lesson };
 	}
 }
 
 export class CourseRepository extends Repository {
-	public async getCourse(courseId: number): Promise<Course> {
+	public async getCourse(courseId: number): Promise<Course | null> {
 		let record = await this.db
 			.selectFrom("course")
 			.where("id", "=", courseId)
 			.selectAll()
-			.executeTakeFirstOrThrow();
+			.executeTakeFirst();
+		if (record === undefined) return null;
 		return this.mapCourse(record);
 	}
 
@@ -64,23 +69,24 @@ export class CourseRepository extends Repository {
 			.then(x => x !== null);
 	}
 
-	public async getLessonContent(id: number): Promise<string> {
+	public async getLessonContent(id: number): Promise<string | null> {
 		return await this.db
 			.selectFrom("lesson")
 			.where("id", "=", id)
 			.select("content")
-			.executeTakeFirstOrThrow()
-			.then(x => JSON.stringify(x.content));
+			.executeTakeFirst()
+			.then(x => (x ? JSON.stringify(x.content) : null));
 	}
 
-	public async getCourseByLesson(lessonId: number): Promise<Course> {
+	public async getCourseByLesson(lessonId: number): Promise<Course | null> {
 		let courseRecord = await this.db
 			.selectFrom("lesson")
 			.where("lesson.id", "=", lessonId)
 			.innerJoin("module", "lesson.moduleId", "module.id")
 			.innerJoin("course", "module.courseId", "course.id")
 			.select(["course.id", "course.title", "course.description"])
-			.executeTakeFirstOrThrow();
+			.executeTakeFirst();
+		if (courseRecord === undefined) return null;
 		return await this.mapCourse(courseRecord);
 	}
 
