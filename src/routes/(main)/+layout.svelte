@@ -2,7 +2,7 @@
 	<img src="/logo.svg" alt="logo" class="header_logo" />
 	<div class="user">
 		<img src="/icons/Bell-32px.svg" alt="bell" />
-		<img src="/logo.svg" alt="logo" class="profile" />
+		<img src="/avatar.svg" alt="avatar" class="profile" />
 	</div>
 </header>
 
@@ -24,6 +24,10 @@
 	}
 	.header_logo {
 		padding: 20px 82px;
+	}
+	.profile{
+		border-radius: 100%;
+		background-color: #EDE7F6;
 	}
 	.user {
 		display: flex;
