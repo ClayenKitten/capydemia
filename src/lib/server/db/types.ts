@@ -54,6 +54,8 @@ export interface PendingRegistration {
   code: string;
   email: string;
   expires: Timestamp;
+  firstName: string;
+  lastName: string;
   passwordHash: string;
 }
 
@@ -64,9 +66,14 @@ export interface Session {
 }
 
 export interface User {
+  avatarUrl: string | null;
   email: string;
+  firstName: string;
   id: Generated<number>;
+  lastName: string;
   passwordHash: string;
+  patronim: string | null;
+  phone: string | null;
 }
 
 export interface DB {

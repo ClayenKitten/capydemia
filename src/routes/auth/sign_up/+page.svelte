@@ -1,23 +1,36 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import { z } from "zod";
 
 	async function create() {
-		await api($page).user.registration.begin.mutate({ email, password });
+		await api($page).user.registration.begin.mutate({
+			email,
+			firstName,
+			lastName,
+			password
+		});
 		confirmed = true;
 	}
 
 	let email = "";
+	let firstName = "";
+	let lastName = "";
 	let password = "";
 	let repeat_password = "";
 	let confirmed = false;
 
 	$: valid_email = z.string().email().max(128).safeParse(email).success;
+	$: validFirstName = firstName.length !== 0 && firstName.length <= 128;
+	$: validLastName = lastName.length !== 0 && lastName.length <= 128;
 	$: valid_password = password.length >= 8 && password.length <= 128;
 	$: valid_repeat_password = password === repeat_password;
-	$: valid = valid_email && valid_password && valid_repeat_password;
+	$: valid =
+		valid_email &&
+		validFirstName &&
+		validLastName &&
+		valid_password &&
+		valid_repeat_password;
 </script>
 
 <main>
@@ -32,25 +45,46 @@
 						<input
 							type="email"
 							bind:value={email}
-							class:invalid={!valid_email}
+							class:invalid={email.length !== 0 && !valid_email}
 						/>
 					</label>
-					<label class="type">
-						<span>Пароль</span>
-						<input
-							type="password"
-							bind:value={password}
-							class:invalid={!valid_password}
-						/>
-					</label>
-					<label class="type">
-						<span>Повторите пароль</span>
-						<input
-							type="password"
-							bind:value={repeat_password}
-							class:invalid={!valid_repeat_password}
-						/>
-					</label>
+					<div class="horizontal">
+						<label class="type">
+							<span>Имя</span>
+							<input
+								type="text"
+								bind:value={firstName}
+								class:invalid={firstName.length !== 0 && !validFirstName}
+							/>
+						</label>
+						<label class="type">
+							<span>Фамилия</span>
+							<input
+								type="text"
+								bind:value={lastName}
+								class:invalid={lastName.length !== 0 && !validLastName}
+							/>
+						</label>
+					</div>
+					<div class="horizontal">
+						<label class="type">
+							<span>Пароль</span>
+							<input
+								type="password"
+								bind:value={password}
+								class:invalid={password.length !== 0 && !valid_password}
+							/>
+						</label>
+						<label class="type">
+							<span>Повторите пароль</span>
+							<input
+								type="password"
+								bind:value={repeat_password}
+								class:invalid={repeat_password.length !== 0 &&
+									!valid_repeat_password}
+							/>
+						</label>
+					</div>
 					<button on:click={create} disabled={!valid}>
 						Зарегистрироваться
 					</button>
@@ -94,16 +128,18 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		max-width: 600px;
 		gap: 48px;
 		border: 1px solid var(--border);
 		border-radius: 24px;
-		padding: 40px 56px 40px 56px;
+		padding: 40px 28px;
 	}
 	.input {
 		display: flex;
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 24px;
+		width: 100%;
 	}
 	.type {
 		display: flex;
@@ -111,19 +147,22 @@
 		justify-content: center;
 		text-align: left;
 		gap: 4px;
+		input {
+			height: 56px;
+			border: 2px solid var(--border);
+			border-radius: 12px;
+			font-size: 20px;
+			padding: 0 10px;
+		}
+		> span {
+			color: rgb(61, 61, 61);
+			padding-left: 8px;
+		}
 	}
 	h1 {
 		color: var(--text-header);
 		font-size: 32px;
 		margin: 10px;
-	}
-	input {
-		height: 56px;
-		width: 528px;
-		border: 2px solid var(--border);
-		border-radius: 12px;
-		font-size: 20px;
-		padding: 0 10px 0 10px;
 	}
 	.invalid {
 		border-color: var(--error);
@@ -169,6 +208,14 @@
 		&:disabled {
 			background-color: var(--text-note);
 			border-color: var(--text-note);
+		}
+	}
+	.horizontal {
+		display: flex;
+		gap: 16px;
+		> label {
+			flex: 1 0 10px;
+			overflow: hidden;
 		}
 	}
 </style>

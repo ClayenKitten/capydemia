@@ -17,10 +17,18 @@ export async function seed(db: Kysely<DB>): Promise<void> {
 		.values([
 			{
 				email: "student@capydemia.ru",
+				phone: "88005553535",
+				firstName: "Котофей",
+				lastName: "Пушистовый",
+				patronim: "Капибарович",
 				passwordHash: await argon2.hash("password")
 			},
 			{
 				email: "teacher@capydemia.ru",
+				phone: null,
+				firstName: "Капибарий",
+				lastName: "Умиротворённый",
+				patronim: null,
 				passwordHash: await argon2.hash("password")
 			}
 		])

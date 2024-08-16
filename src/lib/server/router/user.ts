@@ -89,12 +89,18 @@ const beginRegistration = publicProcedure
 	.input(
 		z.object({
 			email: z.string().email().max(320),
+			firstName: z.string().min(1).max(128),
+			lastName: z.string().min(1).max(128),
 			password: z.string().min(8).max(128)
 		})
 	)
 	.mutation(async ({ ctx, input }) => {
-		console.log(input);
-		return await ctx.services.user.register(input.email, input.password);
+		return await ctx.services.user.register(
+			input.email,
+			input.firstName,
+			input.lastName,
+			input.password
+		);
 	});
 const completeRegistration = publicProcedure
 	.input(z.object({ code: z.string() }))
