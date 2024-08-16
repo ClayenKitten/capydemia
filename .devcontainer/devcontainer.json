@@ -9,7 +9,8 @@
 				"matthewpi.caddyfile-support",
 				"svelte.svelte-vscode",
 				"esbenp.prettier-vscode",
-				"vitest.explorer"
+				"vitest.explorer",
+				"github.vscode-github-actions"
 			],
 			"settings": {
 				"remote.autoForwardPorts": false
