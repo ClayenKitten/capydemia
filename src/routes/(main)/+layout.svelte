@@ -25,9 +25,9 @@
 	.header_logo {
 		padding: 20px 82px;
 	}
-	.profile{
+	.profile {
 		border-radius: 100%;
-		background-color: #EDE7F6;
+		background-color: #ede7f6;
 	}
 	.user {
 		display: flex;
