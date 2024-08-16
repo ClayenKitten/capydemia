@@ -1,17 +1,13 @@
-name: Check and Test
+name: Check
 
 on:
-  push:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - edited
+  workflow_dispatch:
+  workflow_call:
 
 jobs:
   check-and-test:
+    name: Check and test
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js 21.x

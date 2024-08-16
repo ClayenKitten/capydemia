@@ -1,0 +1,25 @@
+name: Production workflow
+permissions: write-all
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yml
+
+  build:
+    name: Build
+    needs: check
+    uses: ./.github/workflows/build.yml
+
+  deploy:
+    name: Deploy
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      HOST: ${{ secrets.PRODUCTION_HOST }}
+      USER: ${{ secrets.PRODUCTION_USER }}
+      KEY: ${{ secrets.PRODUCTION_KEY }}

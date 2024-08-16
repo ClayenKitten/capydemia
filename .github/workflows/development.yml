@@ -1,0 +1,16 @@
+name: Development workflow
+permissions: write-all
+
+on:
+  push:
+    branches: ["develop"]
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yml
+
+  build:
+    name: Build
+    needs: check
+    uses: ./.github/workflows/build.yml
