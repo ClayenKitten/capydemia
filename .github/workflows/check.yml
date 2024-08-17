@@ -8,6 +8,9 @@ jobs:
   check-and-test:
     name: Check
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node.js 21.x
@@ -15,6 +18,7 @@ jobs:
         with:
           node-version: 21.x
           cache: "npm"
+          cache-dependency-path: web/package-lock.json
       - run: npm check:format
         if: ${{ github.event_name == 'pull_request' }}
       - run: npm ci
