@@ -2,6 +2,8 @@
 	import { onMount } from "svelte";
 
 	export let data: EditorJS.OutputData;
+	export let placeholder = "";
+	export let readOnly: boolean = false;
 	let holder: HTMLElement;
 
 	onMount(async () => {
@@ -18,8 +20,9 @@
 				list: List.default,
 				nested: NestedList.default
 			},
-			placeholder: "Давайте напишем что-то потрясающее!",
-			readOnly: true,
+			placeholder,
+			readOnly,
+			minHeight: 0,
 			data
 		});
 	});
