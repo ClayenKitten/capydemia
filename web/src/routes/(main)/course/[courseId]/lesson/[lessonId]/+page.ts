@@ -1,3 +1,4 @@
+import type { OutputData } from "@editorjs/editorjs";
 import api from "$lib/api";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
@@ -20,7 +21,7 @@ export const load: PageLoad = async event => {
 	}
 
 	return {
-		lessonContent: lessonContent.value,
+		lessonContent: JSON.parse(lessonContent.value) as OutputData,
 		lesson,
 		module
 	};
