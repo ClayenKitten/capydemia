@@ -9,8 +9,6 @@
 		const Header = await import("@editorjs/header");
 		const List = await import("@editorjs/list");
 		const NestedList = await import("@editorjs/nested-list");
-		//const CodeTool = await import('@editorjs/code');
-		//const SimpleImage = await import('@editorjs/simple-image');
 
 		let editor: EditorJS.default;
 		editor = new EditorJS.default({
@@ -19,8 +17,6 @@
 				header: Header.default,
 				list: List.default,
 				nested: NestedList.default
-				//code: CodeTool.default,
-				//image: SimpleImage.default
 			},
 			placeholder: "Давайте напишем что-то потрясающее!",
 			readOnly: true,

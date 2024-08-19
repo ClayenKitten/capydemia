@@ -37,12 +37,10 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@editorjs/code": "^2.9.0",
 		"@editorjs/editorjs": "^2.30.5",
 		"@editorjs/header": "^2.8.7",
 		"@editorjs/list": "^1.10.0",
 		"@editorjs/nested-list": "^1.4.3",
-		"@editorjs/simple-image": "^1.6.0",
 		"@sveltejs/adapter-node": "^5.2.0",
 		"@trpc/client": "^10.0.0",
 		"@trpc/server": "^10.0.0",
