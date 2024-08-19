@@ -12,7 +12,7 @@ services:
 
   web:
     image: ghcr.io/clayenkitten/capydemia:latest
-    build: .
+    build: ./web
     init: true
     expose: [3000]
     restart: unless-stopped

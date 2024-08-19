@@ -41,7 +41,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
-          context: "{{defaultContext}}"
+          context: "{{defaultContext}}:web"
           tags: ${{ steps.meta.outputs.tags }}
           push: true
           cache-from: type=gha,scope=capydemia
