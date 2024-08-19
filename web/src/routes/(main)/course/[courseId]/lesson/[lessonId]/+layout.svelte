@@ -169,5 +169,6 @@
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		overflow: hidden;
+		padding: 32px 32px 32px 32px;
 	}
 </style>
