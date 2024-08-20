@@ -65,6 +65,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 14px;
+        width:336px;
 	}
 	.user {
 		background-color: var(--main-bg);
@@ -118,5 +119,6 @@
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		padding: 32px 20px 32px 20px;
+        width:min(900px, 1fr)
 	}
 </style>
