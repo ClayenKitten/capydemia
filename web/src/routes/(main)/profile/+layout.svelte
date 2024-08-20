@@ -1,23 +1,51 @@
 <script lang="ts">
+	import Menu from "$lib/components/Menu.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 </script>
 
 <main>
-	<div class="user">
-		<img src="/avatar.svg" alt="avatar" class="avatar" />
-		<div class="identity">
-			<span class="name">Котофий Пушистовый</span>
-			<p class="role">Студент</p>
+	<div class="sidebar">
+		<div class="user">
+			<img src="/avatar.svg" alt="avatar" class="avatar" />
+			<div class="identity">
+				<span class="name">Котофий Пушистовый</span>
+				<p class="role">Студент</p>
+			</div>
 		</div>
-	</div>
-	<div class="menu">
-		<div>Данные аккаунта</div>
-	</div>
-	<div class="exit">
-		<img src="/icons/SignOut-32px.svg" alt="exit" />
-		<span>Выйти</span>
+		<div class="menu">
+			<Menu text="Данные аккаунта" path="/profile" img="/icons/User-24px.svg" />
+			<Menu
+				text="Мои курсы"
+				path="/profile/courses"
+				img="/icons/GraduationCap-24px.svg"
+			/>
+			<Menu
+				text="Настройки уведомлений"
+				path="/profile/notifications"
+				img="/icons/Bell-24px.svg"
+			/>
+			<Menu
+				text="Сертификаты"
+				path="/profile/certificates"
+				img="/icons/Certificate-24px.svg"
+			/>
+			<Menu
+				text="Мои платежи"
+				path="/profile/payments"
+				img="/icons/CreditCard-24px.svg"
+			/>
+			<Menu
+				text="Поддержка"
+				path="/profile/support"
+				img="/icons/Headset-24px.svg"
+			/>
+		</div>
+		<button class="exit">
+			<img src="/icons/SignOut-32px.svg" alt="exit" />
+			<span>Выйти</span>
+		</button>
 	</div>
 	<div class="content">
 		<slot />
@@ -26,19 +54,19 @@
 
 <style lang="scss">
 	main {
-		display: grid;
-		grid-template-columns: 336px 900px;
-		grid-template-rows: min-content 158px auto;
-		grid-template-areas:
-			"user content"
-			"menu content"
-			"exit content";
-		gap: 14px 40px;
-		padding: 40px calc((max(100vw - 1276px, 0px)) / 2 + 64px);
+		display: flex;
+		justify-content: center;
+		gap: 40px;
+		//padding: 40px calc((max(100vw - 1276px, 0px)) / 2 + 64px);
+		padding: 40px 82px 188px 82px;
 		background-color: var(--base-bg);
 	}
+	.sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
 	.user {
-		grid-area: user;
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
@@ -69,13 +97,12 @@
 		}
 	}
 	.menu {
-		grid-area: menu;
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
+		padding: 32px 0 32px 0;
 	}
 	.exit {
-		grid-area: exit;
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
@@ -87,7 +114,6 @@
 		font: var(--B);
 	}
 	.content {
-		grid-area: content;
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
