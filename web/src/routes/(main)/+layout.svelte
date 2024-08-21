@@ -2,7 +2,9 @@
 	<img src="/logo.svg" alt="logo" class="header_logo" />
 	<div class="user">
 		<img src="/icons/Bell-32px.svg" alt="bell" />
-		<img src="/avatar.svg" alt="avatar" class="profile" />
+		<a href="/profile">
+			<img src="/avatar.svg" alt="avatar" class="profile" />
+		</a>
 	</div>
 </header>
 
