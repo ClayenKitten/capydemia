@@ -1,9 +1,31 @@
 <script lang="ts">
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
+	import { z } from "zod";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+
+	/*
+	let email = "";
+	let firstName = "";
+	let lastName = "";
+	let password = "";
+	let repeat_password = "";
+	let confirmed = false;
+
+	$: valid_email = z.string().email().max(128).safeParse(email).success;
+	$: validFirstName = firstName.length !== 0 && firstName.length <= 128;
+	$: validLastName = lastName.length !== 0 && lastName.length <= 128;
+	$: valid_password = password.length >= 8 && password.length <= 128;
+	$: valid_repeat_password = password === repeat_password;
+	$: valid =
+		valid_email &&
+		validFirstName &&
+		validLastName &&
+		valid_password &&
+		valid_repeat_password;*/
+	$: valid=true;
 </script>
 
 <main>
@@ -15,23 +37,39 @@
 			связаться с Вами.</span
 		>
 	</div>
-	<div class="input">
-		<div class="personal">
+	<div class="inputs">
+		<div class="input">
 			<h4>Личные данные</h4>
-			<div class="personal_input">
-				<Input placeholder="Введите имя" />
+			<div class="personal">
+				<div class="personal_input">
+					<Input placeholder="Введите имя" valid={valid}/>
+					<Input placeholder="Введите фамилию" valid={valid}/>
+					<Input placeholder="Введите отчество" valid={valid}/>
+				</div>
+				<button class="photo">
+					<img src="avatar.svg" alt="avatar">
+					<span>Сменить фото</span>
+				</button>
 			</div>
+			
 		</div>
-		<div class="contacts">
+		<div class="input">
 			<h4>Контактная информация</h4>
-			<div class="contact_input">
-				<Input placeholder="Введите имя" />
+			<div class="contacts">
+				<Input placeholder="Введите почту" valid={valid}/>
+				<Input placeholder="Введите номер телефона" valid={valid}/>
 			</div>
 		</div>
-		<div class="password">
+		<div class="input">
 			<h4>Смена пароля</h4>
-			<div class="password_input">
-				<Input placeholder="Введите имя" />
+			<div class="password">
+				<div class="old_password">
+					<Input placeholder="Введите текущий пароль" />
+				</div>
+				<div class="new_password">
+					<Input placeholder="Введите новый пароль" valid={valid}/>
+					<Input placeholder="Повторите новый пароль" valid={valid}/>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -62,28 +100,61 @@
 		font: var(--H4);
 		color: var(--text);
 	}
-	.input {
+	.inputs {
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
 	}
-	.personal {
+	.input {
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		padding: 32px;
+		display: flex;
+		flex-direction: column;
+		gap:18px;
+	}
+	.personal{
+		display: flex;
+		gap: 32px;
+		justify-content: center;
+		.photo{
+			display:flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 2px;
+			border: none;
+			background-color: var(--main-bg);
+			img{
+				height: 141px;
+				border-radius: 100%;
+				border: 1px solid var(--secondary);
+				background-color: #ede7f6;
+			}
+			span{
+				font:var(--P1-bold);
+				color: var(--primary);
+			}
+		}
+	}
+	.personal_input{
+		display: flex;
+		flex-flow: wrap;
+		row-gap: 18px;
+		column-gap: 32px;
 	}
 	.contacts {
-		background-color: var(--main-bg);
-		border: 1px solid var(--secondary);
-		border-radius: 8px;
-		padding: 32px;
+		display: flex;
+		gap: 32px;
 	}
 	.password {
-		background-color: var(--main-bg);
-		border: 1px solid var(--secondary);
-		border-radius: 8px;
-		padding: 32px;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		.new_password{
+			display: flex;
+			gap: 32px;
+		}
 	}
 	.confirm {
 		display: flex;

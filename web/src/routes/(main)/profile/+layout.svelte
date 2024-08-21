@@ -3,6 +3,7 @@
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+	//Котофий Пушистовый
 </script>
 
 <main>
@@ -10,7 +11,7 @@
 		<div class="user">
 			<img src="/avatar.svg" alt="avatar" class="avatar" />
 			<div class="identity">
-				<span class="name">Котофий Пушистовый</span>
+				<span class="name">{data.user.email} {data.user.id}</span>
 				<p class="role">Студент</p>
 			</div>
 		</div>
@@ -119,6 +120,7 @@
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		padding: 32px 20px 32px 20px;
-        width:min(900px, 1fr)
+        width:min(900px, 1fr);
+		max-width: 900px;
 	}
 </style>

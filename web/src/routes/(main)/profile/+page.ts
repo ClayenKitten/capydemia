@@ -1,7 +1,17 @@
-import type { OutputData } from "@editorjs/editorjs";
 import api from "$lib/api";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
+
+export const load: PageLoad = async event =>{
+	let firstname = await api(event).user.getInfo.query();
+	let lastname = await api(event).user.getInfo.query();
+
+	return{
+		firstname,
+		lastname
+	}
+}
+
 /*
 export const load: PageLoad = async event => {
 	let { lesson, module } = await event.parent();
