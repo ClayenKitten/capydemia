@@ -36,4 +36,9 @@ export async function down(db: Kysely<any>): Promise<void> {
 		.dropColumn("phone")
 		.dropColumn("avatarUrl")
 		.execute();
+	await db.schema
+		.alterTable("pendingRegistration")
+		.dropColumn("firstName")
+		.dropColumn("lastName")
+		.execute();
 }
