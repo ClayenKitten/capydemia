@@ -81,6 +81,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
+		flex: 0 1 900px;
 		gap: 32px;
 	}
 	.heading {
@@ -144,7 +145,9 @@
 	}
 	.contacts {
 		display: flex;
-		gap: 32px;
+		flex-flow: wrap;
+		row-gap: 18px;
+		column-gap: 32px;
 	}
 	.password {
 		display: flex;
@@ -152,7 +155,9 @@
 		gap: 18px;
 		.new_password {
 			display: flex;
-			gap: 32px;
+			flex-flow: wrap;
+			row-gap: 18px;
+			column-gap: 32px;
 		}
 	}
 	.confirm {

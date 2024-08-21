@@ -3,19 +3,19 @@
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
-	//Котофий Пушистовый
 </script>
 
-<main>
-	<div class="sidebar">
+<div class="wrapper">
+	<aside>
 		<div class="user">
 			<img src="/avatar.svg" alt="avatar" class="avatar" />
 			<div class="identity">
-				<span class="name">{data.user.email} {data.user.id}</span>
+				<span class="firstname">{data.user.firstName}</span>
+				<span class="lastname">{data.user.lastName}</span>
 				<p class="role">Студент</p>
 			</div>
 		</div>
-		<div class="menu">
+		<nav>
 			<Menu text="Данные аккаунта" path="/profile" img="/icons/User-24px.svg" />
 			<Menu
 				text="Мои курсы"
@@ -42,31 +42,30 @@
 				path="/profile/support"
 				img="/icons/Headset-24px.svg"
 			/>
-		</div>
+		</nav>
 		<button class="exit">
 			<img src="/icons/SignOut-32px.svg" alt="exit" />
 			<span>Выйти</span>
 		</button>
-	</div>
+	</aside>
 	<div class="content">
 		<slot />
 	</div>
-</main>
+</div>
 
 <style lang="scss">
-	main {
+	.wrapper {
 		display: flex;
 		justify-content: center;
 		gap: 40px;
-		//padding: 40px calc((max(100vw - 1276px, 0px)) / 2 + 64px);
 		padding: 40px 82px 188px 82px;
 		background-color: var(--base-bg);
 	}
-	.sidebar {
+	aside {
 		display: flex;
 		flex-direction: column;
+		flex: 0 0 336px;
 		gap: 14px;
-		width: 336px;
 	}
 	.user {
 		background-color: var(--main-bg);
@@ -86,6 +85,9 @@
 		span {
 			font: var(--P2-bold);
 			color: var(--text);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 		p {
 			font: var(--P3-light);
@@ -98,7 +100,7 @@
 			gap: 8px;
 		}
 	}
-	.menu {
+	nav {
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
@@ -120,7 +122,5 @@
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		padding: 32px 20px 32px 20px;
-		width: min(900px, 1fr);
-		max-width: 900px;
 	}
 </style>
