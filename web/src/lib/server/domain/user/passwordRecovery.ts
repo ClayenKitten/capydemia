@@ -54,6 +54,8 @@ export class PasswordRecoveryRepository extends Repository {
 				"user.id",
 				"user.email",
 				"user.passwordHash",
+				"user.firstName",
+				"user.lastName",
 				"passwordRecovery.code",
 				"passwordRecovery.expires"
 			])
@@ -61,7 +63,13 @@ export class PasswordRecoveryRepository extends Repository {
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
 		return new PasswordRecovery(
-			new User(record.id, record.email, record.passwordHash),
+			new User(
+				record.id,
+				record.email,
+				record.passwordHash,
+				record.firstName,
+				record.lastName
+			),
 			record.code,
 			record.expires
 		);

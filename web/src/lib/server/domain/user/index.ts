@@ -15,7 +15,9 @@ export class User {
 	constructor(
 		public id: number,
 		public email: string,
-		public passwordHash: string
+		public passwordHash: string,
+		public firstName: string,
+		public lastName: string
 	) {}
 }
 
@@ -77,7 +79,13 @@ export class UserRepository extends Repository {
 			.where("id", "=", id)
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
-		return new User(record.id, record.email, record.passwordHash);
+		return new User(
+			record.id,
+			record.email,
+			record.passwordHash,
+			record.firstName,
+			record.lastName
+		);
 	}
 
 	public async updatePassword(user: User, passwordHash: string) {
@@ -95,7 +103,13 @@ export class UserRepository extends Repository {
 			.where("email", "=", email)
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
-		return new User(record.id, record.email, record.passwordHash);
+		return new User(
+			record.id,
+			record.email,
+			record.passwordHash,
+			record.firstName,
+			record.lastName
+		);
 	}
 
 	public async create(

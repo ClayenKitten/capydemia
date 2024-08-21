@@ -55,10 +55,23 @@ export class SessionRepository extends Repository {
 			.selectFrom("session")
 			.where("token", "=", token)
 			.innerJoin("user", "user.id", "session.userId")
-			.select(["user.id", "user.email", "user.passwordHash", "session.expires"])
+			.select([
+				"user.id",
+				"user.email",
+				"user.passwordHash",
+				"session.expires",
+				"user.firstName",
+				"user.lastName"
+			])
 			.executeTakeFirst();
 		if (data === undefined) return undefined;
-		let user = new User(data.id, data.email, data.passwordHash);
+		let user = new User(
+			data.id,
+			data.email,
+			data.passwordHash,
+			data.firstName,
+			data.lastName
+		);
 		return new Session(user, token, data.expires);
 	}
 

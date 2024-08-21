@@ -46,8 +46,8 @@ export default function getUserRouter() {
 }
 
 const getInfo = protectedProcedure.input(z.void()).query(async ({ ctx }) => {
-	let { id, email } = ctx.session.user;
-	return { id, email };
+	let { id, email, firstName, lastName } = ctx.session.user;
+	return { id, email, firstName, lastName };
 });
 const login = publicProcedure
 	.input(
