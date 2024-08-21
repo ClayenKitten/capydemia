@@ -25,7 +25,7 @@
 		validLastName &&
 		valid_password &&
 		valid_repeat_password;*/
-	$: valid=true;
+	$: valid = true;
 </script>
 
 <main>
@@ -42,22 +42,21 @@
 			<h4>Личные данные</h4>
 			<div class="personal">
 				<div class="personal_input">
-					<Input placeholder="Введите имя" valid={valid}/>
-					<Input placeholder="Введите фамилию" valid={valid}/>
-					<Input placeholder="Введите отчество" valid={valid}/>
+					<Input placeholder="Введите имя" {valid} />
+					<Input placeholder="Введите фамилию" {valid} />
+					<Input placeholder="Введите отчество" {valid} />
 				</div>
 				<button class="photo">
-					<img src="avatar.svg" alt="avatar">
+					<img src="avatar.svg" alt="avatar" />
 					<span>Сменить фото</span>
 				</button>
 			</div>
-			
 		</div>
 		<div class="input">
 			<h4>Контактная информация</h4>
 			<div class="contacts">
-				<Input placeholder="Введите почту" valid={valid}/>
-				<Input placeholder="Введите номер телефона" valid={valid}/>
+				<Input placeholder="Введите почту" {valid} />
+				<Input placeholder="Введите номер телефона" {valid} />
 			</div>
 		</div>
 		<div class="input">
@@ -67,8 +66,8 @@
 					<Input placeholder="Введите текущий пароль" />
 				</div>
 				<div class="new_password">
-					<Input placeholder="Введите новый пароль" valid={valid}/>
-					<Input placeholder="Повторите новый пароль" valid={valid}/>
+					<Input placeholder="Введите новый пароль" {valid} />
+					<Input placeholder="Повторите новый пароль" {valid} />
 				</div>
 			</div>
 		</div>
@@ -112,32 +111,32 @@
 		padding: 32px;
 		display: flex;
 		flex-direction: column;
-		gap:18px;
+		gap: 18px;
 	}
-	.personal{
+	.personal {
 		display: flex;
 		gap: 32px;
 		justify-content: center;
-		.photo{
-			display:flex;
+		.photo {
+			display: flex;
 			flex-direction: column;
 			align-items: center;
 			gap: 2px;
 			border: none;
 			background-color: var(--main-bg);
-			img{
+			img {
 				height: 141px;
 				border-radius: 100%;
 				border: 1px solid var(--secondary);
 				background-color: #ede7f6;
 			}
-			span{
-				font:var(--P1-bold);
+			span {
+				font: var(--P1-bold);
 				color: var(--primary);
 			}
 		}
 	}
-	.personal_input{
+	.personal_input {
 		display: flex;
 		flex-flow: wrap;
 		row-gap: 18px;
@@ -151,7 +150,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 18px;
-		.new_password{
+		.new_password {
 			display: flex;
 			gap: 32px;
 		}
