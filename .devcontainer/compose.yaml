@@ -10,8 +10,8 @@ services:
 
   web:
     build:
-      context: ..
-      dockerfile: ./.devcontainer/Dockerfile
+      context: ../web
+      dockerfile: ../.devcontainer/Dockerfile
     expose: [3000]
     env_file: [../.env]
     command: /bin/sh -c "while sleep 1000; do :; done"
