@@ -13,7 +13,7 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"db": "kysely",
-		"db:infer": "kysely-codegen --url postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB --dialect postgres --out-file /app/src/lib/server/db/types.ts"
+		"db:infer": "kysely-codegen --url postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB --dialect postgres --out-file /app/web/src/lib/server/db/types.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "^2.0.0",
