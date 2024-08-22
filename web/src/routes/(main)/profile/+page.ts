@@ -1,3 +1,4 @@
+/*
 import api from "$lib/api";
 import { error } from "@sveltejs/kit";
 import type { PageLoad } from "./$types";
@@ -11,7 +12,7 @@ export const load: PageLoad = async event => {
 		lastname
 	};
 };
-
+*/
 /*
 export const load: PageLoad = async event => {
 	let { lesson, module } = await event.parent();

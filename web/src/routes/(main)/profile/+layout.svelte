@@ -122,5 +122,9 @@
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 		padding: 32px 20px 32px 20px;
+		display: flex;
+		flex-direction: column;
+		flex: 0 1 900px;
+		gap: 32px;
 	}
 </style>

@@ -47,7 +47,7 @@
 					<Input placeholder="Введите отчество" {valid} />
 				</div>
 				<button class="photo">
-					<img src="avatar.svg" alt="avatar" />
+					<img src="/avatar.svg" alt="avatar" />
 					<span>Сменить фото</span>
 				</button>
 			</div>
