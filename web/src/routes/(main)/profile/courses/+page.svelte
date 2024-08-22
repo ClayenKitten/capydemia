@@ -4,45 +4,41 @@
 	export let data: PageData;
 </script>
 
-<main>
-	<div class="heading">
-		<h2>Мои курсы</h2>
-	</div>
-	<div class="courses">
-		{#each data.courses as course}
-			<div class="course">
-				<div class="course_img">
-					<img src="/logo.svg" alt="course" />
+<header>
+	<h2>Мои курсы</h2>
+</header>
+<section class="courses">
+	{#each data.courses as course}
+		<div class="course">
+			<div class="course_img">
+				<img src="/logo.svg" alt="course" />
+			</div>
+			<div class="info">
+				<div class="course_info">
+					<div class="course_heading">
+						<h4>{course.title}</h4>
+					</div>
+					<div class="dates">
+						<div class="start_date">
+							<span class="naming">начало обучения</span>
+							<span class="date">1 января 2024</span>
+						</div>
+						<div class="finish_date">
+							<span class="naming">окончание обучения</span>
+							<span class="date">1 января 2025</span>
+						</div>
+					</div>
 				</div>
-				<div class="info">
-					<div class="course_info">
-						<div class="course_heading">
-							<h4>{course.title}</h4>
-						</div>
-						<div class="dates">
-							<div class="start_date">
-								<span class="naming">начало обучения</span>
-								<span class="date"></span>
-							</div>
-							<div class="finish_date">
-								<span class="naming">окончание обучения</span>
-								<span class="date"></span>
-							</div>
-						</div>
-					</div>
-					<div class="progress">
-						<img src="/progress.svg" alt="progress" />
-					</div>
+				<div class="progress">
+					<img src="/progress.svg" alt="progress" />
 				</div>
 			</div>
-		{/each}
-	</div>
-</main>
+		</div>
+	{/each}
+</section>
 
 <style lang="scss">
-	main {
-	}
-	.heading {
+	header {
 		padding: 0 16px 0 16px;
 		color: var(--text);
 

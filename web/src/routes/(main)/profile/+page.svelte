@@ -28,63 +28,55 @@
 	$: valid = true;
 </script>
 
-<main>
-	<div class="heading">
-		<h2>Данные аккаунта</h2>
-		<span
-			>Данные аккаунта обеспечивают идентификацию пользователя и используются
-			для создания сертификатов, пройденных Вами курсов, а также позволяют нам
-			связаться с Вами.</span
-		>
+<header>
+	<h2>Данные аккаунта</h2>
+	<span
+		>Данные аккаунта обеспечивают идентификацию пользователя и используются для
+		создания сертификатов, пройденных Вами курсов, а также позволяют нам
+		связаться с Вами.</span
+	>
+</header>
+<section class="inputs">
+	<div class="input">
+		<h4>Личные данные</h4>
+		<div class="personal">
+			<div class="personal_input">
+				<Input placeholder="Введите имя" {valid} />
+				<Input placeholder="Введите фамилию" {valid} />
+				<Input placeholder="Введите отчество" {valid} />
+			</div>
+			<button class="photo">
+				<img src="/avatar.svg" alt="avatar" />
+				<span>Сменить фото</span>
+			</button>
+		</div>
 	</div>
-	<div class="inputs">
-		<div class="input">
-			<h4>Личные данные</h4>
-			<div class="personal">
-				<div class="personal_input">
-					<Input placeholder="Введите имя" {valid} />
-					<Input placeholder="Введите фамилию" {valid} />
-					<Input placeholder="Введите отчество" {valid} />
-				</div>
-				<button class="photo">
-					<img src="/avatar.svg" alt="avatar" />
-					<span>Сменить фото</span>
-				</button>
-			</div>
+	<div class="input">
+		<h4>Контактная информация</h4>
+		<div class="contacts">
+			<Input placeholder="Введите почту" {valid} />
+			<Input placeholder="Введите номер телефона" {valid} />
 		</div>
-		<div class="input">
-			<h4>Контактная информация</h4>
-			<div class="contacts">
-				<Input placeholder="Введите почту" {valid} />
-				<Input placeholder="Введите номер телефона" {valid} />
+	</div>
+	<div class="input">
+		<h4>Смена пароля</h4>
+		<div class="password">
+			<div class="old_password">
+				<Input placeholder="Введите текущий пароль" />
 			</div>
-		</div>
-		<div class="input">
-			<h4>Смена пароля</h4>
-			<div class="password">
-				<div class="old_password">
-					<Input placeholder="Введите текущий пароль" />
-				</div>
-				<div class="new_password">
-					<Input placeholder="Введите новый пароль" {valid} />
-					<Input placeholder="Повторите новый пароль" {valid} />
-				</div>
+			<div class="new_password">
+				<Input placeholder="Введите новый пароль" {valid} />
+				<Input placeholder="Повторите новый пароль" {valid} />
 			</div>
 		</div>
 	</div>
-	<div class="confirm">
-		<Button text="Подтвердить изменения" kind="primary" />
-	</div>
-</main>
+</section>
+<div class="confirm">
+	<Button text="Подтвердить изменения" kind="primary" />
+</div>
 
 <style lang="scss">
-	main {
-		display: flex;
-		flex-direction: column;
-		flex: 0 1 900px;
-		gap: 32px;
-	}
-	.heading {
+	header {
 		display: flex;
 		flex-direction: column;
 		gap: 8px;

@@ -48,9 +48,9 @@
 			<span>Выйти</span>
 		</button>
 	</aside>
-	<div class="content">
+	<main>
 		<slot />
-	</div>
+	</main>
 </div>
 
 <style lang="scss">
@@ -117,7 +117,7 @@
 		padding: 16px 32px 16px 32px;
 		font: var(--B);
 	}
-	.content {
+	main {
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
