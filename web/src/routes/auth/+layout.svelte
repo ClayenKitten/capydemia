@@ -1,5 +1,6 @@
-<slot />
-
+<div>
+	<slot />
+</div>
 <footer>
 	<span>Help center</span>
 	<span>Terms of Service</span>
@@ -8,6 +9,10 @@
 </footer>
 
 <style lang="scss">
+	div {
+		display: flex;
+		flex-direction: column;
+	}
 	footer {
 		display: flex;
 		flex-direction: row;
