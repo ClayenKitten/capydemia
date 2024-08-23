@@ -20,10 +20,10 @@
 
 <style lang="scss">
 	.wrapper {
-		display: flex;
+		display: inline-flex;
 		flex-direction: column;
-		width: min(auto, max-content);
 		height: 100%;
+		min-width: 100%;
 	}
 	header {
 		flex: 0 0 134px;
@@ -65,8 +65,6 @@
 		align-items: center;
 		background-color: var(--primary);
 		padding: 0 82px;
-		width: 100%;
-		margin-top: auto;
 		.logo {
 			height: 106px;
 			width: 106px;

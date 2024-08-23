@@ -52,7 +52,9 @@
 			"progress progress achievements"
 			"modules lesson lesson";
 		gap: 40px 40px;
-		padding: 40px calc((max(100vw - 1276px, 0px)) / 2 + 64px);
+		padding: 40px 0;
+		margin: 0 auto;
+		max-width: 1276px;
 		background-color: var(--base-bg);
 	}
 	h1 {

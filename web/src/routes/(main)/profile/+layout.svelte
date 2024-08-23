@@ -58,8 +58,7 @@
 		display: flex;
 		gap: 40px;
 		padding: 40px 0;
-		max-width: 1276px;
-		margin: 0 auto;
+		justify-content: center;
 	}
 	aside {
 		flex: 0 0 336px;
