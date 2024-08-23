@@ -19,11 +19,11 @@
 						<h4>{course.title}</h4>
 					</div>
 					<div class="dates">
-						<div class="start_date">
+						<div class="border_date">
 							<span class="naming">начало обучения</span>
 							<span class="date">1 января 2024</span>
 						</div>
-						<div class="finish_date">
+						<div class="border_date">
 							<span class="naming">окончание обучения</span>
 							<span class="date">1 января 2025</span>
 						</div>
@@ -60,10 +60,31 @@
 		gap: 40px;
 	}
 	.info {
+		flex: 0 1 656px;
 		display: flex;
 		justify-content: space-between;
-		//gap: 228px;
 	}
 	.course_info {
+		flex: 0 1 340px;
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		h4{
+			font:var(--H4);
+		}
+		.dates{
+			display: flex;
+			gap:62px;
+			.border_date{
+				display: flex;
+				flex-direction: column;
+			}
+			.naming{
+				font:var(--P3-extrabold);
+			}
+			.date{
+				font:var(--P3-light);
+			}
+		}
 	}
 </style>

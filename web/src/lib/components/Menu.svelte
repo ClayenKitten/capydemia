@@ -22,16 +22,18 @@
 		color: var(--primary);
 		text-decoration: none;
 
-		&:not(.selected):hover {
-			background-color: var(--secondary-bleek);
+		&:hover {
+			color: var(--secondary);
+		}
+
+		&:active, &.selected{
+			color: var(--main-bg);
+			background-color: var(--primary);
+			img {
+				filter: invert(100%) sepia(95%) saturate(18%) hue-rotate(338deg)
+					brightness(106%) contrast(104%);
+			}
 		}
 	}
-	.selected {
-		color: var(--main-bg);
-		background-color: var(--primary);
-		img {
-			filter: invert(100%) sepia(95%) saturate(18%) hue-rotate(338deg)
-				brightness(106%) contrast(104%);
-		}
-	}
+	
 </style>
