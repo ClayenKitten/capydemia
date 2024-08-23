@@ -26,7 +26,8 @@
 			color: var(--secondary);
 		}
 
-		&:active, &.selected{
+		&:active,
+		&.selected {
 			color: var(--main-bg);
 			background-color: var(--primary);
 			img {
@@ -35,5 +36,4 @@
 			}
 		}
 	}
-	
 </style>

@@ -69,21 +69,21 @@
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
-		h4{
-			font:var(--H4);
+		h4 {
+			font: var(--H4);
 		}
-		.dates{
+		.dates {
 			display: flex;
-			gap:62px;
-			.border_date{
+			gap: 62px;
+			.border_date {
 				display: flex;
 				flex-direction: column;
 			}
-			.naming{
-				font:var(--P3-extrabold);
+			.naming {
+				font: var(--P3-extrabold);
 			}
-			.date{
-				font:var(--P3-light);
+			.date {
+				font: var(--P3-light);
 			}
 		}
 	}
