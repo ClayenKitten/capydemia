@@ -8,7 +8,7 @@
 			error = "Некорректная ссылка.";
 			return;
 		}
-		let result = await api($page).user.password.recovery.complete.mutate({
+		let result = await api($page).user.account.confirmRecovery.mutate({
 			code,
 			newPassword: password
 		});

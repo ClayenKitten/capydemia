@@ -4,7 +4,7 @@
 	import { z } from "zod";
 
 	async function create() {
-		await api($page).user.registration.begin.mutate({
+		await api($page).user.account.register.mutate({
 			email,
 			firstName,
 			lastName,

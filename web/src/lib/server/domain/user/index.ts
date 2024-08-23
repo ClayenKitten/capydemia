@@ -10,6 +10,7 @@ import {
 	type PendingRegistrationRepository
 } from "./pendingRegistration";
 import type Result from "../../util/result";
+import * as m from "$lib/models";
 
 export class User {
 	constructor(
@@ -30,28 +31,27 @@ export class UserService {
 		}
 	) {}
 
-	public async register(
-		email: string,
-		firstName: string,
-		lastName: string,
-		password: string
-	) {
-		let user = await this.repos.user.findByEmail(email);
+	public async register(dto: m.Registration) {
+		let user = await this.repos.user.findByEmail(dto.email);
 		if (user !== undefined) {
-			await this.deps.email.sendTemplate(email, alreadyRegisteredTemplate, {});
+			this.onAlreadyRegistered(dto.email);
 			return;
 		}
-		let passwordHash = await this.deps.password.hash(password);
+		let passwordHash = await this.deps.password.hash(dto.password);
 		let pending = new PendingRegistration(
-			email,
-			firstName,
-			lastName,
+			dto.email,
+			dto.firstName,
+			dto.lastName,
 			passwordHash
 		);
 		await this.repos.pendingRegistration.create(pending);
-		await this.deps.email.sendTemplate(email, registerTemplate, {
+		await this.deps.email.sendTemplate(dto.email, registerTemplate, {
 			code: pending.code
 		});
+	}
+
+	private async onAlreadyRegistered(email: string) {
+		await this.deps.email.sendTemplate(email, alreadyRegisteredTemplate, {});
 	}
 
 	public async confirmEmail(

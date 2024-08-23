@@ -13,7 +13,9 @@ export const load: PageLoad = async event => {
 		if (code === null) {
 			return "Некорректная ссылка.";
 		}
-		let result = await api(event).user.registration.complete.mutate({ code });
+		let result = await api(event).user.account.confirmRegistration.mutate({
+			code
+		});
 
 		if (result.ok) {
 			return "Ваша почта успешно подтверждена! Для начала работы перейдите на главную страницу.";
