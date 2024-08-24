@@ -4,6 +4,6 @@ import appRouter from "$lib/server/router";
 
 export const load: PageServerLoad = async () => {
 	return {
-        content: renderTrpcPanel(appRouter, { url: "http://localhost:3000/trpc" })
-    };
+		content: renderTrpcPanel(appRouter, { url: "http://localhost:3000/trpc" })
+	};
 };

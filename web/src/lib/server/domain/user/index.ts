@@ -78,9 +78,8 @@ export class UserService {
 		oldPassword: string,
 		newPassword: string
 	): Promise<Result<void, "MISMATCH">> {
-		let oldPasswordHash = await this.deps.password.hash(oldPassword);
-		if (oldPasswordHash !== user.passwordHash)
-			return { ok: false, error: "MISMATCH" };
+		let match = await this.deps.password.verify(oldPassword, user.passwordHash);
+		if (!match) return { ok: false, error: "MISMATCH" };
 		let newPasswordHash = await this.deps.password.hash(newPassword);
 		this.repos.user.update(user.id, { passwordHash: newPasswordHash });
 		return { ok: true };

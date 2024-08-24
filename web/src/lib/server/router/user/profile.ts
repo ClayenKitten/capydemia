@@ -21,12 +21,25 @@ export function getProfileRouter() {
 		/** Changes user password. */
 		changePassword: protectedProcedure
 			.input(z.object({ oldPassword: m.Password, newPassword: m.Password }))
-			.mutation(({ input, ctx }) => {
-				ctx.services.user.changePassword(
+			.mutation(async ({ input, ctx }) => {
+				let result = await ctx.services.user.changePassword(
 					ctx.session.user,
 					input.oldPassword,
 					input.newPassword
 				);
+				if (result.ok)
+					ctx.logger.info(`changed password for user ${ctx.session.user.id}`, {
+						user: ctx.session.user.id
+					});
+				else {
+					ctx.logger.info(
+						`failed password change for user ${ctx.session.user.id}`,
+						{
+							user: ctx.session.user.id
+						}
+					);
+				}
+				return result;
 			}),
 		/** Requests user's email change. */
 		requestEmailChange: protectedProcedure
