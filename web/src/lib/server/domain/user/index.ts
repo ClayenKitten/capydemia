@@ -56,18 +56,18 @@ export class UserService {
 
 	public async confirmEmail(
 		code: string
-	): Promise<Result<void, "NOT_FOUND" | "EXPIRED">> {
+	): Promise<Result<{ user: User }, "NOT_FOUND" | "EXPIRED">> {
 		let pending = await this.repos.pendingRegistration.findByCode(code);
 		if (pending === undefined) return { ok: false, error: "NOT_FOUND" };
 		if (pending.expired) return { ok: false, error: "EXPIRED" };
-		await this.repos.user.create(
+		let user = await this.repos.user.create(
 			pending.email,
 			pending.firstName,
 			pending.lastName,
 			pending.passwordHash
 		);
 		await this.repos.pendingRegistration.delete(code);
-		return { ok: true };
+		return { ok: true, value: { user } };
 	}
 }
 
@@ -117,10 +117,13 @@ export class UserRepository extends Repository {
 		firstName: string,
 		lastName: string,
 		passwordHash: string
-	): Promise<void> {
-		await this.db
+	): Promise<User> {
+		let id = await this.db
 			.insertInto("user")
 			.values({ email, firstName, lastName, passwordHash })
-			.execute();
+			.returning("id")
+			.executeTakeFirstOrThrow()
+			.then(x => x.id);
+		return new User(id, email, passwordHash, firstName, lastName);
 	}
 }

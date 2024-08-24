@@ -33,7 +33,7 @@ export class PasswordRecoveryService {
 	public async complete(
 		code: string,
 		newPassword: string
-	): Promise<Result<void, "NOT_FOUND" | "EXPIRED">> {
+	): Promise<Result<{ user: User }, "NOT_FOUND" | "EXPIRED">> {
 		let request = await this.repos.passwordRecovery.findByCode(code);
 		if (request === undefined) return { ok: false, error: "NOT_FOUND" };
 		if (request.expired) return { ok: false, error: "EXPIRED" };
@@ -41,7 +41,7 @@ export class PasswordRecoveryService {
 
 		let passwordHash = await this.deps.password.hash(newPassword);
 		await this.repos.user.updatePassword(request.user, passwordHash);
-		return { ok: true };
+		return { ok: true, value: { user: request.user } };
 	}
 }
 

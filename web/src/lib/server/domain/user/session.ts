@@ -14,18 +14,23 @@ export class SessionService {
 	public async login(
 		email: string,
 		password: string
-	): Promise<Result<{ token: string }, "INVALID_CREDENTIALS">> {
+	): Promise<
+		Result<
+			{ session: Session },
+			{ kind: "MISMATCH"; user: User } | { kind: "NOT_FOUND" }
+		>
+	> {
 		let user = await this.repos.user.findByEmail(email);
 		if (user === undefined) {
-			return { ok: false, error: "INVALID_CREDENTIALS" };
+			return { ok: false, error: { kind: "NOT_FOUND" } };
 		}
 
 		let matches = await this.deps.password.verify(password, user.passwordHash);
-		if (!matches) return { ok: false, error: "INVALID_CREDENTIALS" };
+		if (!matches) return { ok: false, error: { kind: "MISMATCH", user } };
 
 		let session = new Session(user);
 		await this.repos.session.create(session);
-		return { ok: true, value: { token: session.token } };
+		return { ok: true, value: { session } };
 	}
 
 	public async logout(session: Session) {

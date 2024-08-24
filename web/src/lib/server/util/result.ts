@@ -1,4 +1,4 @@
-export type Result<T, E> = Ok<T> | Err<E>;
+type Result<T, E> = Ok<T> | Err<E>;
 export type { Result as default };
 
 type Ok<T> = T extends void ? { ok: true } : { ok: true; value: T };
