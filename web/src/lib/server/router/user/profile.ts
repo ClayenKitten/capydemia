@@ -9,8 +9,8 @@ export function getProfileRouter() {
 			.input(z.void())
 			.output(m.ProfileInfo)
 			.query(async ({ ctx }) => {
-				let { id, email, firstName, lastName } = ctx.session.user;
-				return { id, email, firstName, lastName };
+				let { id, email, firstName, lastName, patronim } = ctx.session.user;
+				return { id, email, firstName, lastName, patronim };
 			}),
 		/** Changes primary profile information. */
 		changeInfo: protectedProcedure

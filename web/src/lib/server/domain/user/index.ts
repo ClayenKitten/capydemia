@@ -20,7 +20,8 @@ export class User {
 		public email: string,
 		public passwordHash: string,
 		public firstName: string,
-		public lastName: string
+		public lastName: string,
+		public patronim?: string
 	) {}
 }
 
@@ -99,7 +100,8 @@ export class UserRepository extends Repository {
 			record.email,
 			record.passwordHash,
 			record.firstName,
-			record.lastName
+			record.lastName,
+			record.patronim ?? undefined
 		);
 	}
 
@@ -115,7 +117,8 @@ export class UserRepository extends Repository {
 			record.email,
 			record.passwordHash,
 			record.firstName,
-			record.lastName
+			record.lastName,
+			record.patronim ?? undefined
 		);
 	}
 

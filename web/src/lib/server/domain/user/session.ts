@@ -66,7 +66,8 @@ export class SessionRepository extends Repository {
 				"user.passwordHash",
 				"session.expires",
 				"user.firstName",
-				"user.lastName"
+				"user.lastName",
+				"user.patronim"
 			])
 			.executeTakeFirst();
 		if (data === undefined) return undefined;
@@ -75,7 +76,8 @@ export class SessionRepository extends Repository {
 			data.email,
 			data.passwordHash,
 			data.firstName,
-			data.lastName
+			data.lastName,
+			data.patronim ?? undefined
 		);
 		return new Session(user, token, data.expires);
 	}
