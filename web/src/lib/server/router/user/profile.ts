@@ -15,11 +15,19 @@ export function getProfileRouter() {
 		/** Changes primary profile information. */
 		changeInfo: protectedProcedure
 			.input(m.ChangeProfileInfo)
-			.mutation(({ input, ctx }) => {}),
+			.mutation(({ input, ctx }) => {
+				ctx.repositories.user.update(ctx.session.user.id, input);
+			}),
 		/** Changes user password. */
 		changePassword: protectedProcedure
 			.input(z.object({ oldPassword: m.Password, newPassword: m.Password }))
-			.mutation(({ input, ctx }) => {}),
+			.mutation(({ input, ctx }) => {
+				ctx.services.user.changePassword(
+					ctx.session.user,
+					input.oldPassword,
+					input.newPassword
+				);
+			}),
 		/** Requests user's email change. */
 		requestEmailChange: protectedProcedure
 			.input(z.object({ newEmail: m.Email }))

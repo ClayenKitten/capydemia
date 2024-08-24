@@ -11,6 +11,8 @@ import {
 } from "./pendingRegistration";
 import type Result from "../../util/result";
 import * as m from "$lib/models";
+import type { Updateable } from "kysely";
+import type { User as UserTable } from "$lib/server/db/types";
 
 export class User {
 	constructor(
@@ -69,6 +71,19 @@ export class UserService {
 		await this.repos.pendingRegistration.delete(code);
 		return { ok: true, value: { user } };
 	}
+
+	public async changePassword(
+		user: User,
+		oldPassword: string,
+		newPassword: string
+	): Promise<Result<void, "MISMATCH">> {
+		let oldPasswordHash = await this.deps.password.hash(oldPassword);
+		if (oldPasswordHash !== user.passwordHash)
+			return { ok: false, error: "MISMATCH" };
+		let newPasswordHash = await this.deps.password.hash(newPassword);
+		this.repos.user.update(user.id, { passwordHash: newPasswordHash });
+		return { ok: true };
+	}
 }
 
 export class UserRepository extends Repository {
@@ -86,14 +101,6 @@ export class UserRepository extends Repository {
 			record.firstName,
 			record.lastName
 		);
-	}
-
-	public async updatePassword(user: User, passwordHash: string) {
-		await this.db
-			.updateTable("user")
-			.where("id", "=", user.id)
-			.set({ passwordHash })
-			.execute();
 	}
 
 	public async findByEmail(email: string): Promise<User | undefined> {
@@ -125,5 +132,10 @@ export class UserRepository extends Repository {
 			.executeTakeFirstOrThrow()
 			.then(x => x.id);
 		return new User(id, email, passwordHash, firstName, lastName);
+	}
+
+	public async update(id: number, dto: Updateable<UserTable>) {
+		delete dto.id;
+		await this.db.updateTable("user").where("id", "=", id).set(dto).execute();
 	}
 }

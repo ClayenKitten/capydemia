@@ -42,5 +42,5 @@ export const ChangeProfileInfo = z
 		lastName: Name,
 		patronim: Name
 	})
-	.optional();
+	.partial();
 export type ChangeProfileInfo = TypeOf<typeof ChangeProfileInfo>;

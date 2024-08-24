@@ -40,7 +40,7 @@ export class PasswordRecoveryService {
 		await this.repos.passwordRecovery.delete(request.code);
 
 		let passwordHash = await this.deps.password.hash(newPassword);
-		await this.repos.user.updatePassword(request.user, passwordHash);
+		await this.repos.user.update(request.user.id, { passwordHash });
 		return { ok: true, value: { user: request.user } };
 	}
 }
