@@ -29,6 +29,13 @@ export interface CourseEnrollment {
   userId: number;
 }
 
+export interface EmailChangeRequest {
+  code: string;
+  expires: Timestamp;
+  newEmail: string;
+  userId: number;
+}
+
 export interface Lesson {
   content: Json;
   id: Generated<number>;
@@ -79,6 +86,7 @@ export interface User {
 export interface DB {
   course: Course;
   courseEnrollment: CourseEnrollment;
+  emailChangeRequest: EmailChangeRequest;
   lesson: Lesson;
   module: Module;
   passwordRecovery: PasswordRecovery;

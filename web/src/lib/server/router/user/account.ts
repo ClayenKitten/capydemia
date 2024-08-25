@@ -14,7 +14,7 @@ export default function getAccountRouter() {
 		confirmRegistration: publicProcedure
 			.input(m.RegistrationConfirmation)
 			.mutation(async ({ ctx, input }) => {
-				let result = await ctx.services.user.confirmEmail(input.code);
+				let result = await ctx.services.user.confirmRegistration(input.code);
 				if (result.ok)
 					ctx.logger.info(
 						`completed registration of user '${result.value.user.id}'`,

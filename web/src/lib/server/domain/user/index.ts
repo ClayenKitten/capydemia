@@ -2,6 +2,8 @@ import Repository from "../../db/repository";
 import type EmailService from "../../email";
 import {
 	alreadyRegisteredTemplate,
+	emailChangeAlreadyExistsTemplate,
+	emailChangeTemplate,
 	registerTemplate
 } from "../../email/templates";
 import type PasswordService from "./password";
@@ -13,6 +15,7 @@ import type Result from "../../util/result";
 import * as m from "$lib/models";
 import type { Updateable } from "kysely";
 import type { User as UserTable } from "$lib/server/db/types";
+import { EmailChangeRequest, type EmailChangeRepository } from "./emailChange";
 
 export class User {
 	constructor(
@@ -31,6 +34,7 @@ export class UserService {
 		private repos: {
 			user: UserRepository;
 			pendingRegistration: PendingRegistrationRepository;
+			emailChange: EmailChangeRepository;
 		}
 	) {}
 
@@ -57,7 +61,7 @@ export class UserService {
 		await this.deps.email.sendTemplate(email, alreadyRegisteredTemplate, {});
 	}
 
-	public async confirmEmail(
+	public async confirmRegistration(
 		code: string
 	): Promise<Result<{ user: User }, "NOT_FOUND" | "EXPIRED">> {
 		let pending = await this.repos.pendingRegistration.findByCode(code);
@@ -71,6 +75,39 @@ export class UserService {
 		);
 		await this.repos.pendingRegistration.delete(code);
 		return { ok: true, value: { user } };
+	}
+
+	public async requestEmailChange(
+		user: User,
+		newEmail: string
+	): Promise<Result<void, "SAME_EMAIL" | "TAKEN">> {
+		if (user.email === newEmail) return { ok: false, error: "SAME_EMAIL" };
+		if ((await this.repos.user.findByEmail(newEmail)) !== undefined) {
+			this.deps.email.sendTemplate(
+				newEmail,
+				emailChangeAlreadyExistsTemplate,
+				{}
+			);
+			return { ok: false, error: "TAKEN" };
+		}
+		let request = new EmailChangeRequest(user, newEmail);
+		await this.repos.emailChange.create(request);
+		await this.deps.email.sendTemplate(newEmail, emailChangeTemplate, {
+			code: request.code
+		});
+		return { ok: true };
+	}
+
+	public async confirmEmailChange(
+		user: User,
+		code: string
+	): Promise<Result<void, "NOT_FOUND" | "EXPIRED">> {
+		let request = await this.repos.emailChange.get(user, code);
+		if (request === undefined) return { ok: false, error: "NOT_FOUND" };
+		if (request.expired) return { ok: false, error: "EXPIRED" };
+		await this.repos.emailChange.delete(user);
+		await this.repos.user.update(user.id, { email: request.newEmail });
+		return { ok: true };
 	}
 
 	public async changePassword(

@@ -5,6 +5,7 @@ import { SessionRepository } from "../domain/user/session";
 import { PendingRegistrationRepository } from "../domain/user/pendingRegistration";
 import { PasswordRecoveryRepository } from "../domain/user/passwordRecovery";
 import { CourseRepository } from "../domain/course";
+import { EmailChangeRepository } from "../domain/user/emailChange";
 
 export default function createRepositories(db: Kysely<DB>) {
 	return {
@@ -12,7 +13,8 @@ export default function createRepositories(db: Kysely<DB>) {
 		session: new SessionRepository(db),
 		pendingRegistration: new PendingRegistrationRepository(db),
 		passwordRecovery: new PasswordRecoveryRepository(db),
-		course: new CourseRepository(db)
+		course: new CourseRepository(db),
+		emailChange: new EmailChangeRepository(db)
 	};
 }
 export type Repositories = ReturnType<typeof createRepositories>;
