@@ -1,5 +1,5 @@
 import { User, UserRepository } from ".";
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import { expiresAfter } from "../../util/date";
 import crypto from "crypto";
 import type PasswordService from "./password";
@@ -54,7 +54,7 @@ export class Session {
 	}
 }
 
-export class SessionRepository extends Repository {
+export class SessionRepository extends DbRepository {
 	public async findByToken(token: string): Promise<Session | undefined> {
 		let data = await this.db
 			.selectFrom("session")

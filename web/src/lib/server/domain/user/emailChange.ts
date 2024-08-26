@@ -1,9 +1,9 @@
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import crypto from "crypto";
 import { expiresAfter } from "../../util/date";
 import type { User } from ".";
 
-export class EmailChangeRepository extends Repository {
+export class EmailChangeRepository extends DbRepository {
 	/**
 	 * Creates a new email change request.
 	 *

@@ -1,4 +1,4 @@
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import { expiresAfter } from "../../util/date";
 import crypto from "crypto";
 import type PasswordService from "./password";
@@ -45,7 +45,7 @@ export class PasswordRecoveryService {
 	}
 }
 
-export class PasswordRecoveryRepository extends Repository {
+export class PasswordRecoveryRepository extends DbRepository {
 	public async findByCode(code: string): Promise<PasswordRecovery | undefined> {
 		let record = await this.db
 			.selectFrom("passwordRecovery")

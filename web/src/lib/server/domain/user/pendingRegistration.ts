@@ -1,8 +1,8 @@
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import crypto from "crypto";
 import { expiresAfter } from "../../util/date";
 
-export class PendingRegistrationRepository extends Repository {
+export class PendingRegistrationRepository extends DbRepository {
 	/**
 	 * Creates a new pending registration.
 	 *

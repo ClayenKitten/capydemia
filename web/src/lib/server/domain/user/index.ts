@@ -1,4 +1,4 @@
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import type EmailService from "../../email";
 import {
 	alreadyRegisteredTemplate,
@@ -123,7 +123,7 @@ export class UserService {
 	}
 }
 
-export class UserRepository extends Repository {
+export class UserRepository extends DbRepository {
 	public async findById(id: number): Promise<User | undefined> {
 		let record = await this.db
 			.selectFrom("user")

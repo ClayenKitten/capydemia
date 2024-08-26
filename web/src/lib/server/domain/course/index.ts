@@ -1,4 +1,4 @@
-import Repository from "$lib/server/db/repository";
+import DbRepository from "$lib/server/db/repository";
 import type { Selectable } from "kysely";
 import type { User } from "../user";
 import type { Course as CourseModel } from "$lib/server/db/types";
@@ -38,7 +38,7 @@ export default class CourseService {
 	}
 }
 
-export class CourseRepository extends Repository {
+export class CourseRepository extends DbRepository {
 	public async getCourse(courseId: number): Promise<Course | null> {
 		let record = await this.db
 			.selectFrom("course")
