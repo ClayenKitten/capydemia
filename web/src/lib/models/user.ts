@@ -33,7 +33,7 @@ export const ProfileInfo = z.object({
 	firstName: Name,
 	lastName: Name,
 	patronim: Name.optional(),
-	avatar: Url
+	avatar: z.string()
 });
 export type ProfileInfo = TypeOf<typeof ProfileInfo>;
 
