@@ -6,10 +6,11 @@ import createServices from "./services";
 
 /** Creates local context for backend, e. g. user session. */
 export async function createInnerContext(opts: InnerContextOpts) {
-	let [db, s3] = await Promise.all([createDatabase(), createS3()]);
 	let logger = createLogger();
-	let repositories = createRepositories(db);
+	let [db, s3] = await Promise.all([createDatabase(), createS3()]);
+	let repositories = createRepositories(db, s3);
 	let services = createServices(repositories);
+	logger.notice("inner context created");
 	return { db, s3, logger, services, repositories };
 }
 

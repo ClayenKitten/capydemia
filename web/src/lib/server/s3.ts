@@ -7,3 +7,11 @@ export default async function createS3(): Promise<Minio> {
 		secretKey: process.env.S3_SECRET_KEY
 	});
 }
+
+export abstract class S3Repository {
+	constructor(protected s3: Minio) {}
+
+	protected get bucket() {
+		return process.env.S3_BUCKET;
+	}
+}
