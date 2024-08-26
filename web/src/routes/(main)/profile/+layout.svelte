@@ -1,8 +1,15 @@
 <script lang="ts">
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 	import Menu from "$lib/components/Menu.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+
+	const exit = async () => {
+		await api($page).user.session.logout.mutate();
+		window.location.reload();
+	};
 </script>
 
 <div class="profile">
@@ -43,7 +50,7 @@
 				img="/icons/Headset-24px.svg"
 			/>
 		</nav>
-		<button class="exit">
+		<button class="exit" on:click={exit}>
 			<img src="/icons/SignOut-32px.svg" alt="exit" />
 			<span>Выйти</span>
 		</button>
@@ -114,6 +121,7 @@
 			gap: 12px;
 			padding: 16px 32px 16px 32px;
 			font: var(--B);
+			color: var(--primary);
 		}
 	}
 	main {
