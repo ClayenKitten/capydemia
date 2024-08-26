@@ -11,7 +11,10 @@ export function getProfileRouter() {
 			.output(m.ProfileInfo)
 			.query(async ({ ctx }) => {
 				let { id, email, firstName, lastName, patronim } = ctx.session.user;
-				return { id, email, firstName, lastName, patronim };
+				let avatar = await ctx.repositories.avatar.downloadURL(
+					ctx.session.user
+				);
+				return { id, email, firstName, lastName, patronim, avatar };
 			}),
 		/** Changes primary profile information. */
 		changeInfo: protectedProcedure

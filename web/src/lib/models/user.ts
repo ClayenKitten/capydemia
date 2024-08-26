@@ -1,5 +1,5 @@
 import { z, type TypeOf } from "zod";
-import { Email, Name, Password, Code } from "./common";
+import { Email, Name, Password, Code, Url } from "./common";
 
 export const Registration = z.object({
 	email: Email,
@@ -32,7 +32,8 @@ export const ProfileInfo = z.object({
 	email: Email,
 	firstName: Name,
 	lastName: Name,
-	patronim: Name.optional()
+	patronim: Name.optional(),
+	avatar: Url
 });
 export type ProfileInfo = TypeOf<typeof ProfileInfo>;
 

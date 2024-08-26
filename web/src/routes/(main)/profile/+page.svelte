@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
-	import { z } from "zod";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -46,7 +45,7 @@
 				<Input placeholder="Введите отчество" {valid} />
 			</div>
 			<button class="photo">
-				<img src="/avatar.svg" alt="avatar" />
+				<img src={data.user.avatar} alt="Фото" />
 				<span>Сменить фото</span>
 			</button>
 		</div>
@@ -119,6 +118,7 @@
 			background-color: var(--main-bg);
 			img {
 				height: 141px;
+				width: 141px;
 				border-radius: 100%;
 				border: 1px solid var(--secondary);
 				background-color: #ede7f6;

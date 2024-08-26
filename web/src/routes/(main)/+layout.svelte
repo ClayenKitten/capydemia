@@ -1,3 +1,9 @@
+<script lang="ts">
+	import type { LayoutData } from "./$types";
+
+	export let data: LayoutData;
+</script>
+
 <div class="wrapper">
 	<header>
 		<a class="logo" href="/" title="Главная">
@@ -7,7 +13,7 @@
 			<img src="/icons/Bell-32px.svg" alt="" />
 		</button>
 		<a class="profile" href="/profile" title="Профиль">
-			<img src="/avatar.svg" alt="Аватар" />
+			<img src={data.user.avatar} alt="" />
 		</a>
 	</header>
 	<div class="content">
@@ -49,6 +55,8 @@
 			height: 72px;
 			margin-left: 44px;
 			> img {
+				width: 100%;
+				height: 100%;
 				border-radius: 100%;
 				background-color: #ede7f6;
 			}

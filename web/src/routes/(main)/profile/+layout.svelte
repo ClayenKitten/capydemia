@@ -15,7 +15,7 @@
 <div class="profile">
 	<aside>
 		<div class="user">
-			<img src="/avatar.svg" alt="avatar" class="avatar" />
+			<img src={data.user.avatar} alt="" class="avatar" />
 			<div class="identity">
 				<span class="firstname">{data.user.firstName}</span>
 				<span class="lastname">{data.user.lastName}</span>
@@ -83,6 +83,7 @@
 			padding: 28px 32px;
 
 			img {
+				width: 102px;
 				height: 102px;
 				border-radius: 100%;
 				background-color: #ede7f6;
