@@ -38,7 +38,7 @@
 				background-color: var(--secondary);
 			}
 
-			&:active {
+			&:focus {
 				color: var(--main-bg);
 				background-color: var(--primary);
 			}
@@ -59,7 +59,7 @@
 				border-color: var(--secondary);
 			}
 
-			&:active {
+			&:focus {
 				color: var(--primary);
 				border-color: var(--primary);
 			}
@@ -95,11 +95,11 @@
 					brightness(99%) contrast(94%);
 			}
 
-			&:active {
+			&:focus {
 				color: var(--text);
 			}
 
-			&:active img {
+			&:focus img {
 				filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
 					brightness(97%) contrast(101%);
 			}

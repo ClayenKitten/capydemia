@@ -17,9 +17,11 @@
 		<div class="user">
 			<img src={data.user.avatar} alt="" class="avatar" />
 			<div class="identity">
-				<span class="firstname">{data.user.firstName}</span>
-				<span class="lastname">{data.user.lastName}</span>
-				<p class="role">Студент</p>
+				<div class="name">
+					{data.user.firstName} <br />
+					{data.user.lastName}
+				</div>
+				<div class="role">Студент</div>
 			</div>
 		</div>
 		<nav>
@@ -88,22 +90,23 @@
 				border-radius: 100%;
 				background-color: #ede7f6;
 			}
-			span {
-				font: var(--P2-bold);
-				color: var(--text);
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-			p {
-				font: var(--P3-light);
-				color: var(--text);
-			}
 
 			.identity {
 				display: flex;
 				flex-direction: column;
 				gap: 8px;
+
+				.name {
+					font: var(--P2-bold);
+					color: var(--text);
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+				.role {
+					font: var(--P3-light);
+					color: var(--text);
+				}
 			}
 		}
 		nav {

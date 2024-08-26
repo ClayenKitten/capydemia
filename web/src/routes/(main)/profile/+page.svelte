@@ -1,30 +1,64 @@
 <script lang="ts">
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
+	import { z } from "zod";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
-	/*
-	let email = "";
-	let firstName = "";
-	let lastName = "";
-	let password = "";
-	let repeat_password = "";
-	let confirmed = false;
+	const change_info = async () => {
+		await api($page).user.profile.changeInfo.mutate({
+			firstName: data.user.firstName,
+			lastName: data.user.lastName,
+			patronim: data.user.patronim
+		});
+		await api($page).user.profile.changePassword.mutate({
+			newPassword: newPassword,
+			oldPassword: oldPassword
+		});
+		await api($page).user.profile.requestEmailChange.mutate({
+			newEmail: data.user.email
+		});
+		await api($page).user.profile.changeAvatar.mutate({
+			newUrl: data.user.avatar
+		});
+		//window.location.reload();
+	};
 
-	$: valid_email = z.string().email().max(128).safeParse(email).success;
-	$: validFirstName = firstName.length !== 0 && firstName.length <= 128;
-	$: validLastName = lastName.length !== 0 && lastName.length <= 128;
-	$: valid_password = password.length >= 8 && password.length <= 128;
-	$: valid_repeat_password = password === repeat_password;
+	let oldPassword = "";
+	let newPassword = "";
+	let repeatPassword = "";
+
+	$: validEmail = z
+		.string()
+		.email()
+		.max(128)
+		.safeParse(data.user.email).success;
+	$: validFirstName =
+		data.user.firstName.length !== 0 && data.user.firstName.length <= 128;
+	$: validLastName =
+		data.user.lastName.length !== 0 && data.user.lastName.length <= 128;
+	$: validPatronim = true;
+	//data.user.patronim.length !== 0 && data.user.patronim.length <= 128;
+
+	$: validOldPassword = true;
+
+	$: validNewPassword = newPassword.length >= 8 && newPassword.length <= 128;
+	$: validRepeatPassword = newPassword === repeatPassword;
+
 	$: valid =
-		valid_email &&
+		validEmail &&
 		validFirstName &&
 		validLastName &&
-		valid_password &&
-		valid_repeat_password;*/
-	$: valid = true;
+		//validPatronim &&
+		validOldPassword &&
+		validNewPassword &&
+		validRepeatPassword;
+	/*
+	let confirmed = false;
+*/
 </script>
 
 <header>
@@ -40,9 +74,21 @@
 		<h4>Личные данные</h4>
 		<div class="personal">
 			<div class="personal_input">
-				<Input placeholder="Введите имя" {valid} />
-				<Input placeholder="Введите фамилию" {valid} />
-				<Input placeholder="Введите отчество" {valid} />
+				<Input
+					placeholder="Введите имя"
+					bind:input={data.user.firstName}
+					valid={validFirstName}
+				/>
+				<Input
+					placeholder="Введите фамилию"
+					bind:input={data.user.lastName}
+					valid={validLastName}
+				/>
+				<Input
+					placeholder="Введите отчество"
+					bind:input={data.user.patronim}
+					valid={validPatronim}
+				/>
 			</div>
 			<button class="photo">
 				<img src={data.user.avatar} alt="Фото" />
@@ -53,25 +99,48 @@
 	<div class="input">
 		<h4>Контактная информация</h4>
 		<div class="contacts">
-			<Input placeholder="Введите почту" {valid} />
-			<Input placeholder="Введите номер телефона" {valid} />
+			<Input
+				placeholder="Введите почту"
+				bind:input={data.user.email}
+				valid={validEmail}
+			/>
+
+			<!--- TODO: may be implemented later -->
+			<!--- <Input placeholder="Введите номер телефона" {valid} /> -->
 		</div>
 	</div>
 	<div class="input">
 		<h4>Смена пароля</h4>
 		<div class="password">
 			<div class="old_password">
-				<Input placeholder="Введите текущий пароль" />
+				<Input
+					placeholder="Введите текущий пароль"
+					bind:input={oldPassword}
+					valid={validOldPassword}
+				/>
 			</div>
 			<div class="new_password">
-				<Input placeholder="Введите новый пароль" {valid} />
-				<Input placeholder="Повторите новый пароль" {valid} />
+				<Input
+					placeholder="Введите новый пароль"
+					bind:input={newPassword}
+					valid={validNewPassword}
+				/>
+				<Input
+					placeholder="Повторите новый пароль"
+					bind:input={repeatPassword}
+					valid={validRepeatPassword}
+				/>
 			</div>
 		</div>
 	</div>
 </section>
 <div class="confirm">
-	<Button text="Подтвердить изменения" kind="primary" />
+	<Button
+		text="Подтвердить изменения"
+		kind="primary"
+		on:click={change_info}
+		disabled={!valid}
+	/>
 </div>
 
 <style lang="scss">

@@ -1,9 +1,10 @@
 <script lang="ts">
 	export let placeholder: string;
 	export let valid: boolean = false;
+	export let input: string | undefined;
 </script>
 
-<input {placeholder} class:invalid={!valid} />
+<input {placeholder} class:invalid={!valid} bind:value={input} />
 
 <style lang="scss">
 	input {

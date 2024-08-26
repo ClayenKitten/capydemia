@@ -23,10 +23,10 @@
 		text-decoration: none;
 
 		&:hover {
-			color: var(--secondary);
+			background-color: var(--secondary-bleek);
 		}
 
-		&:active,
+		&:focus,
 		&.selected {
 			color: var(--main-bg);
 			background-color: var(--primary);
