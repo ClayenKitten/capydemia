@@ -4,7 +4,13 @@ import argon2 from "argon2";
 import { resetSequence } from "../utils";
 
 export async function seed(db: Kysely<DB>): Promise<void> {
-	const tables = ["session", "user"] as const;
+	const tables = [
+		"passwordRecovery",
+		"emailChangeRequest",
+		"pendingRegistration",
+		"session",
+		"user"
+	] as const;
 	for (const table of tables) {
 		await db.deleteFrom(table).execute();
 		await resetSequence(db, table);
