@@ -1,8 +1,10 @@
 import { createLogger as createWinston, format, transports } from "winston";
+import { syslog } from "winston/lib/winston/config";
 
 export default function createLogger() {
 	return createWinston({
 		level: "info",
+		levels: syslog.levels,
 		format: format.combine(format.timestamp(), format.json()),
 		transports: getTransports()
 	});
