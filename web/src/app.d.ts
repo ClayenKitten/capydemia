@@ -19,6 +19,10 @@ declare global {
 			POSTGRES_USER: string;
 			POSTGRES_PASSWORD: string;
 			RESEND_KEY: string;
+			S3_ENDPOINT: string;
+			S3_ACCESS_KEY: string;
+			S3_SECRET_KEY: string;
+			S3_BUCKET: string;
 		}
 	}
 }
