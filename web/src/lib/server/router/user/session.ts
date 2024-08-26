@@ -15,15 +15,12 @@ export default function getSessionRouter() {
 			if (result.ok) {
 				let session = result.value.session;
 				setCookie(ctx.request, session.token);
-				ctx.logger.info(
-					`successful login attempt into account '${session.user.id}'`,
-					{ user: session.user.id }
-				);
+				ctx.logger.info(`user logged in`, { user: session.user.id });
 				return { ok: true };
 			} else {
 				if (result.error.kind === "MISMATCH") {
 					let user = result.error.user;
-					ctx.logger.info(`failed login attempt into account '${user.id}'`, {
+					ctx.logger.info(`failed login attempt`, {
 						user: user.id
 					});
 				} else if (result.error.kind === "NOT_FOUND") {
@@ -40,13 +37,18 @@ export default function getSessionRouter() {
 			if (ctx.session === undefined) {
 				return;
 			}
+			ctx.logger.info(`user logged out`, { user: ctx.session.user.id });
 			return await ctx.services.session.logout(ctx.session);
 		}),
 		/** Terminates all user sessions except current. */
-		logoutAll: protectedProcedure.input(z.void()).mutation(async opts => {
-			opts.ctx.request.cookies.delete(tokenCookieName, { path: "/" });
-			return await opts.ctx.services.session.logoutAll(opts.ctx.session);
-		})
+		logoutAll: protectedProcedure
+			.input(z.void())
+			.mutation(async ({ ctx, input }) => {
+				ctx.logger.info(`user terminated all sessions except current`, {
+					user: ctx.session.user.id
+				});
+				return await ctx.services.session.logoutAll(ctx.session);
+			})
 	});
 }
 

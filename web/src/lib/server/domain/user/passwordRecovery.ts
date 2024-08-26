@@ -18,16 +18,16 @@ export class PasswordRecoveryService {
 		}
 	) {}
 
-	public async request(email: string): Promise<Result<void, never>> {
+	public async request(email: string): Promise<Result<User, "NOT_FOUND">> {
 		let user = await this.repos.user.findByEmail(email);
-		if (user === undefined) return { ok: true };
+		if (user === undefined) return { ok: false, error: "NOT_FOUND" };
 
 		let recovery = new PasswordRecovery(user);
 		await this.repos.passwordRecovery.create(recovery);
 		await this.deps.email.sendTemplate(email, recoverPasswordTemplate, {
 			code: recovery.code
 		});
-		return { ok: true };
+		return { ok: true, value: user };
 	}
 
 	public async complete(

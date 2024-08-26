@@ -29,16 +29,13 @@ export function getProfileRouter() {
 					input.newPassword
 				);
 				if (result.ok)
-					ctx.logger.info(`changed password for user ${ctx.session.user.id}`, {
+					ctx.logger.info("successful password change", {
 						user: ctx.session.user.id
 					});
 				else {
-					ctx.logger.info(
-						`failed password change for user ${ctx.session.user.id}`,
-						{
-							user: ctx.session.user.id
-						}
-					);
+					ctx.logger.info(`failed password change`, {
+						user: ctx.session.user.id
+					});
 				}
 				return result;
 			}),

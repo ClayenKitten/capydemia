@@ -16,10 +16,9 @@ export default function getAccountRouter() {
 			.mutation(async ({ ctx, input }) => {
 				let result = await ctx.services.user.confirmRegistration(input.code);
 				if (result.ok)
-					ctx.logger.info(
-						`completed registration of user '${result.value.user.id}'`,
-						{ user: result.value.user.id }
-					);
+					ctx.logger.info("completed user registration", {
+						user: result.value.user.id
+					});
 				return result;
 			}),
 		/** Begins account recovery. */
@@ -27,11 +26,17 @@ export default function getAccountRouter() {
 			.input(m.Recovery)
 			.mutation(async ({ ctx, input }) => {
 				let result = await ctx.services.passwordRecovery.request(input.email);
-				if (result.ok)
+				if (result.ok) {
+					ctx.logger.info(`requested account recovery`, {
+						user: result.value.id
+					});
+					return { ok: true };
+				} else {
 					ctx.logger.info(
-						`requested account recovery for email '${input.email}'`
+						`requested account recovery for unregistered email '${input.email}'`
 					);
-				return result;
+					return { ok: false };
+				}
 			}),
 		/** Completes account registration via recovery code. */
 		confirmRecovery: publicProcedure
@@ -42,10 +47,9 @@ export default function getAccountRouter() {
 					input.newPassword
 				);
 				if (result.ok)
-					ctx.logger.info(
-						`completed account recovery for user '${result.value.user.id}'`,
-						{ user: result.value.user.id }
-					);
+					ctx.logger.info(`completed user account recovery`, {
+						user: result.value.user.id
+					});
 				return result;
 			})
 	});
