@@ -1,7 +1,12 @@
 <script lang="ts">
+	import { invalidateAll, onNavigate } from "$app/navigation";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
+
+	onNavigate(async () => {
+		invalidateAll();
+	});
 </script>
 
 <header>
