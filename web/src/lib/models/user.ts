@@ -32,7 +32,7 @@ export const ProfileInfo = z.object({
 	email: Email,
 	firstName: Name,
 	lastName: Name,
-	patronim: Name.optional(),
+	patronim: Name.nullable(),
 	avatar: z.string()
 });
 export type ProfileInfo = TypeOf<typeof ProfileInfo>;
@@ -41,7 +41,7 @@ export const ChangeProfileInfo = z
 	.object({
 		firstName: Name,
 		lastName: Name,
-		patronim: Name
+		patronim: Name.nullable()
 	})
 	.partial();
 export type ChangeProfileInfo = TypeOf<typeof ChangeProfileInfo>;

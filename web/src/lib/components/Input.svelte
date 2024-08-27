@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let placeholder: string;
-	export let value: string | undefined;
+	export let value: string | null | undefined;
 	export let type: "text" | "email" | "password" = "text";
 
 	export let invalid: boolean = false;

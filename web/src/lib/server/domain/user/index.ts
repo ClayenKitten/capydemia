@@ -24,7 +24,7 @@ export class User {
 		public passwordHash: string,
 		public firstName: string,
 		public lastName: string,
-		public patronim?: string
+		public patronim: string | null = null
 	) {}
 }
 
@@ -137,7 +137,7 @@ export class UserRepository extends DbRepository {
 			record.passwordHash,
 			record.firstName,
 			record.lastName,
-			record.patronim ?? undefined
+			record.patronim
 		);
 	}
 
@@ -154,7 +154,7 @@ export class UserRepository extends DbRepository {
 			record.passwordHash,
 			record.firstName,
 			record.lastName,
-			record.patronim ?? undefined
+			record.patronim
 		);
 	}
 

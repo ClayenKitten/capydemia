@@ -14,7 +14,7 @@
 			await api($page).user.profile.changeInfo.mutate({
 				firstName: data.user.firstName,
 				lastName: data.user.lastName,
-				patronim: data.user.patronim
+				patronim: data.user.patronim === "" ? null : data.user.patronim
 			});
 		}
 		if (changes.email) {
