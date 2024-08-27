@@ -2,9 +2,9 @@
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import Menu from "$lib/components/Menu.svelte";
-	import type { PageData } from "./$types";
+	import type { LayoutData } from "./$types";
 
-	export let data: PageData;
+	export let data: LayoutData;
 
 	const exit = async () => {
 		await api($page).user.session.logout.mutate();
