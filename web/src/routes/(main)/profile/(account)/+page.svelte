@@ -4,7 +4,6 @@
 	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
-	import Notification from "$lib/components/Notification.svelte";
 	import type { PageData } from "./$types";
 	import Group from "./Group.svelte";
 
@@ -105,7 +104,6 @@
 		создания сертификатов, пройденных Вами курсов, а также позволяют нам
 		связаться с Вами.
 	</span>
-	<Notification name="Woops" text="hello" kind="warning"></Notification>
 </header>
 <section class="inputs">
 	<Group bind:valid={validPersonal} on:input={() => (changes.personal = true)}>
