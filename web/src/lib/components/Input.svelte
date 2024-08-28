@@ -1,5 +1,4 @@
 <script lang="ts">
-	export let name: string = "";
 	export let placeholder: string;
 	export let value: string | null | undefined;
 	export let type: "text" | "email" | "password" = "text";
@@ -16,62 +15,51 @@
 	$: input?.setCustomValidity(invalid ? "invalid" : "");
 </script>
 
-<section>
-	<span>{name}</span>
-	{#if type === "text"}
-		<input
-			type="text"
-			bind:value
-			bind:this={input}
-			{placeholder}
-			{required}
-			{minlength}
-			{maxlength}
-			{pattern}
-			{autocomplete}
-			on:input
-			on:change
-		/>
-	{:else if type === "email"}
-		<input
-			type="email"
-			bind:value
-			bind:this={input}
-			{placeholder}
-			{required}
-			{minlength}
-			{maxlength}
-			{pattern}
-			{autocomplete}
-			on:input
-			on:change
-		/>
-	{:else if type === "password"}
-		<input
-			type="password"
-			bind:value
-			bind:this={input}
-			{placeholder}
-			{required}
-			{minlength}
-			{maxlength}
-			{pattern}
-			{autocomplete}
-			on:input
-			on:change
-		/>
-	{/if}
-</section>
+{#if type === "text"}
+	<input
+		type="text"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{:else if type === "email"}
+	<input
+		type="email"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{:else if type === "password"}
+	<input
+		type="password"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{/if}
 
 <style lang="scss">
-	section {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-	}
-	span {
-		font: var(--P2);
-	}
 	input {
 		height: 52px;
 		width: 292px;

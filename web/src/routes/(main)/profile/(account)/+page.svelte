@@ -110,26 +110,34 @@
 		<h4>Личные данные</h4>
 		<div class="personal">
 			<div class="personal_input">
-				<Input
-					name="Имя"
-					placeholder="Введите имя"
-					bind:value={data.user.firstName}
-					required
-					maxlength={128}
-				/>
-				<Input
-					name="Фамилия"
-					placeholder="Введите фамилию"
-					bind:value={data.user.lastName}
-					required
-					maxlength={128}
-				/>
-				<Input
-					name="Отчество"
-					placeholder="Введите отчество"
-					bind:value={data.user.patronim}
-					maxlength={128}
-				/>
+				<label class="input">
+					<span>Имя</span>
+					<Input
+						placeholder="Введите имя"
+						bind:value={data.user.firstName}
+						required
+						maxlength={128}
+					/>
+				</label>
+
+				<label class="input">
+					<span>Фамилия</span>
+					<Input
+						placeholder="Введите фамилию"
+						bind:value={data.user.lastName}
+						required
+						maxlength={128}
+					/>
+				</label>
+
+				<label class="input">
+					<span>Отчество</span>
+					<Input
+						placeholder="Введите отчество"
+						bind:value={data.user.patronim}
+						maxlength={128}
+					/>
+				</label>
 			</div>
 			<button type="button" class="photo">
 				<img src={data.user.avatar} alt="Фото" />
@@ -140,15 +148,18 @@
 	<Group bind:valid={validContacts}>
 		<h4>Контактная информация</h4>
 		<div class="contacts">
-			<Input
-				name="Почта"
-				type="email"
-				placeholder="Введите почту"
-				autocomplete="new-email"
-				bind:value={data.user.email}
-				required
-				on:input={() => (changes.email = true)}
-			/>
+			<label class="input">
+				<span>Почта</span>
+				<Input
+					type="email"
+					placeholder="Введите почту"
+					autocomplete="new-email"
+					bind:value={data.user.email}
+					required
+					on:input={() => (changes.email = true)}
+				/>
+			</label>
+
 			<!--- TODO: may be implemented later -->
 			<!--- <Input placeholder="Введите номер телефона" {valid} /> -->
 		</div>
@@ -218,6 +229,17 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
+	}
+	.input {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		text-align: left;
+		gap: 2px;
+		span {
+			font: var(--P2);
+			color: var(--text);
+		}
 	}
 	.personal {
 		display: flex;
