@@ -126,6 +126,17 @@
 			padding: 16px 32px 16px 32px;
 			font: var(--B);
 			color: var(--primary);
+			&:hover {
+				background-color: var(--secondary-bleek);
+			}
+			&:focus {
+				color: var(--main-bg);
+				background-color: var(--primary);
+				img {
+					filter: invert(100%) sepia(95%) saturate(18%) hue-rotate(338deg)
+						brightness(106%) contrast(104%);
+				}
+			}
 		}
 	}
 	main {

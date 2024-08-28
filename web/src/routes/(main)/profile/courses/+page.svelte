@@ -6,10 +6,13 @@
 
 <header>
 	<h2>Мои курсы</h2>
+	{#if data.courses === null}
+		<span> Вы не записаны ни на какие курсы. </span>
+	{/if}
 </header>
 <section class="courses">
 	{#each data.courses as course}
-		<div class="course">
+		<a href="/course/{course.id}" class="course">
 			<div class="course_img">
 				<img src="/logo.svg" alt="course" />
 			</div>
@@ -33,7 +36,7 @@
 					<img src="/progress.svg" alt="progress" />
 				</div>
 			</div>
-		</div>
+		</a>
 	{/each}
 </section>
 
@@ -58,6 +61,8 @@
 		padding: 32px;
 		display: flex;
 		gap: 40px;
+		text-decoration: none;
+		color: var(--text);
 	}
 	.info {
 		flex: 0 1 656px;

@@ -4,6 +4,7 @@
 	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
+	import Notification from "$lib/components/Notification.svelte";
 	import type { PageData } from "./$types";
 	import Group from "./Group.svelte";
 
@@ -104,6 +105,7 @@
 		создания сертификатов, пройденных Вами курсов, а также позволяют нам
 		связаться с Вами.
 	</span>
+	<Notification name="Woops" text="hello" kind="warning"></Notification>
 </header>
 <section class="inputs">
 	<Group bind:valid={validPersonal} on:input={() => (changes.personal = true)}>
@@ -111,18 +113,21 @@
 		<div class="personal">
 			<div class="personal_input">
 				<Input
+					name="Имя"
 					placeholder="Введите имя"
 					bind:value={data.user.firstName}
 					required
 					maxlength={128}
 				/>
 				<Input
+					name="Фамилия"
 					placeholder="Введите фамилию"
 					bind:value={data.user.lastName}
 					required
 					maxlength={128}
 				/>
 				<Input
+					name="Отчество"
 					placeholder="Введите отчество"
 					bind:value={data.user.patronim}
 					maxlength={128}
@@ -138,6 +143,7 @@
 		<h4>Контактная информация</h4>
 		<div class="contacts">
 			<Input
+				name="Почта"
 				type="email"
 				placeholder="Введите почту"
 				autocomplete="new-email"
