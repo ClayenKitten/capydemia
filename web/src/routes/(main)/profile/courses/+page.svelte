@@ -63,6 +63,10 @@
 		gap: 40px;
 		text-decoration: none;
 		color: var(--text);
+
+		&:hover {
+			color: var(--secondary);
+		}
 	}
 	.info {
 		flex: 0 1 656px;
