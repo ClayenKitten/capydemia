@@ -14,3 +14,12 @@ jobs:
     name: Build
     needs: check
     uses: ./.github/workflows/build.yml
+
+  deploy:
+    name: Deploy
+    needs: build
+    uses: ./.github/workflows/deploy.yml
+    secrets:
+      HOST: ${{ secrets.DEVELOPMENT_HOST }}
+      USER: ${{ secrets.DEVELOPMENT_USER }}
+      KEY: ${{ secrets.DEVELOPMENT_KEY }}

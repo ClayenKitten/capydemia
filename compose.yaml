@@ -11,7 +11,7 @@ services:
       - caddy_config:/config
 
   web:
-    image: ghcr.io/clayenkitten/capydemia:latest
+    image: ghcr.io/clayenkitten/capydemia:${DEPLOY_TAG}
     build: ./web
     init: true
     expose: [3000]
