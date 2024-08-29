@@ -1,4 +1,4 @@
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import { expiresAfter } from "../../util/date";
 import crypto from "crypto";
 import type PasswordService from "./password";
@@ -18,34 +18,34 @@ export class PasswordRecoveryService {
 		}
 	) {}
 
-	public async request(email: string): Promise<Result<void, never>> {
+	public async request(email: string): Promise<Result<User, "NOT_FOUND">> {
 		let user = await this.repos.user.findByEmail(email);
-		if (user === undefined) return { ok: true };
+		if (user === undefined) return { ok: false, error: "NOT_FOUND" };
 
 		let recovery = new PasswordRecovery(user);
 		await this.repos.passwordRecovery.create(recovery);
 		await this.deps.email.sendTemplate(email, recoverPasswordTemplate, {
 			code: recovery.code
 		});
-		return { ok: true };
+		return { ok: true, value: user };
 	}
 
 	public async complete(
 		code: string,
 		newPassword: string
-	): Promise<Result<void, "NOT_FOUND" | "EXPIRED">> {
+	): Promise<Result<{ user: User }, "NOT_FOUND" | "EXPIRED">> {
 		let request = await this.repos.passwordRecovery.findByCode(code);
 		if (request === undefined) return { ok: false, error: "NOT_FOUND" };
 		if (request.expired) return { ok: false, error: "EXPIRED" };
 		await this.repos.passwordRecovery.delete(request.code);
 
 		let passwordHash = await this.deps.password.hash(newPassword);
-		await this.repos.user.updatePassword(request.user, passwordHash);
-		return { ok: true };
+		await this.repos.user.update(request.user.id, { passwordHash });
+		return { ok: true, value: { user: request.user } };
 	}
 }
 
-export class PasswordRecoveryRepository extends Repository {
+export class PasswordRecoveryRepository extends DbRepository {
 	public async findByCode(code: string): Promise<PasswordRecovery | undefined> {
 		let record = await this.db
 			.selectFrom("passwordRecovery")
@@ -54,6 +54,8 @@ export class PasswordRecoveryRepository extends Repository {
 				"user.id",
 				"user.email",
 				"user.passwordHash",
+				"user.firstName",
+				"user.lastName",
 				"passwordRecovery.code",
 				"passwordRecovery.expires"
 			])
@@ -61,7 +63,13 @@ export class PasswordRecoveryRepository extends Repository {
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
 		return new PasswordRecovery(
-			new User(record.id, record.email, record.passwordHash),
+			new User(
+				record.id,
+				record.email,
+				record.passwordHash,
+				record.firstName,
+				record.lastName
+			),
 			record.code,
 			record.expires
 		);

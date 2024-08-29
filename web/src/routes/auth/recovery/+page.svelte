@@ -4,7 +4,7 @@
 	import { z } from "zod";
 
 	async function submit() {
-		await api($page).user.password.recovery.begin.mutate({ email });
+		await api($page).user.account.recover.mutate({ email });
 		confirmed = true;
 	}
 

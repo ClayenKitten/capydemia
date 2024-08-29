@@ -14,10 +14,10 @@ const dialect = new PostgresDialect({
 });
 
 let dbCache: Kysely<DB> | null = null;
-export default function createDatabase(): Kysely<DB> {
+export default async function createDatabase(): Promise<Kysely<DB>> {
 	if (dbCache === null) {
 		dbCache = new Kysely<DB>({ dialect });
-		migrateToLatest(dbCache);
+		await migrateToLatest(dbCache);
 	}
 	return dbCache;
 }

@@ -1,5 +1,5 @@
 import { User, UserRepository } from ".";
-import Repository from "../../db/repository";
+import DbRepository from "../../db/repository";
 import { expiresAfter } from "../../util/date";
 import crypto from "crypto";
 import type PasswordService from "./password";
@@ -14,18 +14,23 @@ export class SessionService {
 	public async login(
 		email: string,
 		password: string
-	): Promise<Result<{ token: string }, "INVALID_CREDENTIALS">> {
+	): Promise<
+		Result<
+			{ session: Session },
+			{ kind: "MISMATCH"; user: User } | { kind: "NOT_FOUND" }
+		>
+	> {
 		let user = await this.repos.user.findByEmail(email);
 		if (user === undefined) {
-			return { ok: false, error: "INVALID_CREDENTIALS" };
+			return { ok: false, error: { kind: "NOT_FOUND" } };
 		}
 
 		let matches = await this.deps.password.verify(password, user.passwordHash);
-		if (!matches) return { ok: false, error: "INVALID_CREDENTIALS" };
+		if (!matches) return { ok: false, error: { kind: "MISMATCH", user } };
 
 		let session = new Session(user);
 		await this.repos.session.create(session);
-		return { ok: true, value: { token: session.token } };
+		return { ok: true, value: { session } };
 	}
 
 	public async logout(session: Session) {
@@ -49,16 +54,31 @@ export class Session {
 	}
 }
 
-export class SessionRepository extends Repository {
+export class SessionRepository extends DbRepository {
 	public async findByToken(token: string): Promise<Session | undefined> {
 		let data = await this.db
 			.selectFrom("session")
 			.where("token", "=", token)
 			.innerJoin("user", "user.id", "session.userId")
-			.select(["user.id", "user.email", "user.passwordHash", "session.expires"])
+			.select([
+				"user.id",
+				"user.email",
+				"user.passwordHash",
+				"session.expires",
+				"user.firstName",
+				"user.lastName",
+				"user.patronim"
+			])
 			.executeTakeFirst();
 		if (data === undefined) return undefined;
-		let user = new User(data.id, data.email, data.passwordHash);
+		let user = new User(
+			data.id,
+			data.email,
+			data.passwordHash,
+			data.firstName,
+			data.lastName,
+			data.patronim ?? undefined
+		);
 		return new Session(user, token, data.expires);
 	}
 

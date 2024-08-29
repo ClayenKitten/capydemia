@@ -1,9 +1,63 @@
 <script lang="ts">
 	export let placeholder: string;
-	export let valid: boolean = false;
+	export let value: string | null | undefined;
+	export let type: "text" | "email" | "password" = "text";
+
+	export let invalid: boolean = false;
+	export let required: boolean = false;
+	export let minlength: number | undefined = undefined;
+	export let maxlength: number | undefined = undefined;
+	export let pattern: string | undefined = undefined;
+
+	export let autocomplete: string | undefined = undefined;
+
+	let input: HTMLInputElement;
+	$: input?.setCustomValidity(invalid ? "invalid" : "");
 </script>
 
-<input {placeholder} class:invalid={!valid} />
+{#if type === "text"}
+	<input
+		type="text"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{:else if type === "email"}
+	<input
+		type="email"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{:else if type === "password"}
+	<input
+		type="password"
+		bind:value
+		bind:this={input}
+		{placeholder}
+		{required}
+		{minlength}
+		{maxlength}
+		{pattern}
+		{autocomplete}
+		on:input
+		on:change
+	/>
+{/if}
 
 <style lang="scss">
 	input {
@@ -15,12 +69,12 @@
 		border-radius: 8px;
 		font: var(--P1);
 		padding: 14px 24px 14px 24px;
-	}
-	::placeholder {
-		color: var(--text-note);
-		font: var(--P1-bold);
-	}
-	.invalid {
-		border-color: var(--error);
+		&::placeholder {
+			color: var(--text-note);
+			font: var(--P1-bold);
+		}
+		&:invalid {
+			border-color: var(--error);
+		}
 	}
 </style>

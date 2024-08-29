@@ -29,6 +29,13 @@ export interface CourseEnrollment {
   userId: number;
 }
 
+export interface EmailChangeRequest {
+  code: string;
+  expires: Timestamp;
+  newEmail: string;
+  userId: number;
+}
+
 export interface Lesson {
   content: Json;
   id: Generated<number>;
@@ -54,6 +61,8 @@ export interface PendingRegistration {
   code: string;
   email: string;
   expires: Timestamp;
+  firstName: string;
+  lastName: string;
   passwordHash: string;
 }
 
@@ -64,14 +73,20 @@ export interface Session {
 }
 
 export interface User {
+  avatarUrl: string | null;
   email: string;
+  firstName: string;
   id: Generated<number>;
+  lastName: string;
   passwordHash: string;
+  patronim: string | null;
+  phone: string | null;
 }
 
 export interface DB {
   course: Course;
   courseEnrollment: CourseEnrollment;
+  emailChangeRequest: EmailChangeRequest;
   lesson: Lesson;
   module: Module;
   passwordRecovery: PasswordRecovery;
