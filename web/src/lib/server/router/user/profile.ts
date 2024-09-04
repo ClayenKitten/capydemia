@@ -19,8 +19,9 @@ export function getProfileRouter() {
 		/** Changes primary profile information. */
 		changeInfo: protectedProcedure
 			.input(m.ChangeProfileInfo)
-			.mutation(({ input, ctx }) => {
-				ctx.repositories.user.update(ctx.session.user.id, input);
+			.mutation(async ({ input, ctx }) => {
+				await ctx.repositories.user.update(ctx.session.user.id, input);
+				ctx.logger.info("updated primary profile information");
 			}),
 		/** Changes user password. */
 		changePassword: protectedProcedure
@@ -31,15 +32,9 @@ export function getProfileRouter() {
 					input.oldPassword,
 					input.newPassword
 				);
-				if (result.ok)
-					ctx.logger.info("successful password change", {
-						user: ctx.session.user.id
-					});
-				else {
-					ctx.logger.info(`failed password change`, {
-						user: ctx.session.user.id
-					});
-				}
+				ctx.logger.info(
+					result.ok ? "password changed" : "password change failed"
+				);
 				return result;
 			}),
 		/** Requests user's email change. */
@@ -51,19 +46,13 @@ export function getProfileRouter() {
 					input.newEmail
 				);
 				if (result.ok) {
-					ctx.logger.info("email change requested", {
-						user: ctx.session.user.id
-					});
+					ctx.logger.info("email change requested");
 					return result;
 				} else if (result.error === "TAKEN") {
-					ctx.logger.info("email change request failed, email already exist", {
-						user: ctx.session.user.id
-					});
+					ctx.logger.info("email change request failed, email already exist");
 					return { ok: true };
 				} else if (result.error === "SAME_EMAIL") {
-					ctx.logger.info("email change request failed, email is the same", {
-						user: ctx.session.user.id
-					});
+					ctx.logger.info("email change request failed, email is the same");
 					return result;
 				}
 				throw new Error("Unexpected result type");
@@ -77,13 +66,7 @@ export function getProfileRouter() {
 					input.code
 				);
 				if (result.ok)
-					ctx.logger.info("email changed", {
-						user: ctx.session.user.id
-					});
-				else
-					ctx.logger.info("email change failed", {
-						user: ctx.session.user.id
-					});
+					ctx.logger.info(result.ok ? "email changed" : "email change failed");
 				return result;
 			}),
 		/** Changes user avatar. */

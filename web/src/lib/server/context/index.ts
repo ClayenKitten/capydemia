@@ -17,6 +17,7 @@ export default async function createContext(request: RequestEvent) {
 
 	return {
 		...innerContext,
+		logger: innerContext.logger.child({ user: session?.user.id }),
 		request,
 		token,
 		session
