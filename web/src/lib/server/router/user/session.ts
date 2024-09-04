@@ -37,16 +37,14 @@ export default function getSessionRouter() {
 			if (ctx.session === undefined) {
 				return;
 			}
-			ctx.logger.info(`user logged out`, { user: ctx.session.user.id });
+			ctx.logger.info(`user logged out`);
 			return await ctx.services.session.logout(ctx.session);
 		}),
 		/** Terminates all user sessions except current. */
 		logoutAll: protectedProcedure
 			.input(z.void())
 			.mutation(async ({ ctx, input }) => {
-				ctx.logger.info(`user terminated all sessions except current`, {
-					user: ctx.session.user.id
-				});
+				ctx.logger.info(`user terminated all sessions except current`);
 				return await ctx.services.session.logoutAll(ctx.session);
 			})
 	});
