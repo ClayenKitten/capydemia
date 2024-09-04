@@ -16,9 +16,8 @@ function getTransports() {
 
 function getConsoleTransport() {
 	return new transports.Console({
-		format: isProd
-			? format.combine(format.timestamp(), format.json())
-			: format.combine(
+		format: isDev
+			? format.combine(
 					format.timestamp(),
 					format.colorize(),
 					format.printf(({ timestamp, level, message, ...rest }) => {
@@ -27,18 +26,19 @@ function getConsoleTransport() {
 						}
 						return `[${timestamp}] ${level} ${message} ${JSON.stringify(rest)}`;
 					})
-				),
-		forceConsole: !isProd,
-		level: isProd ? "warn" : "info"
+				)
+			: format.combine(format.timestamp(), format.json()),
+		forceConsole: isDev,
+		level: isDev ? "info" : "warn"
 	});
 }
 
 function getFileTransports() {
-	if (!isProd) return [];
+	if (isDev) return [];
 	return [
 		new transports.File({ filename: "error.log", level: "error" }),
 		new transports.File({ filename: "combined.log", level: "info" })
 	];
 }
 
-const isProd = process.env.NODE_ENV === "production";
+const isDev = process.env.NODE_ENV === "development";
