@@ -29,7 +29,7 @@ function getConsoleTransport() {
 				)
 			: format.combine(format.timestamp(), format.json()),
 		forceConsole: isDev,
-		level: isDev ? "info" : "warn"
+		level: isDev ? "debug" : "notice"
 	});
 }
 
