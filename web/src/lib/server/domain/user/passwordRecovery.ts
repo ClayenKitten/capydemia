@@ -50,26 +50,13 @@ export class PasswordRecoveryRepository extends DbRepository {
 		let record = await this.db
 			.selectFrom("passwordRecovery")
 			.innerJoin("user", "passwordRecovery.email", "user.email")
-			.select([
-				"user.id",
-				"user.email",
-				"user.passwordHash",
-				"user.firstName",
-				"user.lastName",
-				"passwordRecovery.code",
-				"passwordRecovery.expires"
-			])
+			.selectAll("user")
+			.select(["passwordRecovery.code", "passwordRecovery.expires"])
 			.where("code", "=", code)
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
 		return new PasswordRecovery(
-			new User(
-				record.id,
-				record.email,
-				record.passwordHash,
-				record.firstName,
-				record.lastName
-			),
+			User.fromRecord(record),
 			record.code,
 			record.expires
 		);
