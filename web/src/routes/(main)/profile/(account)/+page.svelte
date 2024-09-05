@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { beforeNavigate, invalidateAll, onNavigate } from "$app/navigation";
+	import { invalidateAll, onNavigate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
+	import { createToastNotification } from "$lib/components/toast";
 	import type { PageData } from "./$types";
 	import Group from "./Group.svelte";
 
@@ -16,17 +17,44 @@
 				lastName: data.user.lastName,
 				patronim: data.user.patronim === "" ? null : data.user.patronim
 			});
+			createToastNotification(
+				"success",
+				"Данные изменены",
+				"Личные профиля успешно изменены"
+			);
 		}
 		if (changes.email) {
-			await api($page).user.profile.requestEmailChange.mutate({
+			let result = await api($page).user.profile.requestEmailChange.mutate({
 				newEmail: data.user.email
 			});
+			if (result.ok) {
+				createToastNotification(
+					"warning",
+					"Подтвердите Email",
+					`На адрес '${data.user.email}' отправлено письмо с ссылкой для подтверждения.`
+				);
+			} else if (result.error === "SAME_EMAIL") {
+				// Do nothing
+			}
 		}
 		if (changes.password) {
-			await api($page).user.profile.changePassword.mutate({
+			let result = await api($page).user.profile.changePassword.mutate({
 				newPassword: newPassword,
 				oldPassword: oldPassword
 			});
+			if (result.ok) {
+				createToastNotification(
+					"warning",
+					"Пароль изменён",
+					`Пароль успешно изменён.`
+				);
+			} else if (result.error === "MISMATCH") {
+				createToastNotification(
+					"error",
+					"Ошибка",
+					`Неверно указан текущий пароль.`
+				);
+			}
 		}
 		if (changes.avatar) {
 			await api($page).user.profile.changeAvatar.mutate({
@@ -157,6 +185,7 @@
 					bind:value={data.user.email}
 					required
 					on:input={() => (changes.email = true)}
+					maxlength={320}
 				/>
 			</label>
 
