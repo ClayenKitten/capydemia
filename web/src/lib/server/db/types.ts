@@ -77,6 +77,7 @@ export interface User {
   email: string;
   firstName: string;
   id: Generated<number>;
+  isTeacher: Generated<boolean>;
   lastName: string;
   passwordHash: string;
   patronim: string | null;

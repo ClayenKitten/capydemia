@@ -33,7 +33,8 @@ export async function seed(db: Kysely<DB>): Promise<void> {
 				firstName: "Капибарий",
 				lastName: "Умиротворённый",
 				patronim: null,
-				passwordHash: await argon2.hash("password")
+				passwordHash: await argon2.hash("password"),
+				isTeacher: true
 			}
 		])
 		.execute();

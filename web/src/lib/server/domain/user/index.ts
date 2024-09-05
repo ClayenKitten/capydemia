@@ -13,19 +13,37 @@ import {
 } from "./pendingRegistration";
 import type Result from "../../util/result";
 import * as m from "$lib/models";
-import type { Updateable } from "kysely";
+import type { Insertable, Selectable, Updateable } from "kysely";
 import type { User as UserTable } from "$lib/server/db/types";
 import { EmailChangeRequest, type EmailChangeRepository } from "./emailChange";
 
 export class User {
-	constructor(
+	private constructor(
 		public id: number,
 		public email: string,
 		public passwordHash: string,
 		public firstName: string,
 		public lastName: string,
-		public patronim: string | null = null
+		public patronim: string | null = null,
+		public isTeacher: boolean = false
 	) {}
+
+	public static create(id: number, record: Insertable<UserTable>) {
+		let { email, passwordHash, firstName, lastName } = record;
+		return new User(id, email, passwordHash, firstName, lastName);
+	}
+
+	public static fromRecord(record: Selectable<UserTable>): User {
+		return new User(
+			record.id,
+			record.email,
+			record.passwordHash,
+			record.firstName,
+			record.lastName,
+			record.patronim,
+			record.isTeacher
+		);
+	}
 }
 
 export class UserService {
@@ -67,12 +85,7 @@ export class UserService {
 		let pending = await this.repos.pendingRegistration.findByCode(code);
 		if (pending === undefined) return { ok: false, error: "NOT_FOUND" };
 		if (pending.expired) return { ok: false, error: "EXPIRED" };
-		let user = await this.repos.user.create(
-			pending.email,
-			pending.firstName,
-			pending.lastName,
-			pending.passwordHash
-		);
+		let user = await this.repos.user.create(pending);
 		await this.repos.pendingRegistration.delete(code);
 		return { ok: true, value: { user } };
 	}
@@ -131,14 +144,7 @@ export class UserRepository extends DbRepository {
 			.where("id", "=", id)
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
-		return new User(
-			record.id,
-			record.email,
-			record.passwordHash,
-			record.firstName,
-			record.lastName,
-			record.patronim
-		);
+		return User.fromRecord(record);
 	}
 
 	public async findByEmail(email: string): Promise<User | undefined> {
@@ -148,29 +154,17 @@ export class UserRepository extends DbRepository {
 			.where("email", "=", email)
 			.executeTakeFirst();
 		if (record === undefined) return undefined;
-		return new User(
-			record.id,
-			record.email,
-			record.passwordHash,
-			record.firstName,
-			record.lastName,
-			record.patronim
-		);
+		return User.fromRecord(record);
 	}
 
-	public async create(
-		email: string,
-		firstName: string,
-		lastName: string,
-		passwordHash: string
-	): Promise<User> {
+	public async create(dto: Insertable<UserTable>): Promise<User> {
 		let id = await this.db
 			.insertInto("user")
-			.values({ email, firstName, lastName, passwordHash })
+			.values(dto)
 			.returning("id")
 			.executeTakeFirstOrThrow()
 			.then(x => x.id);
-		return new User(id, email, passwordHash, firstName, lastName);
+		return User.create(id, dto);
 	}
 
 	public async update(id: number, dto: Updateable<UserTable>) {

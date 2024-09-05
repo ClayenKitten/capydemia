@@ -60,25 +60,11 @@ export class SessionRepository extends DbRepository {
 			.selectFrom("session")
 			.where("token", "=", token)
 			.innerJoin("user", "user.id", "session.userId")
-			.select([
-				"user.id",
-				"user.email",
-				"user.passwordHash",
-				"session.expires",
-				"user.firstName",
-				"user.lastName",
-				"user.patronim"
-			])
+			.selectAll("user")
+			.select(["session.expires"])
 			.executeTakeFirst();
 		if (data === undefined) return undefined;
-		let user = new User(
-			data.id,
-			data.email,
-			data.passwordHash,
-			data.firstName,
-			data.lastName,
-			data.patronim ?? undefined
-		);
+		let user = User.fromRecord(data);
 		return new Session(user, token, data.expires);
 	}
 
