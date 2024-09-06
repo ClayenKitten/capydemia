@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let kind: "primary" | "secondary" | "text" = "primary";
+	export let kind: "primary" | "secondary" | "text" | "text-left" = "primary";
 	export let text: string;
 	export let disabled: boolean = false;
 </script>
@@ -8,9 +8,19 @@
 	class:primary={kind === "primary"}
 	class:secondary={kind === "secondary"}
 	class:text={kind === "text"}
+	class:text-left={kind === "text-left"}
 	on:click
 	{disabled}
 >
+	{#if kind === "text-left"}
+		<img
+			src="/icons/Arrow.svg"
+			alt="button"
+			class="arrow"
+			style="transform:scale(-1, 1);"
+		/>
+	{/if}
+
 	<span>
 		{text}
 	</span>
@@ -70,38 +80,39 @@
 				cursor: not-allowed;
 			}
 		}
-		&.text {
+		&.text,
+		&.text-left {
 			display: flex;
 			align-items: center;
 			gap: 10px;
 			height: 24px;
 			padding: 4px 0 4px 0;
-			color: var(--text);
+			color: var(--primary);
 			background-color: var(--main-bg);
 			border: none;
 
 			& img {
-				filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
-					brightness(97%) contrast(101%);
-			}
-
-			&:hover {
-				color: var(--primary);
-				fill: var(--primary);
-			}
-
-			&:hover img {
 				filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
 					brightness(99%) contrast(94%);
 			}
 
+			&:hover {
+				color: var(--secondary);
+				fill: var(--secondary);
+			}
+
+			&:hover img {
+				filter: invert(77%) sepia(39%) saturate(283%) hue-rotate(161deg)
+					brightness(100%) contrast(90%);
+			}
+
 			&:focus {
-				color: var(--text);
+				color: var(--primary);
 			}
 
 			&:focus img {
-				filter: invert(12%) sepia(32%) saturate(354%) hue-rotate(155deg)
-					brightness(97%) contrast(101%);
+				filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
+					brightness(99%) contrast(94%);
 			}
 
 			&:disabled {

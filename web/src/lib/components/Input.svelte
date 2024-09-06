@@ -62,7 +62,7 @@
 <style lang="scss">
 	input {
 		height: 52px;
-		width: 292px;
+		width: var(--input-width, 292px);
 		color: var(--text);
 		background: var(--main-bg);
 		border: 1px solid var(--secondary);
