@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import api from "$lib/api";
+	import Button from "$lib/components/Button.svelte";
+	import Input from "$lib/components/Input.svelte";
 	import { z } from "zod";
 
 	async function submit() {
@@ -16,112 +18,185 @@
 </script>
 
 <main>
-	<div class="content">
-		{#if !confirmed}
-			<div class="logo">Logo</div>
-			<div class="form">
-				<h1>Забыли пароль?</h1>
-				<span>Укажите вашу почту для восстановления доступа к аккаунту.</span>
-				<div class="input">
-					<label class="type">
-						<span>Email</span>
-						<input
-							type="email"
-							bind:value={email}
-							class:invalid={!valid_email}
-						/>
-					</label>
-					<button on:click={submit} disabled={!valid}>
-						Запросить восстановление
-					</button>
-				</div>
+	{#if confirmed === false}
+		<div class="header">
+			<h4>Восстановление пароля</h4>
+		</div>
+		<div class="form">
+			<div class="type">
+				<label class="input">
+					<span>Email</span>
+					<Input
+						type="email"
+						placeholder="Email, к которому привязан ваш аккаунт"
+						bind:value={email}
+						required
+					/>
+				</label>
 			</div>
-		{:else}
-			<p>
-				На указанную почту будет отправлено письмо со ссылкой для восстановления
-				пароля. Проверьте свой почтовый ящик!
-			</p>
-		{/if}
-	</div>
+			<div class="buttons">
+				<a href="/auth/sign_in" class="button_text">
+					<img
+						src="/icons/Arrow.svg"
+						alt="button"
+						class="arrow"
+						style="transform:scale(-1, 1);"
+					/>
+					<span>Назад</span>
+				</a>
+				<Button
+					text="Продолжить"
+					kind="primary"
+					on:click={submit}
+					disabled={email == "" || !valid}
+				/>
+			</div>
+		</div>
+	{:else}
+		<div class="submitted">
+			<div class="header">
+				<h4>Восстановление пароля</h4>
+			</div>
+			<div class="info">
+				<span>
+					Мы отправили письмо с инструкциями по смене пароля на указанный Вами
+					email.
+				</span>
+				<a href="/auth/sign_in" class="button_primary">
+					<span>К странице входа</span>
+				</a>
+			</div>
+		</div>
+	{/if}
 </main>
 
 <style lang="scss">
 	main {
 		display: flex;
 		flex-direction: column;
+		gap: 24px;
 		flex: 1;
-		justify-content: center;
 		align-items: center;
-		text-align: center;
-		font-size: 16px;
-		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content {
+	h4 {
+		color: var(--text);
+		font: var(--H4);
+	}
+	.submitted {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 32px;
+		gap: 20px;
+		.info {
+			display: flex;
+			flex-direction: column;
+			gap: 28px;
+			span {
+				text-align: center;
+				font: var(--P1);
+			}
+		}
 	}
 	.form {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
 		align-items: center;
-		gap: 48px;
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		padding: 40px 56px 40px 56px;
+		gap: 36px;
 	}
 	.input {
 		display: flex;
 		flex-direction: column;
-		color: var(--text-note);
-		gap: 24px;
-	}
-	.invalid {
-		border-color: var(--error);
-	}
-	.type {
-		display: flex;
-		flex-direction: column;
 		justify-content: center;
 		text-align: left;
-		gap: 4px;
+		gap: 2px;
+		span {
+			font: var(--P2);
+			color: var(--text);
+		}
 	}
-	h1 {
-		color: var(--text-header);
-		font-size: 32px;
-		margin: 10px;
+	.buttons {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
-	input {
-		height: 56px;
-		width: 528px;
-		border: 2px solid var(--border);
-		border-radius: 12px;
-		font-size: 20px;
-		padding: 0 10px 0 10px;
-	}
-	button {
-		height: 64px;
-		color: var(--button-text);
-		background-color: var(--fill);
-		padding: 2px 7px;
-		border: 2px solid var(--fill);
-		border-radius: 40px;
-		align-self: stretch;
-		font-size: 22px;
+	.button_text {
+		height: 52px;
+		padding: 14px 32px 14px 32px;
+		border-radius: 8px;
 		align-content: center;
+		font: var(--B);
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		height: 24px;
+		padding: 4px 0 4px 0;
+		color: var(--primary);
+		background-color: var(--main-bg);
+		border: none;
 		text-decoration: none;
+		text-align: center;
+
+		& img {
+			filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
+				brightness(99%) contrast(94%);
+		}
 
 		&:hover {
-			border: 2px solid var(--fill-hover);
-			background-color: var(--fill-hover);
+			color: var(--secondary);
+			fill: var(--secondary);
+		}
+
+		&:hover img {
+			filter: invert(77%) sepia(39%) saturate(283%) hue-rotate(161deg)
+				brightness(100%) contrast(90%);
+		}
+
+		&:focus {
+			color: var(--primary);
+		}
+
+		&:focus img {
+			filter: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
+				brightness(99%) contrast(94%);
 		}
 
 		&:disabled {
-			background-color: var(--border);
-			border-color: var(--border);
+			color: var(--text-note);
+			cursor: not-allowed;
+		}
+
+		&:disabled img {
+			filter: invert(82%) sepia(8%) saturate(41%) hue-rotate(316deg)
+				brightness(87%) contrast(98%);
+		}
+	}
+	.button_primary {
+		height: 52px;
+		padding: 14px 32px 14px 32px;
+		border-radius: 8px;
+		align-content: center;
+		font: var(--B);
+		color: var(--main-bg);
+		background-color: var(--primary);
+		border: none;
+		text-decoration: none;
+		text-align: center;
+
+		&:hover {
+			color: var(--text);
+			background-color: var(--secondary);
+		}
+
+		&:focus {
+			color: var(--main-bg);
+			background-color: var(--primary);
+		}
+
+		&:disabled {
+			color: var(--text-disabled);
+			background-color: var(--text-note);
+			cursor: not-allowed;
 		}
 	}
 </style>

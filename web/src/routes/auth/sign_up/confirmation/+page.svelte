@@ -5,13 +5,17 @@
 </script>
 
 <main>
-	<div class="content">
-		<div class="logo">Logo</div>
-		<div class="form">
-			<h1>Подтверждение почты</h1>
-			<span>{data.message}</span>
-			<a href="/" class="button">На главную</a>
-		</div>
+	<div class="header">
+		<h4>Почта подтверждена</h4>
+	</div>
+	<div class="info">
+		<span>
+			Ваша электронная почта подтверждена! Пожалуйста, войдите в аккаунт, чтобы
+			начать работу.
+		</span>
+		<a href="/auth/sign_in" class="button">
+			<span>К странице входа</span>
+		</a>
 	</div>
 </main>
 
@@ -19,55 +23,50 @@
 	main {
 		display: flex;
 		flex-direction: column;
+		gap: 20px;
 		flex: 1;
-		justify-content: center;
 		align-items: center;
-		text-align: center;
-		font-size: 16px;
-		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content {
+	h4 {
+		color: var(--text);
+		font: var(--H4);
+	}
+	.info {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		gap: 32px;
-	}
-	.form {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 48px;
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		padding: 40px 56px 40px 56px;
-	}
-	h1 {
-		color: var(--text-header);
-		font-size: 32px;
-		margin: 10px;
+		gap: 28px;
+		span {
+			text-align: center;
+			font: var(--P1);
+		}
 	}
 	.button {
-		height: 64px;
-		color: var(--button-text);
-		background-color: var(--fill);
-		padding: 2px 7px;
-		border: 2px solid var(--fill);
-		border-radius: 40px;
-		align-self: stretch;
-		font-size: 22px;
+		height: 52px;
+		padding: 14px 32px 14px 32px;
+		border-radius: 8px;
 		align-content: center;
+		font: var(--B);
+		color: var(--main-bg);
+		background-color: var(--primary);
+		border: none;
 		text-decoration: none;
+		text-align: center;
 
 		&:hover {
-			border: 2px solid var(--fill-hover);
-			background-color: var(--fill-hover);
+			color: var(--text);
+			background-color: var(--secondary);
+		}
+
+		&:focus {
+			color: var(--main-bg);
+			background-color: var(--primary);
 		}
 
 		&:disabled {
-			background-color: var(--border);
-			border-color: var(--border);
+			color: var(--text-disabled);
+			background-color: var(--text-note);
+			cursor: not-allowed;
 		}
 	}
 </style>

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import api from "$lib/api";
+	import Button from "$lib/components/Button.svelte";
+	import Input from "$lib/components/Input.svelte";
 
 	async function submit() {
 		let code = $page.url.searchParams.get("code");
@@ -33,41 +35,40 @@
 </script>
 
 <main>
-	<div class="content">
-		{#if !finish}
-			<div class="logo">Logo</div>
-			<div class="form">
-				<h1>Восстановление пароля</h1>
-				{#if !error}
-					<div class="input">
-						<label class="type">
-							<span>Новый пароль</span>
-							<input
-								type="password"
-								bind:value={password}
-								class:invalid={!valid_password}
-							/>
-						</label>
-						<label class="type">
-							<span>Повторите пароль</span>
-							<input
-								type="password"
-								bind:value={repeat_password}
-								class:invalid={!valid_repeat_password}
-							/>
-						</label>
-						<button on:click={submit} disabled={!valid}>
-							Сменить пароль
-						</button>
-					</div>
-				{:else}
-					<span class="error">{error}</span>
-				{/if}
-			</div>
-		{:else}
-			<p>Пароль успешно изменён!</p>
-			<a href="/auth/sign_in">Войти</a>
-		{/if}
+	<div class="header">
+		<h4>Восстановление пароля</h4>
+	</div>
+	<div class="inputs">
+		<div class="type">
+			<label class="input">
+				<span>Пароль</span>
+				<Input
+					type="password"
+					placeholder="Ваш пароль"
+					bind:value={password}
+					required
+					minlength={8}
+					maxlength={128}
+				/>
+			</label>
+			<label class="input">
+				<span>Повторите пароль</span>
+				<Input
+					type="password"
+					placeholder="Повторите  пароль"
+					bind:value={repeat_password}
+					required
+					minlength={8}
+					maxlength={128}
+				/>
+			</label>
+		</div>
+		<Button
+			text="Подтвердить новый пароль"
+			kind="primary"
+			on:click={submit}
+			disabled={password == "" || !valid}
+		/>
 	</div>
 </main>
 
@@ -75,82 +76,35 @@
 	main {
 		display: flex;
 		flex-direction: column;
+		gap: 24px;
 		flex: 1;
-		justify-content: center;
 		align-items: center;
-		text-align: center;
-		font-size: 16px;
-		background-color: var(--main-bg);
 		color: var(--text);
 	}
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 32px;
+	h4 {
+		color: var(--text);
+		font: var(--H4);
 	}
-	.form {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 48px;
-		border: 1px solid var(--border);
-		border-radius: 24px;
-		padding: 40px 56px 40px 56px;
-	}
-	.input {
+	.inputs {
 		display: flex;
 		flex-direction: column;
 		color: var(--text-note);
-		gap: 24px;
-	}
-	.invalid {
-		border-color: var(--error);
+		gap: 36px;
 	}
 	.type {
 		display: flex;
 		flex-direction: column;
+		gap: 16px;
+	}
+	.input {
+		display: flex;
+		flex-direction: column;
 		justify-content: center;
 		text-align: left;
-		gap: 4px;
-	}
-	h1 {
-		color: var(--text-header);
-		font-size: 32px;
-		margin: 10px;
-	}
-	input {
-		height: 56px;
-		width: 528px;
-		border: 2px solid var(--border);
-		border-radius: 12px;
-		font-size: 20px;
-		padding: 0 10px 0 10px;
-	}
-	button {
-		height: 64px;
-		color: var(--button-text);
-		background-color: var(--fill);
-		padding: 2px 7px;
-		border: 2px solid var(--fill);
-		border-radius: 40px;
-		align-self: stretch;
-		font-size: 22px;
-		align-content: center;
-		text-decoration: none;
-
-		&:hover {
-			border: 2px solid var(--fill-hover);
-			background-color: var(--fill-hover);
+		gap: 2px;
+		span {
+			font: var(--P2);
+			color: var(--text);
 		}
-
-		&:disabled {
-			background-color: var(--border);
-			border-color: var(--border);
-		}
-	}
-	.error {
-		color: var(--error);
 	}
 </style>
