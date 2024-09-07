@@ -19,3 +19,7 @@ export type Code = TypeOf<typeof Code>;
 /** Url string. */
 export const Url = z.string().url();
 export type Url = TypeOf<typeof Url>;
+
+/** Numerical id. */
+export const Id = z.number().int().nonnegative();
+export type Id = TypeOf<typeof Id>;

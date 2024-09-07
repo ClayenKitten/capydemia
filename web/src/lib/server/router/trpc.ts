@@ -21,4 +21,21 @@ const protectedProcedure = publicProcedure.use(opts => {
 	});
 });
 
-export { router, publicProcedure, protectedProcedure, createCallerFactory };
+const teacherProcedure = protectedProcedure.use(opts => {
+	if (!opts.ctx.session.user.isTeacher) {
+		throw new TRPCError({ code: "FORBIDDEN" });
+	}
+	return opts.next({
+		ctx: {
+			...opts.ctx
+		}
+	});
+});
+
+export {
+	router,
+	publicProcedure,
+	protectedProcedure,
+	teacherProcedure,
+	createCallerFactory
+};

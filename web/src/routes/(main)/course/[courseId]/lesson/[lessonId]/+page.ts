@@ -21,7 +21,7 @@ export const load: PageLoad = async event => {
 	}
 
 	return {
-		lessonContent: JSON.parse(lessonContent.value) as OutputData,
+		lessonContent: lessonContent.value,
 		lesson,
 		module
 	};
