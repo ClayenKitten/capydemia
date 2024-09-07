@@ -22,6 +22,15 @@ const authorizationHandle: Handle = async ({ event, resolve }) => {
 export const handle: Handle = sequence(
 	createTRPCHandle({
 		router: appRouter,
+		onError: ({ ctx, error }) => {
+			if (error.code === "INTERNAL_SERVER_ERROR") {
+				ctx?.logger.error("internal server error", {
+					cause: error.cause,
+					errorMessage: error.message,
+					stack: error.stack
+				});
+			}
+		},
 		createContext
 	}),
 	authorizationHandle
