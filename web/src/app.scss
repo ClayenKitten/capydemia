@@ -30,6 +30,11 @@
 	--main-bg: white;
 	--base-bg: #fafafa;
 
+	--filter-main-bg: invert(100%) sepia(95%) saturate(18%) hue-rotate(338deg)
+		brightness(106%) contrast(104%);
+	--filter-primary: invert(25%) sepia(60%) saturate(2103%) hue-rotate(179deg)
+		brightness(99%) contrast(94%);
+
 	--text: #172126;
 	--text-note: #b9b8b8;
 	--text-disabled: #8c8c8c;
