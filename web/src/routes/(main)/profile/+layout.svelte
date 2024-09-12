@@ -21,31 +21,49 @@
 					{data.user.firstName} <br />
 					{data.user.lastName}
 				</div>
-				<div class="role">Студент</div>
+				<div class="role">
+					{#if data.user.isTeacher === true}
+						Преподаватель
+					{:else}
+						Студент
+					{/if}
+				</div>
 			</div>
 		</div>
 		<nav>
 			<Menu text="Данные аккаунта" path="/profile" img="/icons/User-24px.svg" />
-			<Menu
-				text="Мои курсы"
-				path="/profile/courses"
-				img="/icons/GraduationCap-24px.svg"
-			/>
+			{#if data.user.isTeacher === false}
+				<Menu
+					text="Мои курсы"
+					path="/profile/courses"
+					img="/icons/GraduationCap-24px.svg"
+				/>
+			{:else}
+				<Menu
+					text="Курируемые курсы"
+					path="/profile/courses"
+					img="/icons/GraduationCap-24px.svg"
+				/>
+			{/if}
 			<Menu
 				text="Настройки уведомлений"
 				path="/profile/notifications"
 				img="/icons/Bell-24px.svg"
 			/>
-			<Menu
-				text="Сертификаты"
-				path="/profile/certificates"
-				img="/icons/Certificate-24px.svg"
-			/>
-			<Menu
-				text="Мои платежи"
-				path="/profile/payments"
-				img="/icons/CreditCard-24px.svg"
-			/>
+			{#if data.user.isTeacher === false}
+				<Menu
+					text="Сертификаты"
+					path="/profile/certificates"
+					img="/icons/Certificate-24px.svg"
+				/>
+			{/if}
+			{#if data.user.isTeacher === false}
+				<Menu
+					text="Мои платежи"
+					path="/profile/payments"
+					img="/icons/CreditCard-24px.svg"
+				/>
+			{/if}
 			<Menu
 				text="Поддержка"
 				path="/profile/support"
