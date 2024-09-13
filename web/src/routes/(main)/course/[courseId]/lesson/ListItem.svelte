@@ -8,8 +8,7 @@
 	export let id: number;
 	export let name: string;
 	export let href: string = "";
-
-	let editable = false;
+	export let editable: boolean = false;
 
 	function Edit() {
 		dispatch("edit");
@@ -36,9 +35,15 @@
 		{/if}
 	{:else if kind === "module"}
 		<div class="module_header" class:current>
-			<button class="module_button">
-				<input value="Модуль {id + 1}. {name}" disabled={editable} />
-			</button>
+			{#if editable === false}
+				<button class="module_button">
+					<span>Модуль {id + 1}. {name}</span>
+				</button>
+			{:else}
+				<div class="module_button">
+					<input value="Модуль {id + 1}. {name}" />
+				</div>
+			{/if}
 			<div class="edit_buttons">
 				<button class="edit_name" on:click={Edit}>
 					<img src="/icons/PencilSimple-32px.svg" alt="" />
@@ -50,9 +55,16 @@
 		</div>
 	{:else}
 		<div class="lesson_header" class:current>
-			<a {href}>
-				<input value="Урок {id + 1}. {name}" disabled={editable} />
-			</a>
+			{#if editable === false}
+				<a {href} class="lesson_link">
+					<span>Урок {id + 1}. {name}</span>
+				</a>
+			{:else}
+				<div class="lesson_link">
+					<input value="Урок {id + 1}. {name}" />
+				</div>
+			{/if}
+
 			<div class="edit_buttons">
 				<button class="edit_name" on:click={Edit}>
 					<img src="/icons/PencilSimple-32px.svg" alt="" />
@@ -88,6 +100,7 @@
 	.module_header {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		height: 72px;
 		width: 100%;
 		background-color: var(--main-bg);
@@ -100,7 +113,8 @@
 			padding: 12px 0 12px 32px;
 			border-radius: 8px;
 
-			> span {
+			> span,
+			input {
 				color: var(--text);
 				max-width: 218px;
 				display: -webkit-box;
@@ -144,7 +158,7 @@
 	.lesson_header {
 		display: flex;
 		align-items: center;
-		a {
+		.lesson_link {
 			display: flex;
 			align-items: center;
 			min-height: 60px;
@@ -158,7 +172,7 @@
 			background-color: var(--secondary);
 		}
 		&:not(.current):hover {
-			a,
+			.lesson_link,
 			input {
 				color: var(--secondary);
 			}

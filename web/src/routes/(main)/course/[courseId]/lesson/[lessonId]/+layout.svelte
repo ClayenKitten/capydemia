@@ -6,7 +6,12 @@
 
 	export let data: PageData;
 
-	function EditName() {}
+	function editName() {
+		editable = true;
+	}
+	function addLesson() {}
+	function deleteItem() {}
+	let editable = false;
 </script>
 
 <main>
@@ -40,6 +45,9 @@
 							status="teacher"
 							id={i}
 							name={module.title}
+							on:edit{editName}
+							on:delete{deleteItem}
+							{editable}
 						/>
 					{/if}
 				</div>
@@ -65,18 +73,21 @@
 									id={j}
 									name={lesson.title}
 									href="/course/{data.course.id}/lesson/{lesson.id}"
+									on:edit{editName}
+									on:delete{deleteItem}
+									{editable}
 								/>
 							{/if}
 						</div>
 					{/each}
 					{#if data.user.isTeacher === true}
-						<AddItem kind="lesson" text="Добавить урок" on:click={EditName} />
+						<AddItem kind="lesson" text="Добавить урок" on:click={addLesson} />
 					{/if}
 				</div>
 			</div>
 		{/each}
 		{#if data.user.isTeacher === true}
-			<AddItem kind="module" text="Добавить модуль" on:click={EditName} />
+			<AddItem kind="module" text="Добавить модуль" on:click={addLesson} />
 		{/if}
 	</div>
 	<div class="lesson">

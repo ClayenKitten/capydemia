@@ -1,6 +1,16 @@
 <script lang="ts">
+	import { createEventDispatcher } from "svelte";
+	const dispatch = createEventDispatcher();
+
 	export let kind: "module" | "lesson";
 	export let text: string;
+
+	function addModule() {
+		dispatch("addModule");
+	}
+	function addLesson() {
+		dispatch("addLesson");
+	}
 </script>
 
 <button class={kind}>
