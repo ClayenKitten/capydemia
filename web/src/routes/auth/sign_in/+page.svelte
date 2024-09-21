@@ -33,7 +33,7 @@
 		</div>
 		<div class="inputs">
 			<div class="type">
-				<label class="input">
+				<label class="input" for={undefined}>
 					<span>Email</span>
 					<Input
 						type="email"
@@ -42,7 +42,7 @@
 						required
 					/>
 				</label>
-				<label class="input">
+				<label class="input" for={undefined}>
 					<div class="password_label">
 						<span>Пароль</span>
 						<a href="/auth/recovery">Забыли пароль?</a>
