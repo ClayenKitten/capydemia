@@ -40,7 +40,7 @@
 	</div>
 	<div class="inputs">
 		<div class="type">
-			<label class="input">
+			<label class="input" for={undefined}>
 				<span>Пароль</span>
 				<Input
 					type="password"
@@ -51,7 +51,7 @@
 					maxlength={128}
 				/>
 			</label>
-			<label class="input">
+			<label class="input" for={undefined}>
 				<span>Повторите пароль</span>
 				<Input
 					type="password"
