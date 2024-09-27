@@ -6,12 +6,13 @@
 
 	export let data: PageData;
 
-	function editName() {
-		editable = true;
+	function addLesson() {
+		/*data.course.createCourse.mutate({
+			title:"",
+			description:""
+		})*/
 	}
-	function addLesson() {}
 	function deleteItem() {}
-	let editable = false;
 </script>
 
 <main>
@@ -45,9 +46,7 @@
 							status="teacher"
 							id={i}
 							name={module.title}
-							on:edit{editName}
-							on:delete{deleteItem}
-							{editable}
+							on:delete={deleteItem}
 						/>
 					{/if}
 				</div>
@@ -73,9 +72,7 @@
 									id={j}
 									name={lesson.title}
 									href="/course/{data.course.id}/lesson/{lesson.id}"
-									on:edit{editName}
-									on:delete{deleteItem}
-									{editable}
+									on:delete={deleteItem}
 								/>
 							{/if}
 						</div>

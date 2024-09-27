@@ -5,15 +5,16 @@
 	export let kind: "module" | "lesson";
 	export let text: string;
 
-	function addModule() {
-		dispatch("addModule");
-	}
-	function addLesson() {
-		dispatch("addLesson");
+	function addItem() {
+		if (kind === "module") {
+			dispatch("addModule");
+		} else {
+			dispatch("addLesson");
+		}
 	}
 </script>
 
-<button class={kind}>
+<button class={kind} on:click={addItem}>
 	<img src="/icons/Plus-24px.svg" alt="" />
 	{text}
 </button>
