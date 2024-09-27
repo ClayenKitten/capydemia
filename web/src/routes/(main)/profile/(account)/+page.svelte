@@ -138,7 +138,7 @@
 		<h4>Личные данные</h4>
 		<div class="personal">
 			<div class="personal_input">
-				<label class="input">
+				<label class="input" for={undefined}>
 					<span>Имя</span>
 					<Input
 						placeholder="Введите имя"
@@ -148,7 +148,7 @@
 					/>
 				</label>
 
-				<label class="input">
+				<label class="input" for={undefined}>
 					<span>Фамилия</span>
 					<Input
 						placeholder="Введите фамилию"
@@ -158,7 +158,7 @@
 					/>
 				</label>
 
-				<label class="input">
+				<label class="input" for={undefined}>
 					<span>Отчество</span>
 					<Input
 						placeholder="Введите отчество"
@@ -176,7 +176,7 @@
 	<Group bind:valid={validContacts}>
 		<h4>Контактная информация</h4>
 		<div class="contacts">
-			<label class="input">
+			<label class="input" for={undefined}>
 				<span>Почта</span>
 				<Input
 					type="email"

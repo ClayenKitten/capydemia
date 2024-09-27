@@ -1,8 +1,18 @@
 <script lang="ts">
 	import Button from "$lib/components/Button.svelte";
+	import ListItem from "../ListItem.svelte";
 	import type { PageData } from "./$types";
+	import AddItem from "./AddItem.svelte";
 
 	export let data: PageData;
+
+	function addLesson() {
+		/*data.course.createCourse.mutate({
+			title:"",
+			description:""
+		})*/
+	}
+	function deleteItem() {}
 </script>
 
 <main>
@@ -21,21 +31,61 @@
 	<div class="modules">
 		{#each data.course.modules as module, i}
 			<div class="module" class:current={module.id === data.module?.id}>
-				<button>
-					<span>Модуль {i + 1}. {module.title}</span>
-				</button>
+				<div class="module_header">
+					{#if data.user.isTeacher === false}
+						<ListItem
+							kind="module"
+							current={module.id === data.module?.id}
+							id={i}
+							name={module.title}
+						/>
+					{:else}
+						<ListItem
+							kind="module"
+							current={module.id === data.module?.id}
+							status="teacher"
+							id={i}
+							name={module.title}
+							on:delete={deleteItem}
+						/>
+					{/if}
+				</div>
 				<div class="lessons">
 					{#each module.lessons as lesson, j}
-						<a
+						<div
+							class="lesson_header"
 							class:current={lesson.id === data.lesson?.id}
-							href={`/course/${data.course.id}/lesson/${lesson.id}`}
 						>
-							Урок {j + 1}. {lesson.title}
-						</a>
+							{#if data.user.isTeacher === false}
+								<ListItem
+									kind="lesson"
+									current={lesson.id === data.lesson?.id}
+									id={j}
+									name={lesson.title}
+									href="/course/{data.course.id}/lesson/{lesson.id}"
+								/>
+							{:else}
+								<ListItem
+									kind="lesson"
+									current={lesson.id === data.lesson?.id}
+									status="teacher"
+									id={j}
+									name={lesson.title}
+									href="/course/{data.course.id}/lesson/{lesson.id}"
+									on:delete={deleteItem}
+								/>
+							{/if}
+						</div>
 					{/each}
+					{#if data.user.isTeacher === true}
+						<AddItem kind="lesson" text="Добавить урок" on:click={addLesson} />
+					{/if}
 				</div>
 			</div>
 		{/each}
+		{#if data.user.isTeacher === true}
+			<AddItem kind="module" text="Добавить модуль" on:click={addLesson} />
+		{/if}
 	</div>
 	<div class="lesson">
 		<slot />
@@ -109,54 +159,8 @@
 					border-top: none;
 					border-radius: 0 0 8px 8px;
 					padding: 12px 0 12px 0;
-					a {
-						display: flex;
-						align-items: center;
-						min-height: 60px;
-						padding: 10px 32px 10px 32px;
-						font: var(--P1);
-						color: var(--text);
-						line-height: 24px;
-						text-decoration: none;
-						&.current {
-							color: var(--primary);
-						}
-						&:not(.current):hover {
-							color: var(--secondary);
-						}
-					}
-				}
-				button {
-					background-color: var(--primary);
-					color: var(--main-bg);
-					border-radius: 8px 8px 0 0;
-					border: none;
 				}
 			}
-
-			button {
-				height: 72px;
-				padding: 12px 32px 12px 32px;
-				text-align: left;
-				width: 100%;
-				background-color: var(--main-bg);
-				border: 1px solid var(--secondary);
-				border-radius: 8px;
-
-				> span {
-					display: -webkit-box;
-					-webkit-line-clamp: 2;
-					line-clamp: 2;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					-webkit-box-orient: vertical;
-				}
-			}
-
-			&:not(:focus-within, .current) > button:hover {
-				color: var(--secondary);
-			}
-
 			.lessons {
 				display: none;
 			}
