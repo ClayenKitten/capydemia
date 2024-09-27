@@ -8,10 +8,10 @@
 	export let id: number;
 	export let name: string;
 	export let href: string = "";
-	export let editable: boolean = false;
 
+	let editable = false;
 	function Edit() {
-		dispatch("edit");
+		editable = true;
 	}
 	function Delete() {
 		dispatch("delete");
@@ -78,10 +78,12 @@
 </div>
 
 <style lang="scss">
-	button,
-	input {
+	button {
 		border: none;
 		background-color: inherit;
+	}
+	input {
+		color: var(--text);
 	}
 	.edit_buttons {
 		display: flex;
@@ -113,8 +115,7 @@
 			padding: 12px 0 12px 32px;
 			border-radius: 8px;
 
-			> span,
-			input {
+			> span {
 				color: var(--text);
 				max-width: 218px;
 				display: -webkit-box;
@@ -134,8 +135,7 @@
 
 			.module_button {
 				border-radius: 8px 8px 0 0;
-				span,
-				input {
+				span {
 					color: var(--main-bg);
 				}
 			}
@@ -148,8 +148,7 @@
 			}
 		}
 		&:not(:focus-within, .current) > .module_header:hover {
-			span,
-			input {
+			span {
 				color: var(--secondary);
 			}
 		}
@@ -172,8 +171,7 @@
 			background-color: var(--secondary);
 		}
 		&:not(.current):hover {
-			.lesson_link,
-			input {
+			.lesson_link {
 				color: var(--secondary);
 			}
 		}
