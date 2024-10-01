@@ -34,6 +34,8 @@
 		gap: 32px;
 		align-items: center;
 		.logo {
+			height: 94px;
+			width: 100.52px;
 		}
 		.form {
 			background-color: var(--main-bg);

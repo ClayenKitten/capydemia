@@ -5,6 +5,32 @@
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { z } from "zod";
+	//import { superForm } from 'sveltekit-superforms';
+
+	export let data;
+
+	import { superForm, defaults } from "sveltekit-superforms";
+	import { zod } from "sveltekit-superforms/adapters";
+	//import { loginSchema } from '$lib/schemas';
+
+	const loginSchema = z.object({
+		password: z.string().min(1, "Пароль должен содержать хотя бы 1 символ"),
+		email: z.string().email("Некорректный адрес электронной почты").max(128)
+	});
+
+	const { form, errors, enhance, validateForm } = superForm(
+		defaults(zod(loginSchema)),
+		{
+			SPA: true,
+			validators: zod(loginSchema),
+			async onChange(event) {
+				valid = (await validateForm()).valid;
+				email = $form.email;
+				password = $form.password;
+				console.log(valid);
+			}
+		}
+	);
 
 	async function submit() {
 		let result = await api($page).user.session.login.mutate({
@@ -16,18 +42,18 @@
 		} else {
 			error = "Неверный логин или пароль";
 		}
+		valid = (await validateForm()).valid;
 	}
 
 	let email = "";
 	let password = "";
 	let error = "";
 
-	$: valid_email = z.string().email().max(128).safeParse(email).success;
-	$: valid = valid_email;
+	let valid = false;
 </script>
 
 <main>
-	<div class="form">
+	<form class="form" use:enhance>
 		<div class="header">
 			<h4>Вход в аккаунт</h4>
 		</div>
@@ -38,9 +64,11 @@
 					<Input
 						type="email"
 						placeholder="Ваш email"
-						bind:value={email}
+						bind:value={$form.email}
 						required
+						invalid={$errors.email ? true : false}
 					/>
+					{#if $errors.email}<span class="error">{$errors.email}</span>{/if}
 				</label>
 				<label class="input" for={undefined}>
 					<div class="password_label">
@@ -50,22 +78,25 @@
 					<Input
 						type="password"
 						placeholder="Ваш пароль"
-						bind:value={password}
+						bind:value={$form.password}
 						required
+						invalid={$errors.password ? true : false}
 					/>
+					{#if $errors.password}<span class="error">{$errors.password}</span
+						>{/if}
 				</label>
 			</div>
 			<Button
 				text="Войти в аккаунт"
 				kind="primary"
 				on:click={submit}
-				disabled={password == "" || !valid}
+				disabled={!valid}
 			/>
 			{#if error}
 				<span class="error">{error}</span>
 			{/if}
 		</div>
-	</div>
+	</form>
 	<hr class="sign_up_offer" />
 	<a href="/auth/sign_up" class="button">
 		<span>Создать аккаунт</span>
