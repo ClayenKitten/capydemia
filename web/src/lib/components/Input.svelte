@@ -11,15 +11,15 @@
 
 	export let autocomplete: string | undefined = undefined;
 
-	let input: HTMLInputElement;
-	$: input?.setCustomValidity(invalid ? "invalid" : "");
+	//let input: HTMLInputElement;
+	//$: a=invalid ? "invalid" : "";
 </script>
 
 {#if type === "text"}
 	<input
 		type="text"
 		bind:value
-		bind:this={input}
+		class={invalid ? "invalid" : ""}
 		{placeholder}
 		{required}
 		{minlength}
@@ -33,7 +33,7 @@
 	<input
 		type="email"
 		bind:value
-		bind:this={input}
+		class={invalid ? "invalid" : ""}
 		{placeholder}
 		{required}
 		{minlength}
@@ -47,7 +47,7 @@
 	<input
 		type="password"
 		bind:value
-		bind:this={input}
+		class={invalid ? "invalid" : ""}
 		{placeholder}
 		{required}
 		{minlength}
@@ -73,8 +73,8 @@
 			color: var(--text-note);
 			font: var(--P1-bold);
 		}
-		&:invalid {
-			border-color: var(--error);
-		}
+	}
+	.invalid {
+		border-color: var(--error);
 	}
 </style>
