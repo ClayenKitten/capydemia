@@ -5,6 +5,7 @@
 </script>
 
 <button
+	type="button"
 	class:primary={kind === "primary"}
 	class:secondary={kind === "secondary"}
 	class:text={kind === "text"}

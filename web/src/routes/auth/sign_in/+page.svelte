@@ -82,8 +82,9 @@
 						required
 						invalid={$errors.password ? true : false}
 					/>
-					{#if $errors.password}<span class="error">{$errors.password}</span
-						>{/if}
+					{#if $errors.password}
+						<span class="error">{$errors.password}</span>
+					{/if}
 				</label>
 			</div>
 			<Button
@@ -127,6 +128,9 @@
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 36px;
+		.error {
+			color: var(--error);
+		}
 	}
 	.type {
 		display: flex;
@@ -207,8 +211,5 @@
 			border-color: var(--text-note);
 			cursor: not-allowed;
 		}
-	}
-	.error {
-		color: var(--error);
 	}
 </style>
