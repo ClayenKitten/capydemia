@@ -4,6 +4,27 @@
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { z } from "zod";
+	import { superForm, defaults } from "sveltekit-superforms";
+	import { zod } from "sveltekit-superforms/adapters";
+
+	const recoverySchema = z.object({
+		email: z
+			.string()
+			.email("Некорректный адрес электронной почты")
+			.max(128, "Слишком длинный адрес")
+	});
+
+	const { form, errors, enhance, validateForm } = superForm(
+		defaults(zod(recoverySchema)),
+		{
+			SPA: true,
+			validators: zod(recoverySchema),
+			async onChange(event) {
+				valid = (await validateForm()).valid;
+				email = $form.email;
+			}
+		}
+	);
 
 	async function submit() {
 		await api($page).user.account.recover.mutate({ email });
@@ -13,8 +34,7 @@
 	let email = "";
 	let confirmed = false;
 
-	$: valid_email = z.string().email().max(128).safeParse(email).success;
-	$: valid = valid_email;
+	let valid = false;
 </script>
 
 <main>
@@ -22,16 +42,18 @@
 		<div class="header">
 			<h4>Восстановление пароля</h4>
 		</div>
-		<div class="form">
-			<div class="type">
-				<label class="input">
+		<form use:enhance>
+			<div class="inputs">
+				<label class="input" for={undefined}>
 					<span>Email</span>
 					<Input
 						type="email"
 						placeholder="Email, к которому привязан ваш аккаунт"
-						bind:value={email}
+						bind:value={$form.email}
 						required
+						invalid={$errors.email ? true : false}
 					/>
+					{#if $errors.email}<span class="error">{$errors.email}</span>{/if}
 				</label>
 			</div>
 			<div class="buttons">
@@ -51,7 +73,7 @@
 					disabled={email == "" || !valid}
 				/>
 			</div>
-		</div>
+		</form>
 	{:else}
 		<div class="submitted">
 			<div class="header">
@@ -97,7 +119,7 @@
 			}
 		}
 	}
-	.form {
+	form {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -112,6 +134,10 @@
 		span {
 			font: var(--P2);
 			color: var(--text);
+		}
+		.error {
+			color: var(--error);
+			font: var(--P2);
 		}
 	}
 	.buttons {

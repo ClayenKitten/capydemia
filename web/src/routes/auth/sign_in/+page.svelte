@@ -5,29 +5,27 @@
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
 	import { z } from "zod";
-	//import { superForm } from 'sveltekit-superforms';
-
-	export let data;
 
 	import { superForm, defaults } from "sveltekit-superforms";
 	import { zod } from "sveltekit-superforms/adapters";
-	//import { loginSchema } from '$lib/schemas';
 
-	const loginSchema = z.object({
+	const signInSchema = z.object({
 		password: z.string().min(1, "Пароль должен содержать хотя бы 1 символ"),
-		email: z.string().email("Некорректный адрес электронной почты").max(128)
+		email: z
+			.string()
+			.email("Некорректный адрес электронной почты")
+			.max(128, "Слишком длинный адрес")
 	});
 
 	const { form, errors, enhance, validateForm } = superForm(
-		defaults(zod(loginSchema)),
+		defaults(zod(signInSchema)),
 		{
 			SPA: true,
-			validators: zod(loginSchema),
+			validators: zod(signInSchema),
 			async onChange(event) {
 				valid = (await validateForm()).valid;
 				email = $form.email;
 				password = $form.password;
-				console.log(valid);
 			}
 		}
 	);
@@ -53,12 +51,12 @@
 </script>
 
 <main>
-	<form class="form" use:enhance>
+	<form use:enhance>
 		<div class="header">
 			<h4>Вход в аккаунт</h4>
 		</div>
-		<div class="inputs">
-			<div class="type">
+		<div class="form">
+			<div class="inputs">
 				<label class="input" for={undefined}>
 					<span>Email</span>
 					<Input
@@ -82,20 +80,21 @@
 						required
 						invalid={$errors.password ? true : false}
 					/>
-					{#if $errors.password}
-						<span class="error">{$errors.password}</span>
-					{/if}
+					{#if $errors.password}<span class="error">{$errors.password}</span
+						>{/if}
 				</label>
 			</div>
-			<Button
-				text="Войти в аккаунт"
-				kind="primary"
-				on:click={submit}
-				disabled={!valid}
-			/>
-			{#if error}
-				<span class="error">{error}</span>
-			{/if}
+			<div class="submit">
+				<Button
+					text="Войти в аккаунт"
+					kind="primary"
+					on:click={submit}
+					disabled={!valid}
+				/>
+				{#if error}
+					<span class="error">{error}</span>
+				{/if}
+			</div>
 		</div>
 	</form>
 	<hr class="sign_up_offer" />
@@ -117,22 +116,28 @@
 		color: var(--text);
 		font: var(--H4);
 	}
-	.form {
+	form {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		gap: 24px;
 	}
-	.inputs {
+	.form {
 		display: flex;
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 36px;
 		.error {
 			color: var(--error);
+			font: var(--P2);
+		}
+		.submit {
+			display: flex;
+			flex-direction: column;
+			text-align: center;
 		}
 	}
-	.type {
+	.inputs {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;

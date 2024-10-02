@@ -10,9 +10,6 @@
 	export let pattern: string | undefined = undefined;
 
 	export let autocomplete: string | undefined = undefined;
-
-	//let input: HTMLInputElement;
-	//$: a=invalid ? "invalid" : "";
 </script>
 
 {#if type === "text"}

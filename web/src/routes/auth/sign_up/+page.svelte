@@ -5,6 +5,46 @@
 	import Input from "$lib/components/Input.svelte";
 	import { z } from "zod";
 
+	import { superForm, defaults } from "sveltekit-superforms";
+	import { zod } from "sveltekit-superforms/adapters";
+
+	const signUpSchema = z.object({
+		firstName: z
+			.string()
+			.min(1, "Это поле не должно быть пустым")
+			.max(128, "Слишком длинное имя"),
+		lastName: z
+			.string()
+			.min(1, "Это поле не должно быть пустым")
+			.max(128, "Слишком длинная фамилия"),
+		email: z
+			.string()
+			.email("Некорректный адрес электронной почты")
+			.max(128, "Слишком длинный адрес"),
+		password: z
+			.string()
+			.min(8, "Пароль должен содержать хотя бы 8 символов")
+			.max(128, "Слишком длинный пароль"),
+		repeat_password: z.string()
+	});
+
+	const { form, errors, enhance, validateForm } = superForm(
+		defaults(zod(signUpSchema)),
+		{
+			SPA: true,
+			validators: zod(signUpSchema),
+			async onChange(event) {
+				valid =
+					(await validateForm()).valid &&
+					$form.password === $form.repeat_password;
+				firstName = $form.firstName;
+				lastName = $form.lastName;
+				email = $form.email;
+				password = $form.password;
+			}
+		}
+	);
+
 	async function create() {
 		await api($page).user.account.register.mutate({
 			email,
@@ -12,7 +52,7 @@
 			lastName,
 			password
 		});
-		confirmed = true;
+		submitted = true;
 	}
 
 	function returning() {
@@ -25,80 +65,80 @@
 	let firstName = "";
 	let lastName = "";
 	let password = "";
-	let repeat_password = "";
-	let confirmed = false;
 
-	$: valid_email = z.string().email().max(128).safeParse(email).success;
-	$: validFirstName = firstName.length !== 0 && firstName.length <= 128;
-	$: validLastName = lastName.length !== 0 && lastName.length <= 128;
-	$: valid_password = password.length >= 8 && password.length <= 128;
-	$: valid_repeat_password = password === repeat_password;
-	$: valid =
-		valid_email &&
-		validFirstName &&
-		validLastName &&
-		valid_password &&
-		valid_repeat_password;
+	let valid = false;
 </script>
 
 <main>
 	{#if submitted === false}
-		<form>
+		<form use:enhance>
 			<div class="header">
 				<h4>Регистрация</h4>
 			</div>
-			<div class="inputs">
-				<div class="type">
+			<div class="form">
+				<div class="inputs">
 					<label class="input" for={undefined}>
 						<span>Имя</span>
 						<Input
 							type="text"
 							placeholder="Ваше имя"
-							bind:value={firstName}
+							bind:value={$form.firstName}
 							required
-							maxlength={128}
+							invalid={$errors.firstName ? true : false}
 						/>
+						{#if $errors.firstName}<span class="error">{$errors.firstName}</span
+							>{/if}
 					</label>
 					<label class="input" for={undefined}>
 						<span>Фамилия</span>
 						<Input
 							type="text"
 							placeholder="Ваша фамилия"
-							bind:value={lastName}
+							bind:value={$form.lastName}
 							required
-							maxlength={128}
+							invalid={$errors.lastName ? true : false}
 						/>
+						{#if $errors.lastName}<span class="error">{$errors.lastName}</span
+							>{/if}
 					</label>
 					<label class="input" for={undefined}>
 						<span>Email</span>
 						<Input
 							type="email"
 							placeholder="Ваш email"
-							bind:value={email}
+							bind:value={$form.email}
 							required
+							invalid={$errors.email ? true : false}
 						/>
+						{#if $errors.email}<span class="error">{$errors.email}</span>{/if}
 					</label>
 					<label class="input" for={undefined}>
 						<span>Пароль</span>
 						<Input
 							type="password"
 							placeholder="Ваш пароль"
-							bind:value={password}
+							bind:value={$form.password}
 							required
-							minlength={8}
-							maxlength={128}
+							invalid={$errors.password ? true : false}
 						/>
+						{#if $errors.password}<span class="error">{$errors.password}</span
+							>{/if}
 					</label>
 					<label class="input" for={undefined}>
 						<span>Повторите пароль</span>
 						<Input
 							type="password"
 							placeholder="Повторите  пароль"
-							bind:value={repeat_password}
+							bind:value={$form.repeat_password}
 							required
-							minlength={8}
-							maxlength={128}
+							invalid={$form.password !== $form.repeat_password ||
+							$errors.password
+								? true
+								: false}
 						/>
+						{#if $form.password !== $form.repeat_password}<span class="error"
+								>Пароли не совпадают</span
+							>{/if}
 					</label>
 				</div>
 				<Button
@@ -149,7 +189,7 @@
 		color: var(--text);
 		font: var(--H4);
 	}
-	.submited {
+	.submitted {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -173,13 +213,17 @@
 		align-items: center;
 		gap: 24px;
 	}
-	.inputs {
+	.form {
 		display: flex;
 		flex-direction: column;
 		color: var(--text-note);
 		gap: 36px;
+		.error {
+			color: var(--error);
+			font: var(--P2);
+		}
 	}
-	.type {
+	.inputs {
 		display: flex;
 		flex-direction: column;
 		gap: 16px;
