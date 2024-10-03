@@ -37,20 +37,16 @@
 				valid =
 					(await validateForm()).valid &&
 					$form.password === $form.repeat_password;
-				firstName = $form.firstName;
-				lastName = $form.lastName;
-				email = $form.email;
-				password = $form.password;
 			}
 		}
 	);
 
 	async function create() {
 		await api($page).user.account.register.mutate({
-			email,
-			firstName,
-			lastName,
-			password
+			email: $form.email,
+			firstName: $form.firstName,
+			lastName: $form.lastName,
+			password: $form.password
 		});
 		submitted = true;
 	}
@@ -60,12 +56,6 @@
 	}
 
 	let submitted = false;
-
-	let email = "";
-	let firstName = "";
-	let lastName = "";
-	let password = "";
-
 	let valid = false;
 </script>
 
@@ -160,8 +150,8 @@
 			</div>
 			<div class="finish">
 				<span class="info">
-					На адрес <span class="email">{email}</span> было отправлено письмо с инструкцией
-					по активации аккаунта.
+					На адрес <span class="email">{$form.email}</span> было отправлено письмо
+					с инструкцией по активации аккаунта.
 				</span>
 				<a href="/auth/sign_in" class="button">
 					<span>К странице входа</span>
