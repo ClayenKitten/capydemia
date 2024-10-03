@@ -65,7 +65,7 @@
 	<div class="header">
 		<h4>Восстановление пароля</h4>
 	</div>
-	{#if !error}
+	{#if !finish && !error}
 		<form use:enhance>
 			<div class="inputs">
 				<label class="input" for={undefined}>
@@ -77,8 +77,9 @@
 						required
 						invalid={$errors.password ? true : false}
 					/>
-					{#if $errors.password}<span class="error">{$errors.password}</span
-						>{/if}
+					{#if $errors.password}
+						<span class="error">{$errors.password}</span>
+					{/if}
 				</label>
 				<label class="input" for={undefined}>
 					<span>Повторите пароль</span>
@@ -92,9 +93,9 @@
 							? true
 							: false}
 					/>
-					{#if $form.password !== $form.repeat_password}<span class="error"
-							>Пароли не совпадают</span
-						>{/if}
+					{#if $form.password !== $form.repeat_password}
+						<span class="error">Пароли не совпадают</span>
+					{/if}
 				</label>
 			</div>
 			<Button
