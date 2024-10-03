@@ -21,19 +21,16 @@
 			validators: zod(recoverySchema),
 			async onChange(event) {
 				valid = (await validateForm()).valid;
-				email = $form.email;
 			}
 		}
 	);
 
 	async function submit() {
-		await api($page).user.account.recover.mutate({ email });
+		await api($page).user.account.recover.mutate({ email: $form.email });
 		confirmed = true;
 	}
 
-	let email = "";
 	let confirmed = false;
-
 	let valid = false;
 </script>
 
@@ -70,7 +67,7 @@
 					text="Продолжить"
 					kind="primary"
 					on:click={submit}
-					disabled={email == "" || !valid}
+					disabled={!valid}
 				/>
 			</div>
 		</form>

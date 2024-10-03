@@ -24,16 +24,14 @@
 			validators: zod(signInSchema),
 			async onChange(event) {
 				valid = (await validateForm()).valid;
-				email = $form.email;
-				password = $form.password;
 			}
 		}
 	);
 
 	async function submit() {
 		let result = await api($page).user.session.login.mutate({
-			email,
-			password
+			email: $form.email,
+			password: $form.password
 		});
 		if (result.ok) {
 			goto("/");
@@ -43,10 +41,7 @@
 		valid = (await validateForm()).valid;
 	}
 
-	let email = "";
-	let password = "";
 	let error = "";
-
 	let valid = false;
 </script>
 

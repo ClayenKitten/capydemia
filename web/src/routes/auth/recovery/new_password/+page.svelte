@@ -25,7 +25,6 @@
 				valid =
 					(await validateForm()).valid &&
 					$form.password === $form.repeat_password;
-				password = $form.password;
 			}
 		}
 	);
@@ -38,7 +37,7 @@
 		}
 		let result = await api($page).user.account.confirmRecovery.mutate({
 			code,
-			newPassword: password
+			newPassword: $form.password
 		});
 		if (result.ok) {
 			finish = true;
@@ -56,7 +55,6 @@
 	}
 
 	let error: string | null = null;
-	let password = "";
 	let finish = false;
 	let valid = false;
 </script>
