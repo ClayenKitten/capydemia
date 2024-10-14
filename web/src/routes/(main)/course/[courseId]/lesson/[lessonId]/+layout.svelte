@@ -6,12 +6,15 @@
 
 	export let data: PageData;
 
-	function addLesson() {
+	function addModule() {
 		/*data.course.createCourse.mutate({
 			title:"",
 			description:""
 		})*/
 	}
+
+	function addLesson() {}
+
 	function deleteItem() {}
 </script>
 
@@ -84,7 +87,7 @@
 			</div>
 		{/each}
 		{#if data.user.isTeacher === true}
-			<AddItem kind="module" text="Добавить модуль" on:click={addLesson} />
+			<AddItem kind="module" text="Добавить модуль" on:click={addModule} />
 		{/if}
 	</div>
 	<div class="lesson">

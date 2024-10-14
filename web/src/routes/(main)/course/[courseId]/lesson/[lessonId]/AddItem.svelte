@@ -34,6 +34,18 @@
 			width: 16px;
 			filter: var(--filter-primary);
 		}
+		&:hover {
+			color: var(--secondary);
+			img {
+				filter: var(--filter-secondary);
+			}
+		}
+		&:active {
+			color: var(--primary);
+			img {
+				filter: var(--filter-primary);
+			}
+		}
 	}
 	.module {
 		padding: 16px 16px 16px 0;

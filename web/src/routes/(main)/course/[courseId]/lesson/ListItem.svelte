@@ -10,9 +10,21 @@
 	export let href: string = "";
 
 	let editable = false;
+	let input: HTMLInputElement;
+
 	function Edit() {
 		editable = true;
+		setTimeout(() => {
+			if (input) {
+				input.focus();
+			}
+		}, 0);
 	}
+
+	function handleBlur() {
+		editable = false;
+	}
+
 	function Delete() {
 		dispatch("delete");
 	}
@@ -41,7 +53,8 @@
 				</button>
 			{:else}
 				<div class="module_button">
-					<input value="Модуль {id + 1}. {name}" />
+					<span>Модуль {id + 1}. </span>
+					<input bind:this={input} bind:value={name} on:blur={handleBlur} />
 				</div>
 			{/if}
 			<div class="edit_buttons">
@@ -61,7 +74,8 @@
 				</a>
 			{:else}
 				<div class="lesson_link">
-					<input value="Урок {id + 1}. {name}" />
+					<span>Урок {id + 1}. </span>
+					<input bind:this={input} bind:value={name} on:blur={handleBlur} />
 				</div>
 			{/if}
 
@@ -94,6 +108,20 @@
 			height: 24px;
 			width: 24px;
 			img {
+				filter: var(--filter-primary);
+			}
+			&:hover > img {
+				filter: var(--filter-secondary);
+			}
+			&:active > img {
+				filter: var(--filter-primary);
+			}
+		}
+		.delete {
+			&:hover > img {
+				filter: var(--filter-error);
+			}
+			&:active > img {
 				filter: var(--filter-primary);
 			}
 		}
@@ -142,6 +170,20 @@
 			.edit_buttons {
 				button {
 					img {
+						filter: var(--filter-main-bg);
+					}
+					&:hover > img {
+						filter: var(--filter-secondary);
+					}
+					&:active > img {
+						filter: var(--filter-main-bg);
+					}
+				}
+				.delete {
+					&:hover > img {
+						filter: var(--filter-error);
+					}
+					&:active > img {
 						filter: var(--filter-main-bg);
 					}
 				}
