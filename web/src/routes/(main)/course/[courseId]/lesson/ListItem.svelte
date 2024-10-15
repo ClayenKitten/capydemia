@@ -23,6 +23,7 @@
 
 	function handleBlur() {
 		editable = false;
+		dispatch("change");
 	}
 
 	function Delete() {
