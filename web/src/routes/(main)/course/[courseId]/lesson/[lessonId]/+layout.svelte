@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { invalidateAll, onNavigate } from "$app/navigation";
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import ListItem from "../ListItem.svelte";
 	import type { PageData } from "./$types";
@@ -13,9 +16,53 @@
 		})*/
 	}
 
-	function addLesson() {}
+	async function addLesson() {}
 
-	function deleteItem() {}
+	async function editName() {
+		console.log("changing");
+		await api($page).course.updateCourse.mutate(data.course);
+	}
+
+	const save = async () => {
+		await api($page).course.updateCourse.mutate(data.course);
+		//await reset();
+	};
+
+	onNavigate(async () => {
+		if (changed) {
+			reset();
+		}
+	});
+
+	const reset = async () => {
+		await invalidateAll();
+		changes = {
+			personal: false,
+			email: false,
+			password: false,
+			avatar: false
+		};
+	};
+
+	let changes = {
+		personal: false,
+		email: false,
+		password: false,
+		avatar: false
+	};
+	$: changed = Object.values(changes).some(x => x);
+
+	async function deleteModule(id: number) {
+		console.log("deleteModule");
+		data.course.modules = data.course.modules.filter(x => x.id !== id);
+		//await api($page).course.updateCourse.mutate(data.course);
+	}
+	function deleteLesson(moduleId: number, lessonId: number) {
+		console.log("deleteLesson");
+		//data.course.lesson = course.lesson.filter(x => x.id !== id);
+		//let module = data.course.modules.find(mod => mod.id === moduleId);
+		//module.lessons = module?.lessons.filter(x => x.id !== lessonId);
+	}
 </script>
 
 <main>
@@ -48,8 +95,9 @@
 							current={module.id === data.module?.id}
 							status="teacher"
 							id={i}
-							name={module.title}
-							on:delete={deleteItem}
+							bind:name={module.title}
+							on:change={editName}
+							on:delete={() => deleteModule(module.id)}
 						/>
 					{/if}
 				</div>
@@ -73,21 +121,32 @@
 									current={lesson.id === data.lesson?.id}
 									status="teacher"
 									id={j}
-									name={lesson.title}
+									bind:name={lesson.title}
 									href="/course/{data.course.id}/lesson/{lesson.id}"
-									on:delete={deleteItem}
+									on:change={editName}
+									on:delete={async () => {
+										console.log("deleteLesson");
+										module.lessons = module.lessons.filter(
+											x => x.id !== lesson.id
+										);
+										//await api($page).course.updateCourse.mutate(data.course);
+									}}
 								/>
 							{/if}
 						</div>
 					{/each}
 					{#if data.user.isTeacher === true}
-						<AddItem kind="lesson" text="Добавить урок" on:click={addLesson} />
+						<AddItem
+							kind="lesson"
+							text="Добавить урок"
+							on:addLesson={addLesson}
+						/>
 					{/if}
 				</div>
 			</div>
 		{/each}
 		{#if data.user.isTeacher === true}
-			<AddItem kind="module" text="Добавить модуль" on:click={addModule} />
+			<AddItem kind="module" text="Добавить модуль" on:addModule={addModule} />
 		{/if}
 	</div>
 	<div class="lesson">
