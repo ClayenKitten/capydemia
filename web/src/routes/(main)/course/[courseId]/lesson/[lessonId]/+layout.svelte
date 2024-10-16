@@ -9,59 +9,46 @@
 
 	export let data: PageData;
 
-	function addModule() {
-		/*data.course.createCourse.mutate({
-			title:"",
-			description:""
-		})*/
+	async function addModule() {
+		console.log("addModule");
+		data.course.modules.push({
+			title: "Новый модуль",
+			id: data.course.modules.length,
+			lessons: [
+				{
+					title: "Новый урок",
+					id: data.course.modules[data.course.modules.length - 1].lessons.length
+				}
+			]
+		});
+		//await api($page).course.updateCourse.mutate(data.course);
 	}
 
-	async function addLesson() {}
+	async function addLesson(moduleId: number, lessonId: number) {
+		console.log("addLesson");
+		data.course.modules[moduleId].lessons.push({
+			title: "Новый урок",
+			id: data.course.modules[moduleId].lessons.length
+		});
+		//await api($page).course.updateCourse.mutate(data.course);
+	}
 
 	async function editName() {
 		console.log("changing");
-		await api($page).course.updateCourse.mutate(data.course);
+		//await api($page).course.updateCourse.mutate(data.course);
 	}
-
-	const save = async () => {
-		await api($page).course.updateCourse.mutate(data.course);
-		//await reset();
-	};
-
-	onNavigate(async () => {
-		if (changed) {
-			reset();
-		}
-	});
-
-	const reset = async () => {
-		await invalidateAll();
-		changes = {
-			personal: false,
-			email: false,
-			password: false,
-			avatar: false
-		};
-	};
-
-	let changes = {
-		personal: false,
-		email: false,
-		password: false,
-		avatar: false
-	};
-	$: changed = Object.values(changes).some(x => x);
 
 	async function deleteModule(id: number) {
 		console.log("deleteModule");
 		data.course.modules = data.course.modules.filter(x => x.id !== id);
 		//await api($page).course.updateCourse.mutate(data.course);
 	}
-	function deleteLesson(moduleId: number, lessonId: number) {
+	async function deleteLesson(moduleId: number, lessonId: number) {
 		console.log("deleteLesson");
-		//data.course.lesson = course.lesson.filter(x => x.id !== id);
-		//let module = data.course.modules.find(mod => mod.id === moduleId);
-		//module.lessons = module?.lessons.filter(x => x.id !== lessonId);
+		data.course.modules[moduleId].lessons = data.course.modules[
+			moduleId
+		].lessons.filter(x => x.id !== lessonId);
+		//await api($page).course.updateCourse.mutate(data.course);
 	}
 </script>
 
@@ -124,13 +111,7 @@
 									bind:name={lesson.title}
 									href="/course/{data.course.id}/lesson/{lesson.id}"
 									on:change={editName}
-									on:delete={async () => {
-										console.log("deleteLesson");
-										module.lessons = module.lessons.filter(
-											x => x.id !== lesson.id
-										);
-										//await api($page).course.updateCourse.mutate(data.course);
-									}}
+									on:delete={() => deleteLesson(i, lesson.id)}
 								/>
 							{/if}
 						</div>
@@ -139,7 +120,7 @@
 						<AddItem
 							kind="lesson"
 							text="Добавить урок"
-							on:addLesson={addLesson}
+							on:addLesson={() => addLesson(i, module.lessons.length)}
 						/>
 					{/if}
 				</div>
