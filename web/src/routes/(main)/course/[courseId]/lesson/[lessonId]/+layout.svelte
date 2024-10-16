@@ -9,8 +9,12 @@
 
 	export let data: PageData;
 
+	const save = async () => {
+		await api($page).course.updateCourse.mutate(data.course);
+	};
+
 	async function addModule() {
-		console.log("addModule");
+		//console.log("addModule");
 		data.course.modules.push({
 			title: "Новый модуль",
 			id: data.course.modules.length,
@@ -21,34 +25,34 @@
 				}
 			]
 		});
-		//await api($page).course.updateCourse.mutate(data.course);
+		save();
 	}
 
 	async function addLesson(moduleId: number, lessonId: number) {
-		console.log("addLesson");
+		//console.log("addLesson");
 		data.course.modules[moduleId].lessons.push({
 			title: "Новый урок",
 			id: data.course.modules[moduleId].lessons.length
 		});
-		//await api($page).course.updateCourse.mutate(data.course);
+		save();
 	}
 
 	async function editName() {
-		console.log("changing");
-		//await api($page).course.updateCourse.mutate(data.course);
+		//console.log("changing");
+		save();
 	}
 
 	async function deleteModule(id: number) {
-		console.log("deleteModule");
+		//console.log("deleteModule");
 		data.course.modules = data.course.modules.filter(x => x.id !== id);
-		//await api($page).course.updateCourse.mutate(data.course);
+		save();
 	}
 	async function deleteLesson(moduleId: number, lessonId: number) {
-		console.log("deleteLesson");
+		//console.log("deleteLesson");
 		data.course.modules[moduleId].lessons = data.course.modules[
 			moduleId
 		].lessons.filter(x => x.id !== lessonId);
-		//await api($page).course.updateCourse.mutate(data.course);
+		save();
 	}
 </script>
 
