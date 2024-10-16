@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { createEventDispatcher, onMount } from "svelte";
+	const dispatch = createEventDispatcher();
 
 	export let data: EditorJS.OutputData;
 	export let placeholder = "";
@@ -23,7 +24,10 @@
 			placeholder,
 			readOnly,
 			minHeight: 0,
-			data
+			data,
+			onChange: () => {
+				dispatch("changed");
+			}
 		});
 	});
 </script>

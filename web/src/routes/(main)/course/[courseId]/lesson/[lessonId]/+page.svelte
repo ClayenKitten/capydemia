@@ -9,37 +9,34 @@
 	export let data: PageData;
 
 	const save = async () => {
-		await api($page).course.updateCourse.mutate(data.course);
-	};
-	onNavigate(async () => {
 		if (changed) {
-			reset();
+			///console.log("saved");
+			await api($page).course.updateCourse.mutate(data.course);
 		}
-	});
+		changed = false;
+	};
 
 	const reset = async () => {
-		await invalidateAll();
-		changes = {
-			personal: false,
-			email: false,
-			password: false,
-			avatar: false
-		};
+		if (changed) {
+			console.log("reset");
+			data.lessonContent = initialData;
+			//location.reload();
+		}
+		changed = false;
 	};
 
-	let changes = {
-		personal: false,
-		email: false,
-		password: false,
-		avatar: false
-	};
-	$: changed = Object.values(changes).some(x => x);
+	let changed = false;
+	let initialData = data.lessonContent;
 </script>
 
 <main>
 	<h5>Конспект урока</h5>
 	<div class="editorjs">
-		<EditorJS data={data.lessonContent} readOnly={!data.user.isTeacher} />
+		<EditorJS
+			bind:data={data.lessonContent}
+			readOnly={!data.user.isTeacher}
+			on:changed={() => (changed = true)}
+		/>
 	</div>
 	<div class="finish">
 		<Button
@@ -48,7 +45,12 @@
 			disabled={!changed}
 			on:click={save}
 		/>
-		<Button kind="secondary" text="Отменить" disabled />
+		<Button
+			kind="secondary"
+			text="Отменить"
+			disabled={!changed}
+			on:click={reset}
+		/>
 	</div>
 </main>
 
