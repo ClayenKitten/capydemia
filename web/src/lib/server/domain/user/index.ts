@@ -85,8 +85,16 @@ export class UserService {
 		let pending = await this.repos.pendingRegistration.findByCode(code);
 		if (pending === undefined) return { ok: false, error: "NOT_FOUND" };
 		if (pending.expired) return { ok: false, error: "EXPIRED" };
-		let user = await this.repos.user.create(pending);
+
+		let { email, firstName, lastName, passwordHash } = pending;
+		let user = await this.repos.user.create({
+			email,
+			firstName,
+			lastName,
+			passwordHash
+		});
 		await this.repos.pendingRegistration.delete(code);
+
 		return { ok: true, value: { user } };
 	}
 
