@@ -87,6 +87,7 @@ export class CourseRepository extends DbRepository {
 				if (course.modules.length !== 0) {
 					await trx
 						.deleteFrom("module")
+						.where("courseId", "=", courseId)
 						.where(
 							"id",
 							"not in",
@@ -140,6 +141,7 @@ export class CourseRepository extends DbRepository {
 				if (lessons.length !== 0) {
 					await trx
 						.deleteFrom("lesson")
+						.where("moduleId", "=", moduleId)
 						.where(
 							"id",
 							"not in",
