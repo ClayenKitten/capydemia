@@ -4,17 +4,21 @@ import { Id } from "./common";
 export const Title = z.string().max(256);
 export const Description = z.string().max(4096).nullable();
 
+export const Lesson = z.object({ id: Id, title: Title });
+export type Lesson = TypeOf<typeof Lesson>;
+
+export const Module = z.object({
+	id: Id,
+	title: Title,
+	lessons: z.array(Lesson)
+});
+export type Module = TypeOf<typeof Module>;
+
 export const Course = z.object({
 	id: Id,
 	title: Title,
 	description: Description,
-	modules: z.array(
-		z.object({
-			id: Id,
-			title: Title,
-			lessons: z.array(z.object({ id: Id, title: Title }))
-		})
-	)
+	modules: z.array(Module)
 });
 export type Course = TypeOf<typeof Course>;
 
