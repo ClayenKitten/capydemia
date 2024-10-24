@@ -41,7 +41,7 @@
 			</div>
 		{:else}
 			<div class="lesson_header" class:current>
-				<a {href}>
+				<a {href} class="lesson_link">
 					Урок {id + 1}. {name}"
 				</a>
 			</div>
