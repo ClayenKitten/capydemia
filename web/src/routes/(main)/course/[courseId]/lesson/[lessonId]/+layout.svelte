@@ -15,6 +15,7 @@
 
 	async function addModule() {
 		//console.log("addModule");
+
 		data.course.modules.push({
 			title: "Новый модуль",
 			id: data.course.modules.length,
@@ -30,6 +31,7 @@
 
 	async function addLesson(moduleId: number, lessonId: number) {
 		//console.log("addLesson");
+
 		data.course.modules[moduleId].lessons.push({
 			title: "Новый урок",
 			id: data.course.modules[moduleId].lessons.length
@@ -56,18 +58,20 @@
 	}
 </script>
 
-<main>
+<main class={!data.user.isTeacher ? "student" : "teacher"}>
 	<h1>{data.course.title}</h1>
-	<div class="progress">
-		<span>Пройдено 5/7 уроков</span>
-	</div>
+	{#if data.user.isTeacher === false}
+		<div class="progress">
+			<span>Пройдено 5/7 уроков</span>
+		</div>
 
-	<div class="achievements">
-		<Button text="Достижения" kind="text" />
-		<img alt="ach" />
-		<img alt="ach" />
-		<img alt="ach" />
-	</div>
+		<div class="achievements">
+			<Button text="Достижения" kind="text" />
+			<img alt="ach" />
+			<img alt="ach" />
+			<img alt="ach" />
+		</div>
+	{/if}
 
 	<div class="modules">
 		{#each data.course.modules as module, i}
@@ -149,10 +153,16 @@
 			"progress progress achievements"
 			"modules lesson lesson";
 		gap: 40px 40px;
-		padding: 40px 0;
+		padding: 40px 0 188px 0;
 		margin: 0 auto;
 		max-width: 1276px;
 		background-color: var(--base-bg);
+		&.teacher {
+			grid-template-rows: min-content auto;
+			grid-template-areas:
+				"header header header"
+				"modules lesson lesson";
+		}
 	}
 	h1 {
 		grid-area: "header";

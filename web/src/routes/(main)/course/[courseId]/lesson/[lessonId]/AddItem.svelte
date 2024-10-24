@@ -21,6 +21,7 @@
 
 <style lang="scss">
 	button {
+		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -48,9 +49,10 @@
 		}
 	}
 	.module {
-		padding: 16px 16px 16px 0;
+		padding: 16px 0;
 	}
 	.lesson {
+		gap: 8px;
 		padding: 8px 16px 8px 0;
 	}
 </style>
