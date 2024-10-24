@@ -1,41 +1,142 @@
 <script lang="ts">
+	import { invalidateAll, onNavigate } from "$app/navigation";
+	import { page } from "$app/stores";
+	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
+	import ListItem from "../ListItem.svelte";
 	import type { PageData } from "./$types";
+	import AddItem from "./AddItem.svelte";
 
 	export let data: PageData;
+
+	const save = async () => {
+		await api($page).course.updateCourse.mutate(data.course);
+	};
+
+	async function addModule() {
+		//console.log("addModule");
+
+		data.course.modules.push({
+			title: "Новый модуль",
+			id: data.course.modules.length,
+			lessons: [
+				{
+					title: "Новый урок",
+					id: data.course.modules[data.course.modules.length - 1].lessons.length
+				}
+			]
+		});
+		save();
+	}
+
+	async function addLesson(moduleId: number, lessonId: number) {
+		//console.log("addLesson");
+
+		data.course.modules[moduleId].lessons.push({
+			title: "Новый урок",
+			id: data.course.modules[moduleId].lessons.length
+		});
+		save();
+	}
+
+	async function editName() {
+		//console.log("changing");
+		save();
+	}
+
+	async function deleteModule(id: number) {
+		//console.log("deleteModule");
+		data.course.modules = data.course.modules.filter(x => x.id !== id);
+		save();
+	}
+	async function deleteLesson(moduleId: number, lessonId: number) {
+		//console.log("deleteLesson");
+		data.course.modules[moduleId].lessons = data.course.modules[
+			moduleId
+		].lessons.filter(x => x.id !== lessonId);
+		save();
+	}
 </script>
 
-<main>
+<main class={!data.user.isTeacher ? "student" : "teacher"}>
 	<h1>{data.course.title}</h1>
-	<div class="progress">
-		<span>Пройдено 5/7 уроков</span>
-	</div>
+	{#if data.user.isTeacher === false}
+		<div class="progress">
+			<span>Пройдено 5/7 уроков</span>
+		</div>
 
-	<div class="achievements">
-		<Button text="Достижения" kind="text" />
-		<img alt="ach" />
-		<img alt="ach" />
-		<img alt="ach" />
-	</div>
+		<div class="achievements">
+			<Button text="Достижения" kind="text" />
+			<img alt="ach" />
+			<img alt="ach" />
+			<img alt="ach" />
+		</div>
+	{/if}
 
 	<div class="modules">
 		{#each data.course.modules as module, i}
 			<div class="module" class:current={module.id === data.module?.id}>
-				<button>
-					<span>Модуль {i + 1}. {module.title}</span>
-				</button>
+				<div class="module_header">
+					{#if data.user.isTeacher === false}
+						<ListItem
+							kind="module"
+							current={module.id === data.module?.id}
+							id={i}
+							name={module.title}
+						/>
+					{:else}
+						<ListItem
+							kind="module"
+							current={module.id === data.module?.id}
+							status="teacher"
+							id={i}
+							bind:name={module.title}
+							on:change={editName}
+							on:delete={() => deleteModule(module.id)}
+						/>
+					{/if}
+				</div>
 				<div class="lessons">
 					{#each module.lessons as lesson, j}
-						<a
+						<div
+							class="lesson_header"
 							class:current={lesson.id === data.lesson?.id}
-							href={`/course/${data.course.id}/lesson/${lesson.id}`}
 						>
-							Урок {j + 1}. {lesson.title}
-						</a>
+							{#if data.user.isTeacher === false}
+								<ListItem
+									kind="lesson"
+									current={lesson.id === data.lesson?.id}
+									id={j}
+									name={lesson.title}
+									href="/course/{data.course.id}/lesson/{lesson.id}"
+								/>
+							{:else}
+								<ListItem
+									kind="lesson"
+									current={lesson.id === data.lesson?.id}
+									status="teacher"
+									id={j}
+									bind:name={lesson.title}
+									href="/course/{data.course.id}/lesson/{lesson.id}"
+									on:change={editName}
+									on:delete={() => deleteLesson(i, lesson.id)}
+								/>
+							{/if}
+						</div>
 					{/each}
+					{#if data.user.isTeacher === true}
+						<AddItem
+							kind="lesson"
+							text="Добавить урок"
+							on:addLesson={() => addLesson(i, module.lessons.length)}
+						/>
+					{/if}
 				</div>
 			</div>
 		{/each}
+		{#if data.user.isTeacher === true}
+			<AddItem kind="module" text="Добавить модуль" on:addModule={addModule} />
+		{/if}
 	</div>
 	<div class="lesson">
 		<slot />
@@ -52,10 +153,16 @@
 			"progress progress achievements"
 			"modules lesson lesson";
 		gap: 40px 40px;
-		padding: 40px 0;
+		padding: 40px 0 188px 0;
 		margin: 0 auto;
 		max-width: 1276px;
 		background-color: var(--base-bg);
+		&.teacher {
+			grid-template-rows: min-content auto;
+			grid-template-areas:
+				"header header header"
+				"modules lesson lesson";
+		}
 	}
 	h1 {
 		grid-area: "header";
@@ -109,54 +216,8 @@
 					border-top: none;
 					border-radius: 0 0 8px 8px;
 					padding: 12px 0 12px 0;
-					a {
-						display: flex;
-						align-items: center;
-						min-height: 60px;
-						padding: 10px 32px 10px 32px;
-						font: var(--P1);
-						color: var(--text);
-						line-height: 24px;
-						text-decoration: none;
-						&.current {
-							color: var(--primary);
-						}
-						&:not(.current):hover {
-							color: var(--secondary);
-						}
-					}
-				}
-				button {
-					background-color: var(--primary);
-					color: var(--main-bg);
-					border-radius: 8px 8px 0 0;
-					border: none;
 				}
 			}
-
-			button {
-				height: 72px;
-				padding: 12px 32px 12px 32px;
-				text-align: left;
-				width: 100%;
-				background-color: var(--main-bg);
-				border: 1px solid var(--secondary);
-				border-radius: 8px;
-
-				> span {
-					display: -webkit-box;
-					-webkit-line-clamp: 2;
-					line-clamp: 2;
-					text-overflow: ellipsis;
-					overflow: hidden;
-					-webkit-box-orient: vertical;
-				}
-			}
-
-			&:not(:focus-within, .current) > button:hover {
-				color: var(--secondary);
-			}
-
 			.lessons {
 				display: none;
 			}
