@@ -6,59 +6,96 @@
 	import ListItem from "../ListItem.svelte";
 	import type { PageData } from "./$types";
 	import AddItem from "./AddItem.svelte";
+	import * as m from "$lib/models";
+	import Confirm from "$lib/components/Confirm.svelte";
 
 	export let data: PageData;
 
 	const save = async () => {
+		console.log("save");
+		//data.course.modules = data.course.modules;
 		await api($page).course.updateCourse.mutate(data.course);
 	};
 
 	async function addModule() {
-		//console.log("addModule");
+		console.log("addModule");
+		newModule = {
+			title: "",
+			id: null,
+			lessons: []
+		};
+		data.course.modules.push(newModule);
+		data.course.modules = data.course.modules;
+	}
 
-		data.course.modules.push({
-			title: "Новый модуль",
-			id: data.course.modules.length,
-			lessons: [
-				{
-					title: "Новый урок",
-					id: data.course.modules[data.course.modules.length - 1].lessons.length
-				}
-			]
-		});
+	async function addLesson(module: m.UpdateModule) {
+		console.log("addLesson");
+		newLesson = {
+			title: "",
+			id: null
+		};
+		module.lessons.push(newLesson);
+		data.course.modules = data.course.modules;
+	}
+
+	async function editModuleName(module: m.UpdateModule) {
+		console.log("changingModule");
+		if (module === newModule && module.title === "") {
+			data.course.modules = data.course.modules.filter(x => x !== module);
+		}
+		newModule = null;
+		editing = false;
+		data.course.modules = data.course.modules;
+		save();
+	}
+	async function editLessonName(
+		module: m.UpdateModule,
+		lesson: m.UpdateLesson
+	) {
+		console.log("changingLesson");
+		if (lesson === newLesson && lesson.title === "") {
+			module.lessons = module.lessons.filter(x => x != newLesson);
+		}
+		newLesson = null;
+		data.course.modules = data.course.modules;
 		save();
 	}
 
-	async function addLesson(moduleId: number, lessonId: number) {
-		//console.log("addLesson");
-
-		data.course.modules[moduleId].lessons.push({
-			title: "Новый урок",
-			id: data.course.modules[moduleId].lessons.length
-		});
+	async function deleteModule(module: m.UpdateModule) {
+		modal_show = true;
+		if (confirm) {
+			console.log("deleteModule");
+			data.course.modules = data.course.modules.filter(x => x !== module);
+			save();
+			modal_show = false;
+			confirm = false;
+		}
+	}
+	async function deleteLesson(module: m.UpdateModule, lesson: m.UpdateLesson) {
+		console.log("deleteLesson");
+		module.lessons = module.lessons.filter(x => x !== lesson);
 		save();
 	}
 
-	async function editName() {
-		//console.log("changing");
-		save();
-	}
-
-	async function deleteModule(id: number) {
-		//console.log("deleteModule");
-		data.course.modules = data.course.modules.filter(x => x.id !== id);
-		save();
-	}
-	async function deleteLesson(moduleId: number, lessonId: number) {
-		//console.log("deleteLesson");
-		data.course.modules[moduleId].lessons = data.course.modules[
-			moduleId
-		].lessons.filter(x => x.id !== lessonId);
-		save();
-	}
+	//let modules_list = data.course.modules;
+	let newModule: m.UpdateModule | null = null;
+	let newLesson: m.UpdateLesson | null = null;
+	let editing: boolean = false;
+	let modal_show: boolean = false;
+	let confirm: boolean = false;
 </script>
 
 <main class={!data.user.isTeacher ? "student" : "teacher"}>
+	{#if modal_show}
+		<div class="modal_confirm">
+			<Confirm
+				header="Подтвердите удаление"
+				text="Вы хотите удалить Вы хотите удалить Вы хотите удалить Вы хотите удалить ?"
+				on:confirm={() => (confirm = true)}
+				on:cancel={() => (modal_show = false)}
+			/>
+		</div>
+	{/if}
 	<h1>{data.course.title}</h1>
 	{#if data.user.isTeacher === false}
 		<div class="progress">
@@ -75,26 +112,23 @@
 
 	<div class="modules">
 		{#each data.course.modules as module, i}
-			<div class="module" class:current={module.id === data.module?.id}>
+			<div
+				class="module"
+				class:current={module.id === data.module?.id}
+				class:editing
+			>
 				<div class="module_header">
-					{#if data.user.isTeacher === false}
-						<ListItem
-							kind="module"
-							current={module.id === data.module?.id}
-							id={i}
-							name={module.title}
-						/>
-					{:else}
-						<ListItem
-							kind="module"
-							current={module.id === data.module?.id}
-							status="teacher"
-							id={i}
-							bind:name={module.title}
-							on:change={editName}
-							on:delete={() => deleteModule(module.id)}
-						/>
-					{/if}
+					<ListItem
+						kind="module"
+						current={module.id === data.module?.id}
+						editable={data.user.isTeacher}
+						id={i}
+						isNew={module === newModule ? true : false}
+						bind:name={module.title}
+						on:change={() => editModuleName(module)}
+						on:delete={() => deleteModule(module)}
+						on:editing={() => (editing = true)}
+					/>
 				</div>
 				<div class="lessons">
 					{#each module.lessons as lesson, j}
@@ -102,33 +136,24 @@
 							class="lesson_header"
 							class:current={lesson.id === data.lesson?.id}
 						>
-							{#if data.user.isTeacher === false}
-								<ListItem
-									kind="lesson"
-									current={lesson.id === data.lesson?.id}
-									id={j}
-									name={lesson.title}
-									href="/course/{data.course.id}/lesson/{lesson.id}"
-								/>
-							{:else}
-								<ListItem
-									kind="lesson"
-									current={lesson.id === data.lesson?.id}
-									status="teacher"
-									id={j}
-									bind:name={lesson.title}
-									href="/course/{data.course.id}/lesson/{lesson.id}"
-									on:change={editName}
-									on:delete={() => deleteLesson(i, lesson.id)}
-								/>
-							{/if}
+							<ListItem
+								kind="lesson"
+								current={lesson.id === data.lesson?.id}
+								editable={data.user.isTeacher}
+								id={j}
+								isNew={lesson === newLesson ? true : false}
+								bind:name={lesson.title}
+								href="/course/{data.course.id}/lesson/{lesson.id}"
+								on:change={() => editLessonName(module, lesson)}
+								on:delete={() => deleteLesson(module, lesson)}
+							/>
 						</div>
 					{/each}
 					{#if data.user.isTeacher === true}
 						<AddItem
 							kind="lesson"
 							text="Добавить урок"
-							on:addLesson={() => addLesson(i, module.lessons.length)}
+							on:addLesson={() => addLesson(module)}
 						/>
 					{/if}
 				</div>
@@ -162,6 +187,18 @@
 			grid-template-areas:
 				"header header header"
 				"modules lesson lesson";
+		}
+		.modal_confirm {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.7);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
 		}
 	}
 	h1 {
@@ -204,6 +241,7 @@
 		.module {
 			height: 72px;
 
+			/*&:not(.editing)*/
 			&:focus-within,
 			&.current {
 				max-height: 340px;
