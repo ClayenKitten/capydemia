@@ -82,7 +82,7 @@ export class CourseRepository extends DbRepository {
 
 			async function deleteMissingModules(
 				courseId: number,
-				modules: m.updateModule[]
+				modules: m.UpdateModule[]
 			) {
 				if (course.modules.length !== 0) {
 					await trx
@@ -104,7 +104,7 @@ export class CourseRepository extends DbRepository {
 
 			async function updateModule(
 				courseId: number,
-				module: m.updateModule,
+				module: m.UpdateModule,
 				order: number
 			): Promise<Module> {
 				if (module.id === null) {

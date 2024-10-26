@@ -3,17 +3,25 @@
 	const dispatch = createEventDispatcher();
 
 	export let kind: "module" | "lesson";
-	export let status: "student" | "teacher" = "student";
+	export let editable: boolean = false;
 	export let current: boolean;
 	export let id: number;
 	export let name: string;
 	export let href: string = "";
+	export let isNew: boolean | undefined = false;
 
-	let editable = false;
+	let isEditing = false;
 	let input: HTMLInputElement;
 
+	if (isNew) {
+		console.log("new");
+		Edit();
+	}
+
 	function Edit() {
-		editable = true;
+		console.log("editing");
+		isEditing = true;
+		dispatch("editing");
 		setTimeout(() => {
 			if (input) {
 				input.focus();
@@ -22,7 +30,7 @@
 	}
 
 	function handleBlur() {
-		editable = false;
+		isEditing = false;
 		dispatch("change");
 	}
 
@@ -31,55 +39,53 @@
 	}
 </script>
 
-<div class="list_item">
-	{#if status === "student"}
-		{#if kind === "module"}
-			<div class="module_header" class:current>
+{#if kind === "module"}
+	<div class="module" class:current class:isEditing>
+		{#if !editable}
+			<div class="module_header">
 				<button class="module_button">
 					<span>Модуль {id + 1}. {name}</span>
+				</button>
+			</div>
+		{:else if !isEditing && !isNew}
+			<div class="module_header">
+				<button class="module_button">
+					<span>Модуль {id + 1}. {name}</span>
+				</button>
+			</div>
+			<div class="edit_buttons">
+				<button class="edit_name" on:click={Edit}>
+					<img src="/icons/PencilSimple-32px.svg" alt="" />
+				</button>
+				<button class="delete" on:click={Delete}>
+					<img src="/icons/Trash-32px.svg" alt="" />
 				</button>
 			</div>
 		{:else}
-			<div class="lesson_header" class:current>
-				<a {href} class="lesson_link">
-					Урок {id + 1}. {name}"
-				</a>
+			<div class="module_header">
+				<input bind:this={input} bind:value={name} on:blur={handleBlur} />
+			</div>
+			<div class="edit_buttons">
+				<button class="delete" on:click={Delete}>
+					<img src="/icons/Trash-32px.svg" alt="" />
+				</button>
 			</div>
 		{/if}
-	{:else if kind === "module"}
-		<div class="module_header" class:current>
-			{#if editable === false}
-				<button class="module_button">
-					<span>Модуль {id + 1}. {name}</span>
-				</button>
-			{:else}
-				<div class="module_button">
-					<span>Модуль {id + 1}. </span>
-					<input bind:this={input} bind:value={name} on:blur={handleBlur} />
-				</div>
-			{/if}
-			<div class="edit_buttons">
-				<button class="edit_name" on:click={Edit}>
-					<img src="/icons/PencilSimple-32px.svg" alt="" />
-				</button>
-				<button class="delete" on:click={Delete}>
-					<img src="/icons/Trash-32px.svg" alt="" />
-				</button>
-			</div>
-		</div>
-	{:else}
-		<div class="lesson_header" class:current>
-			{#if editable === false}
+	</div>
+{:else if kind === "lesson"}
+	<div class="lesson" class:current class:isEditing>
+		{#if !editable}
+			<div class="lesson_header">
 				<a {href} class="lesson_link">
-					<span>Урок {id + 1}. {name}</span>
+					Урок {id + 1}. {name}
 				</a>
-			{:else}
-				<div class="lesson_link">
-					<span>Урок {id + 1}. </span>
-					<input bind:this={input} bind:value={name} on:blur={handleBlur} />
-				</div>
-			{/if}
-
+			</div>
+		{:else if !isEditing && !isNew}
+			<div class="lesson_header">
+				<a {href} class="lesson_link">
+					Урок {id + 1}. {name}
+				</a>
+			</div>
 			<div class="edit_buttons">
 				<button class="edit_name" on:click={Edit}>
 					<img src="/icons/PencilSimple-32px.svg" alt="" />
@@ -88,9 +94,18 @@
 					<img src="/icons/Trash-32px.svg" alt="" />
 				</button>
 			</div>
-		</div>
-	{/if}
-</div>
+		{:else}
+			<div class="lesson_link">
+				<input bind:this={input} bind:value={name} on:blur={handleBlur} />
+			</div>
+			<div class="edit_buttons">
+				<button class="delete" on:click={Delete}>
+					<img src="/icons/Trash-32px.svg" alt="" />
+				</button>
+			</div>
+		{/if}
+	</div>
+{/if}
 
 <style lang="scss">
 	button {
@@ -127,35 +142,44 @@
 			}
 		}
 	}
-
-	.module_header {
+	.module,
+	.lesson {
 		display: flex;
 		justify-content: space-between;
-		align-items: center;
-		height: 72px;
 		width: 100%;
 		background-color: var(--main-bg);
+	}
+	.module {
+		height: 72px;
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
 
-		.module_button {
+		.module_header {
+			display: flex;
+			align-items: center;
 			width: 100%;
-			text-align: left;
-			padding: 12px 0 12px 32px;
-			border-radius: 8px;
+			height: 100%;
 
-			> span {
-				color: var(--text);
-				max-width: 218px;
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				line-clamp: 2;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				-webkit-box-orient: vertical;
+			.module_button {
+				width: 100%;
+				height: 100%;
+				text-align: left;
+				padding: 12px 0 12px 32px;
+				border-radius: 8px;
+
+				> span {
+					color: var(--text);
+					max-width: 218px;
+					display: -webkit-box;
+					-webkit-line-clamp: 2;
+					line-clamp: 2;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					-webkit-box-orient: vertical;
+				}
 			}
 		}
-		&:focus-within,
+		&:not(.isEditing):focus-within,
 		&.current {
 			background-color: var(--primary);
 			color: var(--main-bg);
@@ -190,16 +214,60 @@
 				}
 			}
 		}
-		&:not(:focus-within, .current) > .module_header:hover {
+		&:not(:focus-within, .current):hover {
 			span {
 				color: var(--secondary);
+			}
+			.edit_buttons {
+				button {
+					img {
+						filter: var(--filter-secondary);
+					}
+					&:hover > img {
+						filter: var(--filter-primary);
+					}
+				}
+				.delete {
+					&:hover > img {
+						filter: var(--filter-error);
+					}
+				}
+			}
+		}
+
+		&.editable {
+			height: 100%;
+			display: flex;
+			gap: 10px;
+			padding: 12px 32px;
+			.module_header {
+				display: inline-flex;
+				flex-wrap: wrap;
+				align-items: center;
+				width: 100%;
+				background-color: var(--main-bg);
+				border-radius: 8px;
+				border: 1px solid var(--secondary);
+				padding: 14px 24px;
+				span {
+					color: var(--text);
+				}
+				input {
+					background-color: inherit;
+					color: var(--text);
+					outline: none;
+					border: none;
+					border-radius: 8px;
+					width: 100%;
+				}
+			}
+			.edit_buttons {
+				padding: initial;
 			}
 		}
 	}
 
-	.lesson_header {
-		display: flex;
-		align-items: center;
+	.lesson {
 		.lesson_link {
 			display: flex;
 			align-items: center;
@@ -216,6 +284,51 @@
 		&:not(.current):hover {
 			.lesson_link {
 				color: var(--secondary);
+			}
+			.edit_buttons {
+				button {
+					img {
+						filter: var(--filter-secondary);
+					}
+					&:hover > img {
+						filter: var(--filter-primary);
+					}
+				}
+				.delete {
+					&:hover > img {
+						filter: var(--filter-error);
+					}
+				}
+			}
+		}
+		&.editable {
+			height: 100%;
+			display: flex;
+			gap: 10px;
+			padding: 10px 32px;
+			.lesson_link {
+				display: inline-flex;
+				flex-wrap: wrap;
+				align-items: center;
+				width: 100%;
+				background-color: var(--main-bg);
+				border-radius: 8px;
+				border: 1px solid var(--secondary);
+				padding: 14px 24px;
+				span {
+					color: var(--text);
+				}
+				input {
+					background-color: inherit;
+					color: var(--text);
+					outline: none;
+					border: none;
+					border-radius: 8px;
+					width: 100%;
+				}
+			}
+			.edit_buttons {
+				padding: initial;
 			}
 		}
 	}

@@ -39,7 +39,7 @@ export const UpdateModule = z.object({
 	title: Title,
 	lessons: z.array(UpdateLesson)
 });
-export type updateModule = TypeOf<typeof UpdateModule>;
+export type UpdateModule = TypeOf<typeof UpdateModule>;
 
 export const UpdateCourse = z.object({
 	id: Id,
