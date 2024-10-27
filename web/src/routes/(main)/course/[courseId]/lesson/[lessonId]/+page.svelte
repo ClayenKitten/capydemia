@@ -38,20 +38,22 @@
 			on:changed={() => (changed = true)}
 		/>
 	</div>
-	<div class="finish">
-		<Button
-			kind="primary"
-			text="Сохранить"
-			disabled={!changed}
-			on:click={save}
-		/>
-		<Button
-			kind="secondary"
-			text="Отменить"
-			disabled={!changed}
-			on:click={reset}
-		/>
-	</div>
+	{#if data.user.isTeacher}
+		<div class="finish">
+			<Button
+				kind="primary"
+				text="Сохранить"
+				disabled={!changed}
+				on:click={save}
+			/>
+			<Button
+				kind="secondary"
+				text="Отменить"
+				disabled={!changed}
+				on:click={reset}
+			/>
+		</div>
+	{/if}
 </main>
 
 <style lang="scss">

@@ -65,16 +65,16 @@
 		</div>
 	{/if}
 	<h1>{data.course.title}</h1>
-	{#if data.user.isTeacher === false}
+	{#if !data.user.isTeacher}
 		<div class="progress">
 			<span>Пройдено 5/7 уроков</span>
 		</div>
 
 		<div class="achievements">
 			<Button text="Достижения" kind="text" />
-			<img alt="ach" />
-			<img alt="ach" />
-			<img alt="ach" />
+			<img alt="" />
+			<img alt="" />
+			<img alt="" />
 		</div>
 	{/if}
 
@@ -106,7 +106,7 @@
 				/>
 			</div>
 		{/each}
-		{#if data.user.isTeacher === true}
+		{#if data.user.isTeacher}
 			<AddItem kind="module" text="Добавить модуль" on:addModule={addModule} />
 		{/if}
 	</div>
