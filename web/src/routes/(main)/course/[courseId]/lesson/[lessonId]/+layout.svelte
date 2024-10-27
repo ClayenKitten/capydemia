@@ -41,20 +41,16 @@
 		newModule = null;
 	}
 	async function deleteModule(module: m.UpdateModule) {
-		modal_show = true;
-		if (confirm) {
-			console.log("deleteModule");
-			data.course.modules = data.course.modules.filter(x => x !== module);
-			save();
-			modal_show = false;
-			confirm = false;
-		}
+		console.log("deleteModule");
+		data.course.modules = data.course.modules.filter(x => x !== module);
+		save();
+		modal_show = false;
 	}
-
+	let delete_module: m.UpdateModule;
 	let newModule: m.UpdateModule | null = null;
 	let modal_show: boolean = false;
-	let confirm: boolean = false;
 	let expandedModule: number | null = data.module?.id;
+	let modal_text: string;
 </script>
 
 <main class={!data.user.isTeacher ? "student" : "teacher"}>
@@ -62,8 +58,8 @@
 		<div class="modal_confirm">
 			<Confirm
 				header="Подтвердите удаление"
-				text="Вы хотите удалить Вы хотите удалить Вы хотите удалить Вы хотите удалить ?"
-				on:confirm={() => (confirm = true)}
+				text="Вы хотите удалить {modal_text}?"
+				on:confirm={() => deleteModule(delete_module)}
 				on:cancel={() => (modal_show = false)}
 			/>
 		</div>
@@ -99,11 +95,14 @@
 					currentLessonId={data.lesson?.id}
 					bind:expanded={expandedModule}
 					on:change={() => editModuleName(module)}
-					on:delete={() => deleteModule(module)}
+					on:delete={() => {
+						modal_show = true;
+						delete_module = module;
+						modal_text = `модуль ${i + 1} "${module.title}"`;
+					}}
 					on:expanded={() => (expandedModule = module.id)}
 					on:refresh={Refresh}
 					on:save={save}
-					on:deleteLesson={save}
 				/>
 			</div>
 		{/each}
@@ -142,7 +141,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background: rgba(0, 0, 0, 0.7);
+			background: #292d2f66;
 			display: flex;
 			align-items: center;
 			justify-content: center;
