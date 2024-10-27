@@ -1,3 +1,4 @@
+import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async event => {
@@ -8,6 +9,9 @@ export const load: LayoutLoad = async event => {
 		lessons.some(({ id }) => id === lessonId)
 	);
 	let lesson = module?.lessons.find(({ id }) => id === lessonId);
+	if (lesson === undefined || module === undefined) {
+		error(404, { message: "Урок не найден" });
+	}
 
 	return {
 		module,

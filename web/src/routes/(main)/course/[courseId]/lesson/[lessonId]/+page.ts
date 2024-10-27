@@ -5,9 +5,6 @@ import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async event => {
 	let { lesson, module } = await event.parent();
-	if (lesson === undefined || module === null) {
-		error(404, { message: "Урок не найден" });
-	}
 
 	let lessonId = Number(event.params.lessonId);
 
