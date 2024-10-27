@@ -1,21 +1,25 @@
 <script lang="ts">
-	import { invalidateAll, onNavigate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
-	import ListItem from "../ListItem.svelte";
-	import type { PageData } from "./$types";
+	import type { LayoutData } from "./$types";
 	import AddItem from "./AddItem.svelte";
 	import * as m from "$lib/models";
 	import Confirm from "$lib/components/Confirm.svelte";
+	import Module from "../Module.svelte";
 
-	export let data: PageData;
+	export let data: LayoutData;
 
 	const save = async () => {
-		console.log("save");
-		//data.course.modules = data.course.modules;
+		console.log(data.course);
+		data.course.modules = data.course.modules;
 		await api($page).course.updateCourse.mutate(data.course);
 	};
+
+	async function Refresh() {
+		console.log("refresh");
+		data.course.modules = data.course.modules;
+	}
 
 	async function addModule() {
 		console.log("addModule");
@@ -25,42 +29,17 @@
 			lessons: []
 		};
 		data.course.modules.push(newModule);
-		data.course.modules = data.course.modules;
+		Refresh();
 	}
-
-	async function addLesson(module: m.UpdateModule) {
-		console.log("addLesson");
-		newLesson = {
-			title: "",
-			id: null
-		};
-		module.lessons.push(newLesson);
-		data.course.modules = data.course.modules;
-	}
-
 	async function editModuleName(module: m.UpdateModule) {
 		console.log("changingModule");
 		if (module === newModule && module.title === "") {
 			data.course.modules = data.course.modules.filter(x => x !== module);
+		} else {
+			save();
 		}
 		newModule = null;
-		editing = false;
-		data.course.modules = data.course.modules;
-		save();
 	}
-	async function editLessonName(
-		module: m.UpdateModule,
-		lesson: m.UpdateLesson
-	) {
-		console.log("changingLesson");
-		if (lesson === newLesson && lesson.title === "") {
-			module.lessons = module.lessons.filter(x => x != newLesson);
-		}
-		newLesson = null;
-		data.course.modules = data.course.modules;
-		save();
-	}
-
 	async function deleteModule(module: m.UpdateModule) {
 		modal_show = true;
 		if (confirm) {
@@ -71,18 +50,11 @@
 			confirm = false;
 		}
 	}
-	async function deleteLesson(module: m.UpdateModule, lesson: m.UpdateLesson) {
-		console.log("deleteLesson");
-		module.lessons = module.lessons.filter(x => x !== lesson);
-		save();
-	}
 
-	//let modules_list = data.course.modules;
 	let newModule: m.UpdateModule | null = null;
-	let newLesson: m.UpdateLesson | null = null;
-	let editing: boolean = false;
 	let modal_show: boolean = false;
 	let confirm: boolean = false;
+	let expandedModule: number | null = data.module?.id;
 </script>
 
 <main class={!data.user.isTeacher ? "student" : "teacher"}>
@@ -114,49 +86,25 @@
 		{#each data.course.modules as module, i}
 			<div
 				class="module"
-				class:current={module.id === data.module?.id}
-				class:editing
+				class:expanded={module.id === data.module?.id ||
+					expandedModule === module.id}
 			>
-				<div class="module_header">
-					<ListItem
-						kind="module"
-						current={module.id === data.module?.id}
-						editable={data.user.isTeacher}
-						id={i}
-						isNew={module === newModule ? true : false}
-						bind:name={module.title}
-						on:change={() => editModuleName(module)}
-						on:delete={() => deleteModule(module)}
-						on:editing={() => (editing = true)}
-					/>
-				</div>
-				<div class="lessons">
-					{#each module.lessons as lesson, j}
-						<div
-							class="lesson_header"
-							class:current={lesson.id === data.lesson?.id}
-						>
-							<ListItem
-								kind="lesson"
-								current={lesson.id === data.lesson?.id}
-								editable={data.user.isTeacher}
-								id={j}
-								isNew={lesson === newLesson ? true : false}
-								bind:name={lesson.title}
-								href="/course/{data.course.id}/lesson/{lesson.id}"
-								on:change={() => editLessonName(module, lesson)}
-								on:delete={() => deleteLesson(module, lesson)}
-							/>
-						</div>
-					{/each}
-					{#if data.user.isTeacher === true}
-						<AddItem
-							kind="lesson"
-							text="Добавить урок"
-							on:addLesson={() => addLesson(module)}
-						/>
-					{/if}
-				</div>
+				<Module
+					current={module.id === data.module?.id}
+					editable={data.user.isTeacher}
+					id={i}
+					isNew={module === newModule ? true : false}
+					bind:module
+					courseId={data.course.id}
+					currentLessonId={data.lesson?.id}
+					bind:expanded={expandedModule}
+					on:change={() => editModuleName(module)}
+					on:delete={() => deleteModule(module)}
+					on:expanded={() => (expandedModule = module.id)}
+					on:refresh={Refresh}
+					on:save={save}
+					on:deleteLesson={save}
+				/>
 			</div>
 		{/each}
 		{#if data.user.isTeacher === true}
@@ -235,31 +183,7 @@
 
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
-		font: var(--B);
-
-		.module {
-			height: 72px;
-
-			/*&:not(.editing)*/
-			&:focus-within,
-			&.current {
-				max-height: 340px;
-				height: min-content;
-				.lessons {
-					display: flex;
-					flex-direction: column;
-					background-color: var(--main-bg);
-					border: 1px solid var(--secondary);
-					border-top: none;
-					border-radius: 0 0 8px 8px;
-					padding: 12px 0 12px 0;
-				}
-			}
-			.lessons {
-				display: none;
-			}
-		}
+		gap: 12px;
 	}
 	.lesson {
 		grid-area: lesson;
