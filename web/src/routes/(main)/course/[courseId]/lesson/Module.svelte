@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from "svelte";
 	import * as m from "$lib/models";
 	import AddItem from "./[lessonId]/AddItem.svelte";
+	import Confirm from "$lib/components/Confirm.svelte";
 	const dispatch = createEventDispatcher();
 
 	//export let kind: "module" | "lesson";
@@ -17,7 +18,9 @@
 	//export let newLesson: m.UpdateLesson | undefined = undefined;
 
 	let isEditingModule = false;
-	//let isEditingLesson = false;
+	let modal_show: boolean = false;
+	let modal_text: string;
+	let delete_lesson: m.UpdateLesson;
 	let input: HTMLInputElement;
 	let inputLesson: HTMLInputElement;
 	let new_lesson: m.UpdateLesson | null = null;
@@ -27,12 +30,6 @@
 	function Select() {
 		dispatch("expanded");
 	}
-	/*
-	//on:blur={Deselect}
-	function Deselect(){
-		dispatch("not_expanded");
-	}*/
-
 	if (isNew) {
 		console.log("new");
 		EditModule();
@@ -91,7 +88,8 @@
 	async function DeleteLesson(lesson: m.UpdateLesson) {
 		console.log("deleteLesson");
 		module.lessons = module.lessons.filter(x => x !== lesson);
-		dispatch("deleteLesson");
+		dispatch("save");
+		modal_show = false;
 	}
 </script>
 
@@ -100,6 +98,16 @@
 	class:expanded={current || expanded === module.id}
 	class:isEditingModule
 >
+	{#if modal_show}
+		<div class="modal_confirm">
+			<Confirm
+				header="Подтвердите удаление"
+				text="Вы хотите удалить {modal_text}?"
+				on:confirm={() => DeleteLesson(delete_lesson)}
+				on:cancel={() => (modal_show = false)}
+			/>
+		</div>
+	{/if}
 	<div class="module_header">
 		{#if !editable}
 			<div class="module_title">
@@ -166,7 +174,14 @@
 							<button class="edit_name" on:click={() => EditLesson(lesson)}>
 								<img src="/icons/PencilSimple-32px.svg" alt="" />
 							</button>
-							<button class="delete" on:click={() => DeleteLesson(lesson)}>
+							<button
+								class="delete"
+								on:click={() => {
+									modal_show = true;
+									delete_lesson = lesson;
+									modal_text = `урок ${i + 1} "${lesson.title}"`;
+								}}
+							>
 								<img src="/icons/Trash-32px.svg" alt="" />
 							</button>
 						</div>
@@ -273,7 +288,6 @@
 			}
 		}
 		&.expanded {
-			//height:100%;
 			border: none;
 			.module_header {
 				background-color: var(--primary);
@@ -366,82 +380,89 @@
 		&:not(.expanded).isEditingModule > .module_header > .module_title {
 			border: 1px solid var(--secondary);
 		}
-		.lessons {
-			//padding:12px 0;
+		.modal_confirm {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: #292d2f66;
 			display: flex;
-			flex-direction: column;
-			.lesson {
-				height: 60px;
-				display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 1000;
+		}
+	}
+	.lesson {
+		height: 60px;
+		display: flex;
 
-				.lesson_title {
-					display: flex;
-					align-items: center;
-					width: 100%;
-					height: 100%;
-					border-radius: 8px;
-					a {
-						width: 100%;
-						padding: 18px 0 18px 32px;
-						font: var(--P1);
-						color: var(--text);
-						text-decoration: none;
-					}
-				}
-				&.current {
-					background-color: var(--secondary);
-				}
-				&:not(.current):hover {
-					.lesson_title > a {
-						color: var(--secondary);
-					}
-					.edit_buttons {
-						button {
-							img {
-								filter: var(--filter-secondary);
-							}
-							&:hover > img {
-								filter: var(--filter-primary);
-							}
-						}
-						.delete {
-							&:hover > img {
-								filter: var(--filter-error);
-							}
-						}
-					}
-				}
-				&.isEditingLesson {
-					height: 100%;
-					display: flex;
-					gap: 10px;
-					padding: 10px 32px;
-					.lesson_title {
-						width: 100%;
-						background-color: var(--main-bg);
-						border-radius: 8px;
-						padding: 14px 24px;
-
-						input {
-							background-color: inherit;
-							color: var(--text);
-							outline: none;
-							border: none;
-							border-radius: 8px;
-							width: 100%;
-						}
-					}
-					.edit_buttons {
-						padding: initial;
-					}
-				}
-				&:not(.current).isEditingLesson > .lesson_title {
-					border: 1px solid var(--secondary);
-				}
-			}
-			.add_module {
+		.lesson_title {
+			display: flex;
+			align-items: center;
+			width: 100%;
+			height: 100%;
+			border-radius: 8px;
+			a {
 				width: 100%;
+				padding: 18px 0 18px 32px;
+				font: var(--P1);
+				color: var(--text);
+				text-decoration: none;
 			}
 		}
+		&.current {
+			background-color: var(--secondary);
+		}
+		&:not(.current):hover {
+			.lesson_title > a {
+				color: var(--secondary);
+			}
+			.edit_buttons {
+				button {
+					img {
+						filter: var(--filter-secondary);
+					}
+					&:hover > img {
+						filter: var(--filter-primary);
+					}
+				}
+				.delete {
+					&:hover > img {
+						filter: var(--filter-error);
+					}
+				}
+			}
+		}
+		&.isEditingLesson {
+			height: 100%;
+			display: flex;
+			gap: 10px;
+			padding: 10px 32px;
+			.lesson_title {
+				width: 100%;
+				background-color: var(--main-bg);
+				border-radius: 8px;
+				padding: 14px 24px;
+
+				input {
+					background-color: inherit;
+					color: var(--text);
+					outline: none;
+					border: none;
+					border-radius: 8px;
+					width: 100%;
+				}
+			}
+			.edit_buttons {
+				padding: initial;
+			}
+		}
+		&:not(.current).isEditingLesson > .lesson_title {
+			border: 1px solid var(--secondary);
+		}
+	}
+	.add_module {
+		width: 100%;
 	}
 </style>
