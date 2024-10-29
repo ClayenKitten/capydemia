@@ -12,8 +12,12 @@
 
 	const save = async () => {
 		console.log(data.course);
+		console.log("save");
 		data.course.modules = data.course.modules;
 		await api($page).course.updateCourse.mutate(data.course);
+		data.course.modules = data.course.modules;
+		console.log("save");
+		console.log(data.course);
 	};
 
 	async function Refresh() {
@@ -32,9 +36,10 @@
 		Refresh();
 	}
 	async function editModuleName(module: m.UpdateModule) {
-		console.log("changingModule");
+		console.log("editModuleName");
 		if (module === newModule && module.title === "") {
 			data.course.modules = data.course.modules.filter(x => x !== module);
+			console.log("removeEmpty");
 		} else {
 			save();
 		}
@@ -49,7 +54,7 @@
 	let delete_module: m.UpdateModule;
 	let newModule: m.UpdateModule | null = null;
 	let modal_show: boolean = false;
-	let expandedModule: number | null = data.module?.id;
+	let expandedModule: m.UpdateModule;
 	let modal_text: string;
 </script>
 
@@ -80,11 +85,7 @@
 
 	<div class="modules">
 		{#each data.course.modules as module, i}
-			<div
-				class="module"
-				class:expanded={module.id === data.module?.id ||
-					expandedModule === module.id}
-			>
+			<div class="module">
 				<Module
 					current={module.id === data.module?.id}
 					editable={data.user.isTeacher}
@@ -100,7 +101,7 @@
 						delete_module = module;
 						modal_text = `модуль ${i + 1} "${module.title}"`;
 					}}
-					on:expanded={() => (expandedModule = module.id)}
+					on:expanded={() => (expandedModule = module)}
 					on:refresh={Refresh}
 					on:save={save}
 				/>
