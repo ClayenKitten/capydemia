@@ -9,7 +9,7 @@
 	export let editable: boolean = false;
 	export let current: boolean;
 	export let id: number;
-	export let expanded: number | null;
+	export let expanded: m.UpdateModule;
 	export let module: m.UpdateModule;
 	export let courseId: number;
 	export let currentLessonId: number | null;
@@ -63,7 +63,7 @@
 		EditLesson(new_lesson);
 	}
 	function EditLesson(lesson: m.UpdateLesson) {
-		console.log(lesson.id);
+		console.log("editLesson", lesson.id);
 		changingLesson = lesson;
 		setTimeout(() => {
 			if (inputLesson) {
@@ -72,7 +72,7 @@
 		}, 0);
 	}
 	async function editLessonName(lesson: m.UpdateLesson) {
-		console.log("changingLesson");
+		console.log("editLessonName");
 		if (lesson === new_lesson && lesson.title === "") {
 			module.lessons = module.lessons.filter(x => x != new_lesson);
 		} else {
@@ -95,7 +95,7 @@
 
 <div
 	class="module"
-	class:expanded={current || expanded === module.id}
+	class:expanded={current || expanded === module}
 	class:isEditingModule
 >
 	{#if modal_show}
@@ -144,7 +144,7 @@
 			</div>
 		{/if}
 	</div>
-	{#if current || expanded === module.id}
+	{#if current || expanded === module}
 		<div class="lessons">
 			{#each module.lessons as lesson, i}
 				<div
