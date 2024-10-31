@@ -110,10 +110,9 @@ export class CourseRepository extends DbRepository {
 				if (module.id === null) {
 					let { id } = await trx
 						.insertInto("module")
-						.values({ courseId: courseId, title: module.title, order: order })
+						.values({ courseId, title: module.title, order: order })
 						.returning("id")
 						.executeTakeFirstOrThrow();
-					console.log(id);
 					module.id = id;
 				} else {
 					let result = await trx
@@ -172,7 +171,7 @@ export class CourseRepository extends DbRepository {
 					let result = await trx
 						.updateTable("lesson")
 						.set({ title: lesson.title, order })
-						.where("id", "=", moduleId)
+						.where("id", "=", lesson.id)
 						.executeTakeFirst();
 					if (result.numUpdatedRows === 0n) {
 						throw new TRPCError({ code: "NOT_FOUND" });
