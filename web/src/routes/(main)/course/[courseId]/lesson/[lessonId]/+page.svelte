@@ -1,44 +1,45 @@
 <script lang="ts">
-	import { invalidateAll, onNavigate } from "$app/navigation";
+	import { invalidate, onNavigate } from "$app/navigation";
 	import { page } from "$app/stores";
 	import api from "$lib/api";
 	import Button from "$lib/components/Button.svelte";
 	import EditorJS from "$lib/components/Editor.svelte";
+	import * as m from "$lib/models";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
 	const save = async () => {
-		if (changed && data.lesson.id) {
-			console.log("saved");
+		if (changed) {
 			await api($page).course.updateLessonContent.mutate({
-				id: data.lesson.id,
-				content: data.lessonContent
+				id: Number($page.params.lessonId),
+				content: await saveEditorContent()
 			});
+			await invalidate("custom:lessonContent");
 		}
 		changed = false;
 	};
+	let saveEditorContent: () => Promise<m.LessonContent>;
 
 	const reset = async () => {
-		if (changed) {
-			console.log("reset");
-			data.lessonContent = initialData;
-			//location.reload();
-		}
+		await invalidate("custom:lessonContent");
 		changed = false;
 	};
 
 	let changed = false;
-	let initialData = data.lessonContent;
+	onNavigate(() => {
+		changed = false;
+	});
 </script>
 
 <main>
 	<h5>Конспект урока</h5>
 	<div class="editorjs">
 		<EditorJS
-			bind:data={data.lessonContent}
+			data={data.lessonContent}
 			readOnly={!data.user.isTeacher}
 			on:changed={() => (changed = true)}
+			bind:save={saveEditorContent}
 		/>
 	</div>
 	{#if data.user.isTeacher}

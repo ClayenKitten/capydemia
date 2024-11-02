@@ -37,7 +37,7 @@ export interface EmailChangeRequest {
 }
 
 export interface Lesson {
-  content: Json;
+  content: Generated<Json>;
   id: Generated<number>;
   moduleId: number;
   order: number;

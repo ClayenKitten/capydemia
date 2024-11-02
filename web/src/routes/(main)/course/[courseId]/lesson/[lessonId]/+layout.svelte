@@ -48,7 +48,10 @@
 	let modal_text: string;
 </script>
 
-<main class={!data.user.isTeacher ? "student" : "teacher"}>
+<main
+	class={!data.user.isTeacher ? "student" : "teacher"}
+	data-sveltekit-preload-data="off"
+>
 	{#if modal_show}
 		<div class="modal_confirm">
 			<Confirm
@@ -77,13 +80,12 @@
 		{#each data.course.modules as module, i}
 			<div class="module">
 				<Module
-					current={module.id === data.module?.id}
 					editable={data.user.isTeacher}
 					id={i}
 					isNew={module === newModule ? true : false}
 					bind:module
 					courseId={data.course.id}
-					currentLessonId={data.lesson?.id}
+					currentLessonId={Number($page.params.lessonId)}
 					bind:expanded={expandedModuleId}
 					on:change={() => editModuleName(module)}
 					on:delete={() => {

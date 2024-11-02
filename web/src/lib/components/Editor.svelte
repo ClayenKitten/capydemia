@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from "svelte";
-	const dispatch = createEventDispatcher();
+	const dispatch = createEventDispatcher<{ changed: void }>();
 
 	export let data: EditorJS.OutputData;
 	export let placeholder = "";
 	export let readOnly: boolean = false;
+
 	let holder: HTMLElement;
+	let editor: EditorJS.default;
+	let editorReady: boolean = false;
 
 	onMount(async () => {
 		const EditorJS = await import("@editorjs/editorjs");
@@ -13,7 +16,6 @@
 		const List = await import("@editorjs/list");
 		const NestedList = await import("@editorjs/nested-list");
 
-		let editor: EditorJS.default;
 		editor = new EditorJS.default({
 			holder,
 			tools: {
@@ -24,12 +26,18 @@
 			placeholder,
 			readOnly,
 			minHeight: 0,
-			data,
-			onChange: () => {
-				dispatch("changed");
-			}
+			data: data ?? undefined,
+			onChange: () => dispatch("changed")
 		});
+		await editor.isReady;
+		editorReady = true;
 	});
+
+	$: if (editorReady) editor.render(data);
+
+	export function save(): Promise<EditorJS.OutputData> {
+		return editor.save();
+	}
 </script>
 
 <div bind:this={holder} />

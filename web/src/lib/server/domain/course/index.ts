@@ -27,7 +27,7 @@ export default class CourseService {
 	public async getLessonContent(
 		user: User,
 		lessonId: number
-	): Promise<Result<string, "NOT_FOUND">> {
+	): Promise<Result<m.LessonContent, "NOT_FOUND">> {
 		let course = await this.repos.course.getCourseByLesson(lessonId);
 		if (course === null) return { ok: false, error: "NOT_FOUND" };
 		if (!this.repos.course.isEnrolled(user, course))
@@ -163,7 +163,7 @@ export class CourseRepository extends DbRepository {
 				if (lesson.id === null) {
 					let { id } = await trx
 						.insertInto("lesson")
-						.values({ moduleId, title: lesson.title, order, content: {} })
+						.values({ moduleId, title: lesson.title, order })
 						.returning("id")
 						.executeTakeFirstOrThrow();
 					lesson.id = id;
@@ -206,21 +206,24 @@ export class CourseRepository extends DbRepository {
 			.then(x => x !== null);
 	}
 
-	public async getLessonContent(id: number): Promise<string | null> {
+	public async getLessonContent(id: number): Promise<m.LessonContent | null> {
 		return await this.db
 			.selectFrom("lesson")
 			.where("id", "=", id)
 			.select("content")
 			.executeTakeFirst()
-			.then(x => (x ? JSON.stringify(x.content) : null));
+			.then(x => (x ? (x.content as unknown as m.LessonContent) : null));
 	}
 
-	public async updateLessonContent(id: number, content: string): Promise<void> {
+	public async updateLessonContent(
+		id: number,
+		content: m.LessonContent
+	): Promise<void> {
 		await this.db
 			.updateTable("lesson")
 			.set({ content })
 			.where("id", "=", id)
-			.execute();
+			.executeTakeFirst();
 	}
 
 	public async getCourseByLesson(lessonId: number): Promise<Course | null> {
