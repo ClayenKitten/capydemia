@@ -11,11 +11,9 @@
 		display: flex;
 		width: 100%;
 		height: 100%;
-		background-color: var(--error);
 		h1 {
 			margin: auto;
 			font-size: 20px;
-			color: white;
 		}
 	}
 </style>
