@@ -9,9 +9,12 @@
 	export let data: PageData;
 
 	const save = async () => {
-		if (changed) {
-			///console.log("saved");
-			await api($page).course.updateCourse.mutate(data.course);
+		if (changed && data.lesson.id) {
+			console.log("saved");
+			await api($page).course.updateLessonContent.mutate({
+				id: data.lesson.id,
+				content: data.lessonContent
+			});
 		}
 		changed = false;
 	};
