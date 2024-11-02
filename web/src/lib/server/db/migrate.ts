@@ -7,7 +7,8 @@ const migrations = [
 	"0002_course",
 	"0003_profile",
 	"0004_emailChange",
-	"0005_teacher"
+	"0005_teacher",
+	"0006_newLesson"
 ] as const;
 
 export default async function migrateToLatest(db: Kysely<DB>) {

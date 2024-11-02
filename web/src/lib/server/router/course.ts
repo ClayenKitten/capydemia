@@ -47,8 +47,8 @@ export default function getCourseRouter() {
 				if (!result.ok) return result;
 				return {
 					ok: true,
-					value: JSON.parse(result.value)
-				} as Result<m.LessonContent, never>;
+					value: result.value
+				} satisfies Result<m.LessonContent, never>;
 			}),
 		/** Updates content of the lesson */
 		updateLessonContent: teacherProcedure
@@ -56,9 +56,9 @@ export default function getCourseRouter() {
 			.mutation(async ({ ctx, input }) => {
 				await ctx.repositories.course.updateLessonContent(
 					input.id,
-					JSON.stringify(input.content)
+					input.content
 				);
-				ctx.logger.info("lesson updated", { lesson: input.id });
+				ctx.logger.info("lesson content updated", { lesson: input.id });
 			}),
 		/** Deletes course. */
 		deleteCourse: teacherProcedure

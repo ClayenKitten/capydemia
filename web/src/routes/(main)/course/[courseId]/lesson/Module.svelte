@@ -6,7 +6,6 @@
 	const dispatch = createEventDispatcher();
 
 	export let editable: boolean = false;
-	export let current: boolean;
 	export let id: number;
 	export let expanded: number | null;
 	export let module: m.UpdateModule;
@@ -87,7 +86,8 @@
 
 <div
 	class="module"
-	class:expanded={current || expanded === module.id}
+	class:expanded={module.lessons.some(x => x.id === currentLessonId) ||
+		expanded === module.id}
 	class:isEditingModule
 >
 	{#if modal_show}
@@ -136,7 +136,7 @@
 			</div>
 		{/if}
 	</div>
-	{#if current || expanded === module.id}
+	{#if module.lessons.some(x => x.id === currentLessonId) || expanded === module.id}
 		<div class="lessons">
 			{#each module.lessons as lesson, i}
 				<div

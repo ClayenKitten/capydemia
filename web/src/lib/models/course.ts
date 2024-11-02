@@ -50,15 +50,17 @@ export const UpdateCourse = z.object({
 export type UpdateCourse = TypeOf<typeof UpdateCourse>;
 
 export const LessonContent = z.object({
-	time: z.number().nonnegative(),
-	blocks: z.array(
-		z.object({
-			id: z.string().max(64),
-			type: z.string().max(64),
-			data: z.record(z.string(), z.any())
-		})
-	),
-	version: z.string().max(64)
+	time: z.number().nonnegative().optional(),
+	version: z.string().max(64).optional(),
+	blocks: z
+		.array(
+			z.object({
+				id: z.string().max(64),
+				type: z.string().max(64),
+				data: z.record(z.string(), z.any())
+			})
+		)
+		.max(8192)
 });
 export type LessonContent = TypeOf<typeof LessonContent>;
 
