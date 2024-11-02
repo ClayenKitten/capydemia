@@ -11,42 +11,32 @@
 	export let data: LayoutData;
 
 	const save = async () => {
-		console.log(data.course);
-		console.log("save");
 		data.course.modules = data.course.modules;
-		await api($page).course.updateCourse.mutate(data.course);
-		data.course.modules = data.course.modules;
-		console.log("save");
-		console.log(data.course);
+		data.course = await api($page).course.updateCourse.mutate(data.course);
 	};
 
-	async function Refresh() {
-		console.log("refresh");
+	async function refresh() {
 		data.course.modules = data.course.modules;
 	}
 
 	async function addModule() {
-		console.log("addModule");
 		newModule = {
 			title: "",
 			id: null,
 			lessons: []
 		};
 		data.course.modules.push(newModule);
-		Refresh();
+		refresh();
 	}
 	async function editModuleName(module: m.UpdateModule) {
-		console.log("editModuleName");
 		if (module === newModule && module.title === "") {
 			data.course.modules = data.course.modules.filter(x => x !== module);
-			console.log("removeEmpty");
 		} else {
 			save();
 		}
 		newModule = null;
 	}
 	async function deleteModule(module: m.UpdateModule) {
-		console.log("deleteModule");
 		data.course.modules = data.course.modules.filter(x => x !== module);
 		save();
 		modal_show = false;
@@ -54,7 +44,7 @@
 	let delete_module: m.UpdateModule;
 	let newModule: m.UpdateModule | null = null;
 	let modal_show: boolean = false;
-	let expandedModule: m.UpdateModule;
+	let expandedModuleId: number | null;
 	let modal_text: string;
 </script>
 
@@ -94,15 +84,15 @@
 					bind:module
 					courseId={data.course.id}
 					currentLessonId={data.lesson?.id}
-					bind:expanded={expandedModule}
+					bind:expanded={expandedModuleId}
 					on:change={() => editModuleName(module)}
 					on:delete={() => {
 						modal_show = true;
 						delete_module = module;
 						modal_text = `модуль ${i + 1} "${module.title}"`;
 					}}
-					on:expanded={() => (expandedModule = module)}
-					on:refresh={Refresh}
+					on:expanded={() => (expandedModuleId = module.id)}
+					on:refresh={refresh}
 					on:save={save}
 				/>
 			</div>

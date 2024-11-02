@@ -5,25 +5,23 @@
 	import Confirm from "$lib/components/Confirm.svelte";
 	const dispatch = createEventDispatcher();
 
-	//export let kind: "module" | "lesson";
 	export let editable: boolean = false;
 	export let current: boolean;
 	export let id: number;
-	export let expanded: m.UpdateModule;
+	export let expanded: number | null;
 	export let module: m.UpdateModule;
 	export let courseId: number;
 	export let currentLessonId: number | null;
-	let changingLesson: m.UpdateLesson;
-	export let isNew: boolean | undefined = false;
-	//export let newLesson: m.UpdateLesson | undefined = undefined;
+	export let isNew: boolean = false;
 
+	let changingLesson: m.UpdateLesson;
 	let isEditingModule = false;
-	let modal_show: boolean = false;
-	let modal_text: string;
 	let delete_lesson: m.UpdateLesson;
 	let input: HTMLInputElement;
 	let inputLesson: HTMLInputElement;
 	let new_lesson: m.UpdateLesson | null = null;
+	let modal_show: boolean = false;
+	let modal_text: string;
 
 	//module management
 
@@ -31,7 +29,6 @@
 		dispatch("expanded");
 	}
 	if (isNew) {
-		console.log("new");
 		EditModule();
 	}
 	function EditModule() {
@@ -53,7 +50,6 @@
 	//lesson management
 
 	async function addLesson() {
-		console.log("addLesson");
 		new_lesson = {
 			title: "",
 			id: null
@@ -63,7 +59,6 @@
 		EditLesson(new_lesson);
 	}
 	function EditLesson(lesson: m.UpdateLesson) {
-		console.log("editLesson", lesson.id);
 		changingLesson = lesson;
 		setTimeout(() => {
 			if (inputLesson) {
@@ -72,7 +67,6 @@
 		}, 0);
 	}
 	async function editLessonName(lesson: m.UpdateLesson) {
-		console.log("editLessonName");
 		if (lesson === new_lesson && lesson.title === "") {
 			module.lessons = module.lessons.filter(x => x != new_lesson);
 		} else {
@@ -81,12 +75,10 @@
 		new_lesson = null;
 	}
 	function handleBlurLesson() {
-		console.log(changingLesson);
 		editLessonName(changingLesson);
 		changingLesson = { id: -1, title: "" };
 	}
 	async function DeleteLesson(lesson: m.UpdateLesson) {
-		console.log("deleteLesson");
 		module.lessons = module.lessons.filter(x => x !== lesson);
 		dispatch("save");
 		modal_show = false;
@@ -95,7 +87,7 @@
 
 <div
 	class="module"
-	class:expanded={current || expanded === module}
+	class:expanded={current || expanded === module.id}
 	class:isEditingModule
 >
 	{#if modal_show}
@@ -144,7 +136,7 @@
 			</div>
 		{/if}
 	</div>
-	{#if current || expanded === module}
+	{#if current || expanded === module.id}
 		<div class="lessons">
 			{#each module.lessons as lesson, i}
 				<div
