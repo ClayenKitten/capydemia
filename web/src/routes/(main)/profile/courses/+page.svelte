@@ -5,7 +5,11 @@
 </script>
 
 <header>
-	<h2>Мои курсы</h2>
+	{#if !data.user.isTeacher}
+		<h2>Мои курсы</h2>
+	{:else}
+		<h2>Курируемые курсы</h2>
+	{/if}
 	{#if data.courses === null}
 		<span> Вы не записаны ни на какие курсы. </span>
 	{/if}
@@ -55,6 +59,7 @@
 		gap: 20px;
 	}
 	.course {
+		min-width: 600px;
 		background-color: var(--main-bg);
 		border: 1px solid var(--secondary);
 		border-radius: 8px;
