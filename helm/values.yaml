@@ -1,0 +1,14 @@
+domain: capydemia.clayenkitten.dev
+
+nodeEnv: production
+dockerTag: main
+
+email:
+  sender: "Capydemia <noreply@clayenkitten.dev>"
+  resendKey: example
+
+s3:
+  endpoint: s3.timeweb.cloud
+  bucket: 4f267831-capydemia
+  accessKey: EURCS9IDGC9WM9V1TPMH
+  secretKey: example
