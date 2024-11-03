@@ -24,13 +24,13 @@
 
 	//module management
 
-	function Select() {
+	function select() {
 		dispatch("expanded");
 	}
 	if (isNew) {
-		EditModule();
+		editModule();
 	}
-	function EditModule() {
+	function editModule() {
 		isEditingModule = true;
 		setTimeout(() => {
 			if (input) {
@@ -42,7 +42,7 @@
 		isEditingModule = false;
 		dispatch("change");
 	}
-	function Delete() {
+	function deleteModule() {
 		dispatch("delete");
 	}
 
@@ -55,9 +55,9 @@
 		};
 		module.lessons.push(new_lesson);
 		dispatch("refresh");
-		EditLesson(new_lesson);
+		editLesson(new_lesson);
 	}
-	function EditLesson(lesson: m.UpdateLesson) {
+	function editLesson(lesson: m.UpdateLesson) {
 		changingLesson = lesson;
 		setTimeout(() => {
 			if (inputLesson) {
@@ -77,7 +77,7 @@
 		editLessonName(changingLesson);
 		changingLesson = { id: -1, title: "" };
 	}
-	async function DeleteLesson(lesson: m.UpdateLesson) {
+	async function deleteLesson(lesson: m.UpdateLesson) {
 		module.lessons = module.lessons.filter(x => x !== lesson);
 		dispatch("save");
 		modal_show = false;
@@ -95,7 +95,7 @@
 			<Confirm
 				header="Подтвердите удаление"
 				text="Вы хотите удалить {modal_text}?"
-				on:confirm={() => DeleteLesson(delete_lesson)}
+				on:confirm={() => deleteLesson(delete_lesson)}
 				on:cancel={() => (modal_show = false)}
 			/>
 		</div>
@@ -103,21 +103,21 @@
 	<div class="module_header">
 		{#if !editable}
 			<div class="module_title">
-				<button class="module_button" on:click={Select}>
+				<button class="module_button" on:click={select}>
 					<span>Модуль {id + 1}. {module.title}</span>
 				</button>
 			</div>
 		{:else if !isEditingModule && !isNew}
 			<div class="module_title">
-				<button class="module_button" on:click={Select}>
+				<button class="module_button" on:click={select}>
 					<span>Модуль {id + 1}. {module.title}</span>
 				</button>
 			</div>
 			<div class="edit_buttons">
-				<button class="edit_name" on:click={EditModule}>
+				<button class="edit_name" on:click={editModule}>
 					<img src="/icons/PencilSimple-32px.svg" alt="" />
 				</button>
-				<button class="delete" on:click={Delete}>
+				<button class="delete" on:click={deleteModule}>
 					<img src="/icons/Trash-32px.svg" alt="" />
 				</button>
 			</div>
@@ -130,7 +130,7 @@
 				/>
 			</div>
 			<div class="edit_buttons">
-				<button class="delete" on:click={Delete}>
+				<button class="delete" on:click={deleteModule}>
 					<img src="/icons/Trash-32px.svg" alt="" />
 				</button>
 			</div>
@@ -163,7 +163,7 @@
 							</a>
 						</div>
 						<div class="edit_buttons">
-							<button class="edit_name" on:click={() => EditLesson(lesson)}>
+							<button class="edit_name" on:click={() => editLesson(lesson)}>
 								<img src="/icons/PencilSimple-32px.svg" alt="" />
 							</button>
 							<button
@@ -186,7 +186,7 @@
 							/>
 						</div>
 						<div class="edit_buttons">
-							<button class="delete" on:click={() => DeleteLesson(lesson)}>
+							<button class="delete" on:click={() => deleteLesson(lesson)}>
 								<img src="/icons/Trash-32px.svg" alt="" />
 							</button>
 						</div>
