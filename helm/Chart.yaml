@@ -1,0 +1,5 @@
+apiVersion: v2
+name: capydemia-helm
+version: 0.0.1
+description: Educational platform 
+home: https://github.com/ClayenKitten/capydemia

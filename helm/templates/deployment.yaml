@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capydemia-web
+  labels:
+    app: capydemia-web
+    app.kubernetes.io/part-of: capydemia
+spec:
+  selector:
+    matchLabels:
+      app: capydemia-web
+  template:
+    metadata:
+      labels:
+        app: capydemia-web
+        app.kubernetes.io/part-of: capydemia
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/clayenkitten/capydemia:{{ .Values.dockerTag }}
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "128Mi"
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: capydemia-postgres-app
+                  key: dbname
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: capydemia-postgres-app
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: capydemia-postgres-app
+                  key: password
+          envFrom:
+            - configMapRef:
+                name: capydemia-env
+          ports:
+            - containerPort: 3000

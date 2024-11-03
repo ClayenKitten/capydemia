@@ -7,29 +7,26 @@ on:
   workflow_dispatch:
   workflow_call:
 
+env:
+  HELM_FOLDER: helm
+
 jobs:
-  docker:
-    name: Build and push to GHCR
-    runs-on: ubuntu-latest
+  images:
+    name: Build and push images
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        targets: [{ name: capydemia, context: ./web }]
+
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository contents
+        uses: actions/checkout@v4
 
       - name: Generate image metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.targets.name }}
           flavor: |
           tags: |
             type=schedule
@@ -38,11 +35,42 @@ jobs:
             type=ref,event=pr
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push image
-        uses: docker/build-push-action@v5
+      - name: Build image
+        id: build_image
+        uses: redhat-actions/buildah-build@v2
         with:
-          context: "{{defaultContext}}:web"
+          image: ${{ matrix.targets.name }}
           tags: ${{ steps.meta.outputs.tags }}
-          push: true
-          cache-from: type=gha,scope=capydemia
-          cache-to: type=gha,mode=max,scope=capydemia
+          context: ${{ matrix.targets.context }}
+          containerfiles: ${{ matrix.targets.containerfile || format('{0}/Dockerfile', matrix.targets.context ) }}
+
+      - name: Push to GHCR
+        uses: redhat-actions/push-to-registry@v2
+        id: push
+        with:
+          tags: ${{ steps.build_image.outputs.tags }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+  helm:
+    name: Publish helm chart
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository contents
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4.2.0
+        with:
+          version: "3.16.2"
+
+      - name: Publish helm chart
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          REGISTRY=$(echo "oci://ghcr.io/${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+
+          echo $TOKEN | helm registry login ghcr.io -u ${{ github.actor }} --password-stdin
+          PKG_RESPONSE=$(helm package ${{ env.HELM_FOLDER }})
+          CHART_TAR_GZ=$(basename "$PKG_RESPONSE") # extract tar name from helm package stdout
+          helm push "$CHART_TAR_GZ" "$REGISTRY"

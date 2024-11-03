@@ -1,0 +1,4 @@
+domain: dev.capydemia.clayenkitten.dev
+
+nodeEnv: development
+dockerTag: develop
