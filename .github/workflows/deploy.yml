@@ -2,22 +2,21 @@ name: Deploy
 
 on:
   workflow_dispatch:
+    inputs:
+      environment:
+        type: environment
+        required: true
   workflow_call:
-    secrets:
-      HOST:
-        description: SSH host to connect to
-        required: true
-      USER:
-        description: SSH user to connect as
-        required: true
-      KEY:
-        description: SSH key to use
+    inputs:
+      environment:
+        type: string
         required: true
 
 jobs:
   deploy:
-    name: Pull new image version
-    runs-on: ubuntu-latest
+    name: Deploy
+    runs-on: ubuntu-22.04
+    environment: ${{ inputs.environment }}
     steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.3
@@ -26,6 +25,12 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.KEY }}
           script: |
-            cd ~/capydemia
-            git reset --hard @{u} && git pull
-            docker compose pull && docker compose up -d --force-recreate
+            rm -rf /tmp/capydemia-helm
+            helm pull oci://ghcr.io/clayenkitten/capydemia-helm \
+              --untar \
+              --destination /tmp
+            helm upgrade --install capydemia \
+              /tmp/capydemia/capydemia-helm/ \
+              --values /tmp/capydemia-helm/${{ vars.VALUES_FILE }} \
+              --namespace ${{ vars.NAMESPACE }} \
+              --create-namespace
