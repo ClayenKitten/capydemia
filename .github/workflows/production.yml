@@ -19,7 +19,5 @@ jobs:
     name: Deploy
     needs: build
     uses: ./.github/workflows/deploy.yml
-    secrets:
-      HOST: ${{ secrets.PRODUCTION_HOST }}
-      USER: ${{ secrets.PRODUCTION_USER }}
-      KEY: ${{ secrets.PRODUCTION_KEY }}
+    with:
+      environment: Production
