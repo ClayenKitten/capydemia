@@ -5,10 +5,10 @@ metadata:
 data:
   NODE_ENV: {{ .Values.nodeEnv }}
   DOMAIN: {{ .Values.domain }}
-  EMAIL_SENDER: {{ .Values.email.sender }}
-  RESEND_KEY: {{ .Values.email.resendKey }}
+  EMAIL_SENDER: {{ .Values.emailSender }}
+  RESEND_KEY: {{ .Values.secrets.resendKey }}
   POSTGRES_HOST: capydemia-postgres-rw
-  S3_ENDPOINT: {{ .Values.s3.endpoint }}
-  S3_ACCESS_KEY: {{ .Values.s3.accessKey }}
-  S3_SECRET_KEY: {{ .Values.s3.secretKey }}
-  S3_BUCKET: {{ .Values.s3.bucket }}
+  S3_ENDPOINT: {{ .Values.s3Endpoint }}
+  S3_BUCKET: {{ .Values.s3Bucket }}
+  S3_ACCESS_KEY: {{ .Values.s3AccessKey }}
+  S3_SECRET_KEY: {{ .Values.secrets.s3SecretKey }}

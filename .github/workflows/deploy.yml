@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          secrets: '{
+              "s3SecretKey": "${{ secrets.S3_SECRET_KEY }}",
+              "resendKey": "${{ secrets.RESEND_KEY }}"
+            }'
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
@@ -30,7 +35,8 @@ jobs:
               --untar \
               --destination /tmp
             helm upgrade --install capydemia \
-              /tmp/capydemia/capydemia-helm/ \
+              /tmp/capydemia-helm/ \
               --values /tmp/capydemia-helm/${{ vars.VALUES_FILE }} \
               --namespace ${{ vars.NAMESPACE }} \
-              --create-namespace
+              --create-namespace \
+              --set-json 'secrets=${{ env.secrets }}'
