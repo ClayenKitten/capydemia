@@ -2,6 +2,7 @@ name: Development workflow
 permissions: write-all
 
 on:
+  workflow_dispatch:
   push:
     branches: ["develop"]
 
