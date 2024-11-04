@@ -3,12 +3,14 @@ domain: capydemia.clayenkitten.dev
 nodeEnv: production
 dockerTag: main
 
-email:
-  sender: "Capydemia <noreply@clayenkitten.dev>"
-  resendKey: example
+emailSender: "Capydemia <noreply@clayenkitten.dev>"
 
-s3:
-  endpoint: s3.timeweb.cloud
-  bucket: 4f267831-capydemia
-  accessKey: EURCS9IDGC9WM9V1TPMH
-  secretKey: example
+s3Endpoint: s3.timeweb.cloud
+s3Bucket: 4f267831-capydemia
+s3AccessKey: EURCS9IDGC9WM9V1TPMH
+
+# Secrets are set from deploy.yaml action and should never have non-example value there.
+# When new secret is created, update deploy.yaml file.
+secrets:
+  s3SecretKey: abcdefgh
+  resendKey: re_abcdefgh
