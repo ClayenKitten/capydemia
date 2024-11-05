@@ -1,7 +1,6 @@
 import pg from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import type { DB } from "$lib/server/db/types";
-import migrateToLatest from "./migrate";
 
 const dialect = new PostgresDialect({
 	pool: new pg.Pool({
@@ -17,7 +16,6 @@ let dbCache: Kysely<DB> | null = null;
 export default async function createDatabase(): Promise<Kysely<DB>> {
 	if (dbCache === null) {
 		dbCache = new Kysely<DB>({ dialect });
-		await migrateToLatest(dbCache);
 	}
 	return dbCache;
 }

@@ -1,5 +1,5 @@
 import { sql, type Kysely } from "kysely";
-import type { DB } from "./types";
+import type { DB } from "../web/src/lib/server/db/types";
 
 export async function resetSequence(
 	db: Kysely<DB>,
