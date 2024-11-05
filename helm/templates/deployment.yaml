@@ -18,6 +18,7 @@ spec:
       containers:
         - name: web
           image: ghcr.io/clayenkitten/capydemia:{{ .Values.dockerTag }}
+          imagePullPolicy: Always
           resources:
             limits:
               cpu: "500m"
