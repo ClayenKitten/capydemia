@@ -1,4 +1,4 @@
-domain: capydemia.clayenkitten.dev
+domain: capydemia.ru
 
 nodeEnv: production
 dockerTag: main
