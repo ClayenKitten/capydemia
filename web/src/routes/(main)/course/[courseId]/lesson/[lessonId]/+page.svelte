@@ -33,7 +33,6 @@
 </script>
 
 <main>
-	<h5>Конспект урока</h5>
 	<div class="editorjs">
 		<EditorJS
 			data={data.lessonContent}
@@ -65,10 +64,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 20px;
-	}
-	h5 {
-		font: var(--H5);
-		color: var(--text);
 	}
 	.finish {
 		display: flex;

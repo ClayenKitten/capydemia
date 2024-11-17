@@ -158,7 +158,7 @@
 		}
 	}
 	main {
-		flex: 1 0 600px;
+		flex: 1;
 		max-width: 900px;
 		display: flex;
 		flex-direction: column;

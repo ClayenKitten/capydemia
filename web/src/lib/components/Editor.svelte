@@ -47,4 +47,7 @@
 		font: var(--P1);
 		color: var(--text);
 	}
+	:global(.ce-header) {
+		font: var(--H5);
+	}
 </style>

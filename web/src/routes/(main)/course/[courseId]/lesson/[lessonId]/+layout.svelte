@@ -45,7 +45,19 @@
 	let newModule: m.UpdateModule | null = null;
 	let modal_show: boolean = false;
 	let expandedModuleId: number | null;
+	let currentModuleNumber: number;
+	let currentLessonNumber: number;
+	let currentLessonName: string;
 	let modal_text: string;
+
+	$: currentModuleNumber = data.course.modules.findIndex(module =>
+		module.lessons.some(lesson => lesson.id === Number($page.params.lessonId))
+	);
+	$: currentLessonNumber = data.course.modules[
+		currentModuleNumber
+	].lessons.findIndex(x => x.id === Number($page.params.lessonId));
+	$: currentLessonName =
+		data.course.modules[currentModuleNumber].lessons[currentLessonNumber].title;
 </script>
 
 <main
@@ -104,7 +116,16 @@
 		{/if}
 	</div>
 	<div class="lesson">
-		<slot />
+		<div class="lesson_content">
+			<div class="header">
+				<span
+					>Модуль {currentModuleNumber + 1}. Урок {currentLessonNumber +
+						1}</span
+				>
+				<h4>{currentLessonName}</h4>
+			</div>
+			<slot />
+		</div>
 	</div>
 </main>
 
@@ -180,12 +201,25 @@
 	.lesson {
 		grid-area: lesson;
 
-		display: flex;
-		flex-direction: column;
-		background-color: var(--main-bg);
-		border: 1px solid var(--secondary);
-		border-radius: 8px;
-		overflow: hidden;
-		padding: 32px 32px 32px 32px;
+		.lesson_content {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			background-color: var(--main-bg);
+			border: 1px solid var(--secondary);
+			border-radius: 8px;
+			padding: 32px 32px 32px 32px;
+			.header {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				span {
+					font: var(--P3-extrabold);
+				}
+				h4 {
+					font: var(--H4);
+				}
+			}
+		}
 	}
 </style>
